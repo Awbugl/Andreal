@@ -38,7 +38,7 @@ internal static class Program
         Console.WriteLine(@"| ' </ _ | ' \/ _` |  _/ _` |");
         Console.WriteLine(@"|_|\_\___|_||_\__,_\__|\__,_|");
 
-        Console.WriteLine("Konata. Konata Project 2022\nProject Andreal v0.2.8 on Konata\n\n");
+        Console.WriteLine("Konata. Konata Project 2022\nProject Andreal v0.2.9 on Konata\n\n");
 
         External.Initialize(Config);
 
@@ -110,8 +110,6 @@ internal static class Program
             case CaptchaEvent.CaptchaType.Slider:
 
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("需要滑块验证，请使用验证助手扫码验证：");
-                Console.WriteLine("若显示错误，请将控制台的字体更换为新宋体。");
                 Console.WriteLine(e.SliderUrl);
                 Console.WriteLine();
                 Console.ResetColor();
@@ -141,6 +139,8 @@ internal static class Program
                 }
 
                 Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("需要滑块验证，请使用验证助手扫码验证：");
+                Console.WriteLine("若显示错误，请将控制台的字体更换为新宋体。");
                 Console.WriteLine("Please enter the ticket:");
                 Console.ResetColor();
 

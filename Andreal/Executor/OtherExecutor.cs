@@ -34,7 +34,8 @@ internal class OtherExecutor : ExecutorBase
     private async Task<MessageChain?> Dismiss()
     {
         if (Info.Message.Chain.FindChain<AtChain>()?.Any(i => i.AtUin == Info.Bot.Uin) != true) return null;
-        if (!IsGroup || !await Info.PermissionCheck()) return null;
+        if (!IsGroup) return null;
+        if (!Info.MasterCheck() && !await Info.PermissionCheck()) return null;
 
         Info.SendMessage(RobotReply.GroupLeave);
         await Task.Delay(5000);

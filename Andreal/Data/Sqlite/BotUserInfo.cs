@@ -40,8 +40,8 @@ internal class BotUserInfo
     internal enum ImgVersion
     {
         ImgV1 = 0,
-        ImgV2 = 1,
-        ImgV3 = 2,
-        ImgV4 = 3
+        ImgV2,
+        ImgV3,
+        ImgV4
     }
 }
