@@ -16,7 +16,7 @@ internal class SongInfo
     [NonSerialized] private static Lazy<ConcurrentDictionary<string, SongInfo>> _songList = new();
 
     [NonSerialized]
-    private static readonly Dictionary<string, string> Abbreviations = new();
+    private static readonly ConcurrentDictionary<string, string> Abbreviations = new();
 
     static SongInfo()
     {
@@ -197,11 +197,11 @@ internal class SongInfo
                       Lyricist = item.Lyricist,
                       Composer = item.Composer,
                       MusicTime = musicMetas.First().MusicTime ?? 0,
-                      EventRate = musicMetas.First().EventRate,
+                      EventRate = musicMetas.First().EventRate ?? 0,
                       Levels = musicMetas.Select(i => i.Level).ToList(),
                       Note = string.Join(" | ", musicMetas.Select(i => i.Combo)),
-                      BaseScore = string.Join(" | ", musicMetas.Select(i => i.BaseScore.ToString("0.000"))),
-                      FeverScore = string.Join(" | ", musicMetas.Select(i => i.FeverScore.ToString("0.000"))),
+                      BaseScore = string.Join(" | ", musicMetas.Select(i => (i.BaseScore ?? 0).ToString("0.000"))),
+                      FeverScore = string.Join(" | ", musicMetas.Select(i => (i.FeverScore ?? 0).ToString("0.000"))),
                       AssetbundleName = item.AssetbundleName,
                       PublishedAt = item.PublishedAt,
                       Alias = alias ?? Array.Empty<string>()

@@ -16,9 +16,9 @@ public class PjskMusicMetas
 
     [JsonProperty("music_time")] public double? MusicTime { get; set; }
 
-    [JsonProperty("event_rate")] public int EventRate { get; set; }
+    [JsonProperty("event_rate")] public int? EventRate { get; set; }
 
-    [JsonProperty("base_score")] public double BaseScore { get; set; }
+    [JsonProperty("base_score")] public double? BaseScore { get; set; }
 
-    [JsonProperty("fever_score")] public double FeverScore { get; set; }
+    [JsonProperty("fever_score")] public double? FeverScore { get; set; }
 }
