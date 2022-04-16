@@ -74,7 +74,7 @@ internal class PjskCurrentEventImageGenerator
         using var logo
             = WebHelper.GetImage($"https://assets.pjsek.ai/file/pjsekai-assets/ondemand/event/{_currentEvent.AssetbundleName}/logo/logo/logo.png");
 
-        var bg = bitmap.Cut(new(0, 0, 1000, 1000)).BlurImage(40);
+        var bg = bitmap.Cut(new(0, 0, 1000, 1000)).Blur(40);
         bg.FillColor(Color.Black, 80);
 
         bg.Draw(new ImageModel(logo, 200, 50, 600, 300),
