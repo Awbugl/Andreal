@@ -1,5 +1,5 @@
 ﻿using Andreal.Core;
-using Andreal.Data.Json.Arcaea.BotArcApi;
+using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Message;
 using Newtonsoft.Json;
 using Path = Andreal.Core.Path;
@@ -50,15 +50,9 @@ internal static class ArcaeaUnlimitedApi
     internal static async Task<ResponseRoot?> UserBest40(long ucode) =>
         await GetString($"user/best30?usercode={ucode:D9}&overflow=9");
 
-    internal static async Task<ResponseRoot?> SongByAlias(string alias) =>
-        await GetString($"song/info?songname={alias}");
-
-    internal static async Task<ResponseRoot?> SongAlias(string alias) =>
-        await GetString($"song/alias?songname={alias}");
-
     internal static async Task<ResponseRoot?> SongList() => await GetString("song/list");
 
-    internal static async Task SongAssets(string sid, sbyte difficulty, Path pth) =>
+    internal static async Task SongAssets(string sid, int difficulty, Path pth) =>
         await GetStream($"assets/song?songid={sid}&difficulty={difficulty}", pth);
 
     internal static async Task CharAssets(int partner, bool awakened, Path pth) =>

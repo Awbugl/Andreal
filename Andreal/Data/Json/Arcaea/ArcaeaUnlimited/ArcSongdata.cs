@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 #pragma warning disable CS8618
 
-namespace Andreal.Data.Json.Arcaea.BotArcApi;
+namespace Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 
 public class ArcSongdata
 {
@@ -10,7 +10,7 @@ public class ArcSongdata
 
     [JsonProperty("difficulty")] public sbyte Difficulty { get; set; }
 
-    [JsonProperty("score")] public string Score { get; set; }
+    [JsonProperty("score")] public int Score { get; set; }
 
     [JsonProperty("shiny_perfect_count")] public string MaxPure { get; set; }
 

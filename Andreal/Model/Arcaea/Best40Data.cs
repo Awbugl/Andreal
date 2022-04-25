@@ -1,4 +1,4 @@
-using Andreal.Data.Json.Arcaea.BotArcApi;
+using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 
 namespace Andreal.Model.Arcaea;
 

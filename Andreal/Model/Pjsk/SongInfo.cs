@@ -86,7 +86,6 @@ internal class SongInfo
         return ImageMessage.FromPath(pth);
     }
 
-
     internal MessageChain FullString() =>
         new(SongImage(),
             (TextMessage)($"\n{Songname}\n作词：{Lyricist}\n作曲：{Composer}\n演出：{Categories}\n"

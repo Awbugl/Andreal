@@ -6,5 +6,9 @@ internal static class RandomHelper
 
     internal static T GetRandomItem<T>(this T[] ls) => ls[Random.Next(ls.Length)];
 
-    internal static T GetRandomItem<T>(this IEnumerable<T> ls) => ls.ToArray().GetRandomItem();
+    internal static T GetRandomItem<T>(this IEnumerable<T> ls)
+    {
+        var enumerable = ls as T[] ?? ls.ToArray();
+        return GetRandomItem(enumerable);
+    }
 }

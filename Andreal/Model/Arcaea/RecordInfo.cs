@@ -1,7 +1,6 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using System.Text;
 using Andreal.Data.Json.Arcaea.ArcaeaLimited;
-using Andreal.Data.Json.Arcaea.BotArcApi;
+using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 using Image = Andreal.UI.Image;
 
 namespace Andreal.Model.Arcaea;
@@ -9,14 +8,14 @@ namespace Andreal.Model.Arcaea;
 [Serializable]
 internal class RecordInfo
 {
-    private readonly string _score;
+    private readonly int _score;
 
     internal RecordInfo(RecordDataItem recentdata, sbyte difficulty = -128)
     {
         Difficulty = difficulty == -128
             ? recentdata.Difficulty
             : difficulty;
-        SongInfo = new(recentdata.SongId, Difficulty);
+        SongInfo = ArcaeaCharts.QueryById(recentdata.SongId)![Difficulty];
         Cleartype = 0;
         SongId = recentdata.SongId;
         Rating = recentdata.PotentialValue.ToString("0.0000");
@@ -32,7 +31,7 @@ internal class RecordInfo
     public RecordInfo(ArcSongdata recentdata)
     {
         Difficulty = recentdata.Difficulty;
-        SongInfo = new(recentdata.SongId, Difficulty);
+        SongInfo = ArcaeaCharts.QueryById(recentdata.SongId)![Difficulty];
         Cleartype = recentdata.ClearType;
         SongId = recentdata.SongId;
         Rating = recentdata.Rating.ToString("0.0000");
@@ -44,11 +43,11 @@ internal class RecordInfo
         _score = recentdata.Score;
     }
 
-    internal SongInfo SongInfo { get; }
+    internal ArcaeaChart SongInfo { get; }
 
     internal sbyte Cleartype { get; }
 
-    internal sbyte Difficulty { get; }
+    internal int Difficulty { get; }
 
     internal bool IsRecent => Difficulty == -128;
 
@@ -70,22 +69,21 @@ internal class RecordInfo
 
     internal DifficultyInfo DifficultyInfo => SongInfo.DifficultyInfo;
 
-    internal double Const => SongInfo.Const;
-
-    internal Color MainColor => SongInfo.MainColor;
+    internal double Const => SongInfo.Rating;
 
     internal string Score
     {
         get
         {
+            var scorestr = _score.ToString();
             var result = new StringBuilder();
-            var len = _score.Length;
+            var len = scorestr.Length;
             for (var i = 0; i < 8; i++)
             {
                 var j = len - 8 + i;
                 result.Append(j < 0
                                   ? '0'
-                                  : _score[j]);
+                                  : scorestr[j]);
                 if (i is 1 or 4) result.Append('\'');
             }
 
@@ -97,7 +95,7 @@ internal class RecordInfo
     {
         get
         {
-            return Convert.ToInt32(_score) switch
+            return _score switch
                    {
                        >= 9900000 => "[EX+]",
                        >= 9800000 => "[EX]",
@@ -110,13 +108,13 @@ internal class RecordInfo
         }
     }
 
-    internal async Task<Image> GetSongImg() => await SongInfo.GetSongImg();
+    internal async Task<Image> GetSongImg() => await ArcaeaCharts.GetSongImg(SongId,Difficulty);
 
     internal string SongName(byte length) => SongInfo.GetSongName(length);
 
     internal bool Compare(RecordInfo? info)
     {
         if (info == null) return true;
-        return Convert.ToInt32(_score) > Convert.ToInt32(info._score);
+        return _score > info._score;
     }
 }

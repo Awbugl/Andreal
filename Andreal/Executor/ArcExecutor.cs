@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Andreal.Core;
 using Andreal.Data.Api;
-using Andreal.Data.Json.Arcaea.BotArcApi;
+using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Data.Sqlite;
 using Andreal.Message;
 using Andreal.Model.Arcaea;
@@ -17,11 +17,13 @@ namespace Andreal.Executor;
 [Serializable]
 internal class ArcExecutor : ExecutorBase
 {
+    private static readonly int[] DifPriority = { 0, 1, 3, 2 };
+    
     public ArcExecutor(MessageInfo info) : base(info) { }
 
-    private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(SongInfo song, sbyte dif = 3)
+    private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, sbyte dif = 3)
     {
-        var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcId, song.SongId, dif);
+        var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcId, song.SongID, DifPriority[dif]);
 
         switch (data.Status)
         {
@@ -130,12 +132,12 @@ internal class ArcExecutor : ExecutorBase
         switch (CommandLength)
         {
             default: return RobotReply.ParameterLengthError;
-            case 0:  return RobotReply.RandSongReply + SongInfo.RandomSong().NameWithPackage;
+            case 0:  return RobotReply.RandSongReply + ArcaeaCharts.RandomSong().NameWithPackage;
             case 1:
             {
                 var (lower, upper) = Command[0].ConvertToArcaeaRange();
                 if (lower < 0) return RobotReply.ParameterError;
-                var info = SongInfo.RandomSong(lower, upper);
+                var info = ArcaeaCharts.RandomSong(lower, upper);
                 return info == null
                     ? RobotReply.ParameterError
                     : RobotReply.RandSongReply + info.NameWithPackageAndConst;
@@ -145,7 +147,7 @@ internal class ArcExecutor : ExecutorBase
                 var (lower, _) = Command[0].ConvertToArcaeaRange();
                 var (_, upper) = Command[1].ConvertToArcaeaRange();
                 if (lower < 0 || upper < 0 || lower > upper) return RobotReply.ParameterError;
-                var info = SongInfo.RandomSong(lower, upper);
+                var info = ArcaeaCharts.RandomSong(lower, upper);
                 return info == null
                     ? RobotReply.ParameterError
                     : RobotReply.RandSongReply + info.NameWithPackageAndConst;
@@ -154,19 +156,20 @@ internal class ArcExecutor : ExecutorBase
     }
 
     [CommandPrefix("/arc note", "计算note")]
-    private async Task<MessageChain> CalcNote()
+    private MessageChain CalcNote()
     {
         if (CommandLength < 3) return RobotReply.ParameterLengthError;
         if (!short.TryParse(Command[0], out var far) || !short.TryParse(Command[1], out var lost))
             return RobotReply.ParameterError;
 
-        var (_, (status, result)) = await ArcaeaHelper.SongNameConverter(Command.Skip(2));
-        if (status != 0) return AliasErrorHelper.GetSongAliasErrorMessage(RobotReply, status, result);
-        var arcsong = result![0];
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
+            return errMessage;
+
+        var arcsong = song[dif];
 
         var notes = arcsong.Note;
 
-        if (arcsong.Const <= 0 || notes <= 0) return "此谱面的Note数量暂未被记录。";
+        if (arcsong.Rating <= 0 || notes <= 0) return "此谱面的Note数量暂未被记录。";
 
         if (far + lost > notes) return RobotReply.ParameterError;
 
@@ -177,17 +180,18 @@ internal class ArcExecutor : ExecutorBase
     }
 
     [CommandPrefix("/arc score", "计算分数")]
-    private async Task<MessageChain> CalcScore()
+    private MessageChain CalcScore()
     {
         if (CommandLength < 2) return RobotReply.ParameterLengthError;
 
         if (!double.TryParse(Command[0], out var ptt)) return RobotReply.ParameterError;
 
-        var (_, (status, result)) = await ArcaeaHelper.SongNameConverter(Command.Skip(1));
-        if (status != 0) return AliasErrorHelper.GetSongAliasErrorMessage(RobotReply, status, result);
-        var arcsong = result![0];
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
+            return errMessage;
 
-        var defNum = arcsong.Const;
+        var arcsong = song[dif];
+        
+        var defNum = arcsong.Rating;
         var mptt = ptt - defNum;
         if (defNum == 0 || ptt < 0 || mptt > 2) return RobotReply.ParameterError;
 
@@ -202,17 +206,18 @@ internal class ArcExecutor : ExecutorBase
     }
 
     [CommandPrefix("/arc ptt", "计算ptt")]
-    private async Task<MessageChain> CalcPtt()
+    private MessageChain CalcPtt()
     {
         if (CommandLength < 2) return RobotReply.ParameterLengthError;
 
         if (!double.TryParse(Command[0], out var score) || score is < 0 or > 10009999) return RobotReply.ParameterError;
 
-        var (_, (status, result)) = await ArcaeaHelper.SongNameConverter(Command.Skip(1));
-        if (status != 0) return AliasErrorHelper.GetSongAliasErrorMessage(RobotReply, status, result);
-        var arcsong = result[0];
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
+            return errMessage;
 
-        var defNum = arcsong.Const;
+        var arcsong = song[dif];
+
+        var defNum = arcsong.Rating;
         var ptt = score switch
                   {
                       >= 1e7   => defNum + 2,
@@ -229,9 +234,10 @@ internal class ArcExecutor : ExecutorBase
     {
         if (CommandLength == 0) return RobotReply.ParameterLengthError;
 
-        var (_, (status, result)) = await ArcaeaHelper.SongNameConverter(Command);
-        if (status != 0) return AliasErrorHelper.GetSongAliasErrorMessage(RobotReply, status, result);
-        return await result[0].FullConstString();
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out _, out var errMessage))
+            return errMessage;
+
+        return await song.FullConstString();
     }
 
     [CommandPrefix("/arc b30", "/arc r10", "/b30", "查b30")]
@@ -338,25 +344,12 @@ internal class ArcExecutor : ExecutorBase
         RecordInfo recordInfo;
         PlayerInfo playerInfo;
 
-        var (cached, (status, result)) = await ArcaeaHelper.SongNameConverter(Command);
-        if (status != 0) return AliasErrorHelper.GetSongAliasErrorMessage(RobotReply, status, result);
-        var arcsong = result[0];
-
-        if (cached)
-        {
-            var data = await ArcaeaUnlimitedApi.UserBest(User.ArcId, arcsong.SongId, arcsong.Difficulty);
-            if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
-
-            var content = data.DeserializeContent<UserBestContent>();
-            recordInfo = new(content.Record);
-            playerInfo = new(content.AccountInfo, User);
-        }
-        else
-        {
-            TextMessage exceptionInformation;
-            (recordInfo, playerInfo, exceptionInformation) = await GetUserBest(arcsong);
-            if (recordInfo == null) return exceptionInformation;
-        }
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out _, out var errMessage))
+            return errMessage;
+        
+        TextMessage exceptionInformation;
+        (recordInfo, playerInfo, exceptionInformation) = await GetUserBest(song);
+        if (recordInfo == null) return exceptionInformation;
 
         return await new RecordData(playerInfo, recordInfo, User).GetResult();
     }
@@ -367,7 +360,8 @@ internal class ArcExecutor : ExecutorBase
         if (CommandLength != 1) return RobotReply.ParameterLengthError;
         if (!double.TryParse(Command[0], out var num) || num > 12) return RobotReply.ParameterError;
         if (num < 8) return (TextMessage)"暂不支持查询8.0以下的定数。";
-        var list = SongInfo.GetByConst(num).ToArray();
+        var list = ArcaeaCharts.GetByConst(num).OrderBy<(string, ArcaeaChart), string>(((string sid, ArcaeaChart chart) i) => i.chart.NameEn)
+                               .ToArray();
         if (list.Length == 0) return (TextMessage)"此定数在当前版本不存在对应谱面。";
         return await new ArcSongLevelListImageGenerator(list).Generate();
     }
@@ -394,21 +388,17 @@ internal class ArcExecutor : ExecutorBase
     }
 
     [CommandPrefix("/arc alias", "查别名")]
-    private async Task<MessageChain> Alias()
+    private MessageChain Alias()
     {
         if (CommandLength == 0) return RobotReply.ParameterLengthError;
 
-        var (_, (status, result)) = await ArcaeaHelper.SongNameConverter(Command);
-        if (status != 0) return AliasErrorHelper.GetSongAliasErrorMessage(RobotReply, status, result);
-        var arcsong = result[0];
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out _, out var errMessage))
+            return errMessage;
 
-        var data = await ArcaeaUnlimitedApi.SongAlias(arcsong.SongId);
-        if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
-
-        var alias = data.DeserializeContent<List<string>>();
-
+        var alias = ArcaeaCharts.GetSongAlias(song.SongID);
+        
         return alias.Count > 0
-            ? $"{arcsong.NameWithPackage}\n在数据库中的别名列表：\n{alias.Aggregate((i, j) => i + "\n" + j)}"
-            : $"{arcsong.NameWithPackage}\n该曲目暂无别名收录。";
+            ? $"{song.NameWithPackage}\n在数据库中的别名列表：\n{alias.Aggregate((i, j) => i + "\n" + j)}"
+            : $"{song.NameWithPackage}\n该曲目暂无别名收录。";
     }
 }

@@ -20,7 +20,7 @@ internal class PermissionExecutor : ExecutorBase
     private MessageChain? Update()
     {
         if (!Info.MasterCheck()) return null;
-        Songdata.Init();
+        ArcaeaCharts.Init();
         return "Arcaea songlist updated";
     }
 }

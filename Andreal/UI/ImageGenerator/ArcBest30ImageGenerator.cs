@@ -20,7 +20,7 @@ internal class ArcBest30ImageGenerator
     {
         var bg = new BackGround(Path.ArcaeaBest30Bg);
         bg.Draw(new TextOnlyModel(Info.PlayerName, Font.Andrea72, Color.White, 345, 175),
-                new TextOnlyModel($"ArcID: {Info.PlayerId}", Font.ExoLight28, Color.White, 370, 320),
+                new TextOnlyModel($"ArcID: {Info.PlayerCode}", Font.ExoLight28, Color.White, 370, 320),
                 new TextOnlyModel($"Total Best 30: {B30data.Best30Avg}", Font.Andrea60, Color.White, 145, 480),
                 new TextOnlyModel($"Recent Best 10: {B30data.Recent10Avg}", Font.Andrea60, Color.White, 1095, 480),
                 new ImageModel(await Path.ArcaeaPartnerIcon(Info.Partner, Info.IsAwakened), 75, 130, 255),
@@ -40,9 +40,9 @@ internal class ArcBest30ImageGenerator
                     new PolygonModel(record.DifficultyInfo.Color, new(x + 278, y + 22), new(x + 278, y + 70),
                                      new(x + 503, y + 70), new(x + 458, y + 22)),
                     new ImageModel(song, x + 22, y + 22, 256, 256),
-                    new TextOnlyModel($"[{record.Const:0.0}] {record.SongName(11)}", Font.Beatrice36, record.MainColor,
+                    new TextOnlyModel($"[{record.Const:0.0}] {record.SongName(11)}", Font.Beatrice36, song.MainColor,
                                       x + 295, y + 80),
-                    new TextOnlyModel(record.Score, Font.Exo44, record.MainColor, x + 290, y + 145),
+                    new TextOnlyModel(record.Score, Font.Exo44, song.MainColor, x + 290, y + 145),
                     new TextOnlyModel(record.Rating, Font.Exo26, System.Drawing.Color.White, x + 297, y + 24),
                     new TextOnlyModel($"#{i + 1}", Font.Beatrice26, System.Drawing.Color.Black, x + 800, y + 24),
                     new TextOnlyModel($"Pure: {record.Pure} (+{record.MaxPure})", Font.Beatrice20,

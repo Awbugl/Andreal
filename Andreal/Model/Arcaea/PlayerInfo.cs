@@ -8,11 +8,11 @@ internal class PlayerInfo
 {
     private readonly bool _isHide;
 
-    private readonly string _playerId, _playerName;
+    private readonly string _playerCode, _playerName;
 
     internal PlayerInfo(UserinfoDataItem recentdata, BotUserInfo user)
     {
-        _playerId = user.ArcId.ToString("D9");
+        _playerCode = user.ArcId.ToString("D9");
         _playerName = recentdata.DisplayName;
         _isHide = user.IsHide == 0;
         ImgVersion = user.UiVersion;
@@ -21,9 +21,9 @@ internal class PlayerInfo
         Potential = recentdata.Potential ?? -1;
     }
 
-    public PlayerInfo(Data.Json.Arcaea.BotArcApi.AccountInfo accountInfo, BotUserInfo user)
+    public PlayerInfo(Data.Json.Arcaea.ArcaeaUnlimited.AccountInfo accountInfo, BotUserInfo user)
     {
-        _playerId = accountInfo.Code.ToString("D9");
+        _playerCode = accountInfo.Code.ToString("D9");
         _playerName = accountInfo.Name;
         _isHide = user.IsHide == 0;
         ImgVersion = user.UiVersion;
@@ -37,9 +37,9 @@ internal class PlayerInfo
             ? _playerName
             : $"{_playerName[0]}......{_playerName[^1]}";
 
-    internal string PlayerId =>
+    internal string PlayerCode =>
         _isHide
-            ? _playerId
+            ? _playerCode
             : "xxxxxxxxx";
 
     internal BotUserInfo.ImgVersion ImgVersion { get; }

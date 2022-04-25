@@ -33,7 +33,7 @@ internal class ArcRecord5ImageGenerator
             using var song = await record.GetSongImg();
 
             bg.Draw(new ImageModel(song, 94, 304 + i * 340, 280, 280),
-                    new TextWithStrokeModel(record.SongName(18), Font.KazesawaLight72, record.MainColor, 420,
+                    new TextWithStrokeModel(record.SongName(18), Font.KazesawaLight72, song.MainColor, 420,
                                             295 + i * 340, Color.Black, 1),
                     new TextWithStrokeModel(record.Score, Font.KazesawaLight56, Color.ArcGray, 426, 403 + i * 340,
                                             Color.Black, 1),

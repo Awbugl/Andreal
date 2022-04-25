@@ -9,13 +9,18 @@ namespace Andreal.UI.ImageGenerator;
 
 internal class ArcBackgroundGenerator
 {
-    private readonly SongInfo _info;
+    private readonly ArcaeaChart _info;
+    private readonly string _sid;
 
-    internal ArcBackgroundGenerator(SongInfo info) { _info = info; }
+    public ArcBackgroundGenerator(RecordInfo recordInfo)
+    {
+        _sid = recordInfo.SongId;
+        _info = recordInfo.SongInfo; 
+    }
 
     internal async Task<BackGround> ArcV1()
     {
-        var path = Path.ArcaeaBg1(_info.SongId, _info.Difficulty);
+        var path = Path.ArcaeaBg1(_sid, _info.Difficulty);
         return path.FileExists
             ? new(path)
             : await GenerateArcV1(path);
@@ -23,11 +28,11 @@ internal class ArcBackgroundGenerator
 
     private async Task<BackGround> GenerateArcV1(Path path)
     {
-        using var song = await _info.GetSongImg();
+        using var song = await ArcaeaCharts.GetSongImg(_sid, _info.Difficulty);
         using var temp = song.Cut(new(0, 87, 512, 341));
         var background = new BackGround(temp, 1440, 960);
         using var masktmp = background.Blur(20).Cut(new(50, 50, 1340, 860)).Blur(80);
-        background.FillColor(_info.MainColor);
+        background.FillColor(song.MainColor);
         background.Draw(new ImageModel(Path.ArcaeaBg1Mask, 0, 0, 1440, 960), new ImageModel(masktmp, 50, 50, 1340, 860),
                         new ImageModel(Path.ArcaeaDivider, 100, 840, 1240),
                         new TextWithStrokeModel("Pure", Font.Exo40, Color.White, 518, 488),
@@ -42,7 +47,7 @@ internal class ArcBackgroundGenerator
 
     internal async Task<BackGround> ArcV2()
     {
-        var path = Path.ArcaeaBg2(_info.SongId, _info.Difficulty);
+        var path = Path.ArcaeaBg2(_sid, _info.Difficulty);
         return path.FileExists
             ? new(path)
             : await GenerateArcV2(path);
@@ -50,10 +55,10 @@ internal class ArcBackgroundGenerator
 
     private async Task<BackGround> GenerateArcV2(Path path)
     {
-        using var song = await _info.GetSongImg();
+        using var song = await ArcaeaCharts.GetSongImg(_sid, _info.Difficulty);
         using var temp = song.Cut(new(0, 112, 512, 288));
         var background = new BackGround(temp, 1920, 1080).Blur(60);
-        background.FillColor(_info.MainColor);
+        background.FillColor(song.MainColor);
         background.Draw(new TextWithShadowModel("Play PTT", Font.Exo36, 123, 355),
                         new TextWithShadowModel("Pure", Font.Exo32, 127, 455),
                         new TextWithShadowModel("Far", Font.Exo32, 127, 525),
@@ -64,7 +69,7 @@ internal class ArcBackgroundGenerator
                         new LineModel(Color.White, 3, new(0, 920), new(1920, 920)),
                         new LineModel(Color.White, 1, new(0, 705), new(1920, 705)),
                         new LineModel(Color.White, 1, new(0, 955), new(1920, 955)),
-                        new RectangleModel(_info.PartnerSide == Side.Hikari
+                        new RectangleModel(_info.Side == (int)Side.Hikari
                                                ? Color.Light
                                                : Color.Conflict, new(145, 685, 320, 320)),
                         new ImageModel(song, 130, 670, 320, 320),
@@ -75,7 +80,7 @@ internal class ArcBackgroundGenerator
 
     internal async Task<BackGround> ArcV3()
     {
-        var path = Path.ArcaeaBg3(_info.SongId, _info.Difficulty);
+        var path = Path.ArcaeaBg3(_sid, _info.Difficulty);
         return path.FileExists
             ? new(path)
             : await GenerateArcV3(path);
@@ -83,11 +88,11 @@ internal class ArcBackgroundGenerator
 
     private async Task<BackGround> GenerateArcV3(Path path)
     {
-        using var song = await _info.GetSongImg();
+        using var song = await ArcaeaCharts.GetSongImg(_sid, _info.Difficulty);
         using var temp = song.Cut(new(78, 0, 354, 512));
         var background = new BackGround(temp, 1000, 1444).Blur(10);
         background.FillColor(Color.White, 100);
-        background.Draw(new ImageModel(Path.ArcaeaBg3Mask((int)_info.PartnerSide), 0, 0, 1000),
+        background.Draw(new ImageModel(Path.ArcaeaBg3Mask(_info.Side), 0, 0, 1000),
                         new TextOnlyModel(_info.GetSongName(30), Font.Beatrice36, Color.Black, 500, 860,
                                           StringAlignment.Center), new ImageModel(song, 286, 408, 428),
                         new TextOnlyModel("PlayPtt:", Font.Exo24, Color.GnaqGray, 110, 1275),

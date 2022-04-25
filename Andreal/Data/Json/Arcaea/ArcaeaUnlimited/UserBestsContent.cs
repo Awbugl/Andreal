@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 #pragma warning disable CS8618
 
-namespace Andreal.Data.Json.Arcaea.BotArcApi;
+namespace Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 
 public class UserBestsContent
 {

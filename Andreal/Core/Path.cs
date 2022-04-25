@@ -79,18 +79,18 @@ internal class Path
 
     internal static Path BotConfig(uint qqid) => new(AndreaConfigRoot + $"BotInfo/{qqid}.andreal.konata.botinfo");
 
-    internal static Path ArcaeaBg1(string sid, sbyte difficulty) =>
+    internal static Path ArcaeaBg1(string sid, int difficulty) =>
         new(ArcaeaBackgroundRoot + $"V1_{sid}{(difficulty == 3 ? "_3" : "")}.png");
 
-    internal static Path ArcaeaBg2(string sid, sbyte difficulty) =>
+    internal static Path ArcaeaBg2(string sid, int difficulty) =>
         new(ArcaeaBackgroundRoot + $"V2_{sid}{(difficulty == 3 ? "_3" : "")}.png");
 
-    internal static Path ArcaeaBg3(string sid, sbyte difficulty) =>
+    internal static Path ArcaeaBg3(string sid, int difficulty) =>
         new(ArcaeaBackgroundRoot + $"V3_{sid}{(difficulty == 3 ? "_3" : "")}.png");
 
     internal static Path ArcaeaBg3Mask(int side) => new(ArcaeaSourceRoot + $"RawV3Bg_{side}.png");
 
-    internal static async Task<Path> ArcaeaSong(string sid, sbyte difficulty)
+    internal static async Task<Path> ArcaeaSong(string sid, int difficulty)
     {
         var song = sid switch
                    {
@@ -142,7 +142,7 @@ internal class Path
 
     internal static Path ArcaeaCleartypeV4(sbyte cleartype) => new(ArcaeaSourceRoot + $"clear_badge_{cleartype}.png");
 
-    internal static Path ArcaeaDifficultyForV1(sbyte difficulty) => new(ArcaeaSourceRoot + $"con_{difficulty}.png");
+    internal static Path ArcaeaDifficultyForV1(int difficulty) => new(ArcaeaSourceRoot + $"con_{difficulty}.png");
 
     internal static Path RandImageFileName() => new(TempImageRoot + $"{RandStringHelper.GetRandString()}.jpg");
 
@@ -153,7 +153,7 @@ internal class Path
     public static Path PjskEvent(string currentEventAssetbundleName) =>
         new(PjskImageRoot + $"EventBg/{currentEventAssetbundleName}.png");
 
-    public static Path ArcaeaBg4(sbyte difficulty, string package)
+    public static Path ArcaeaBg4(int difficulty, string package)
     {
         var backgroundImgV4 = difficulty == 3
             ? "Beyond"

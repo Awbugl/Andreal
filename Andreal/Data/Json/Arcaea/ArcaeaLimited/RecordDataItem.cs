@@ -9,7 +9,7 @@ public class RecordDataItem
 {
     [JsonProperty("song_id")] public string SongId { get; set; }
     [JsonProperty("difficulty")] public sbyte Difficulty { get; set; }
-    [JsonProperty("score")] public string Score { get; set; }
+    [JsonProperty("score")] public int Score { get; set; }
     [JsonProperty("shiny_pure_count")] public string ShinyPureCount { get; set; }
     [JsonProperty("pure_count")] public string PureCount { get; set; }
     [JsonProperty("far_count")] public string FarCount { get; set; }

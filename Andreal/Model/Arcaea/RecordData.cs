@@ -1,5 +1,5 @@
 ﻿using Andreal.Data.Api;
-using Andreal.Data.Json.Arcaea.BotArcApi;
+using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Data.Sqlite;
 using Andreal.Message;
 using Andreal.UI.ImageGenerator;
@@ -21,7 +21,7 @@ internal class RecordData
     private BotUserInfo UserInfo { get; }
 
     private TextMessage RecordTextResult =>
-        $"{PlayerInfo.PlayerName}({PlayerInfo.PlayerId}) 的最近记录\n曲名：{RecordInfo.SongName(50)} {RecordInfo.SongInfo.ConstString}\n分数：{RecordInfo.Score}\nPure:{RecordInfo.Pure} (+{RecordInfo.MaxPure})  Far:{RecordInfo.Far}  Lost:{RecordInfo.Lost}\n单曲PTT：{RecordInfo.Rating}\n时间：{RecordInfo.TimeStr}";
+        $"{PlayerInfo.PlayerName}({PlayerInfo.PlayerCode}) 的最近记录\n曲名：{RecordInfo.SongName(50)} {RecordInfo.SongInfo.ConstString}\n分数：{RecordInfo.Score}\nPure:{RecordInfo.Pure} (+{RecordInfo.MaxPure})  Far:{RecordInfo.Far}  Lost:{RecordInfo.Lost}\n单曲PTT：{RecordInfo.Rating}\n时间：{RecordInfo.TimeStr}";
 
     internal async Task<MessageChain> GetResult()
     {

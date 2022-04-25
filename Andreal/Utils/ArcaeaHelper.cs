@@ -1,4 +1,5 @@
-﻿using Andreal.Model.Arcaea;
+﻿using Andreal.Core;
+using Andreal.Model.Arcaea;
 
 namespace Andreal.Utils;
 
@@ -25,16 +26,35 @@ internal static class ArcaeaHelper
                 : (-1, -1)
         };
 
-    internal static async Task<(bool, (int, SongInfo[]?))> SongNameConverter(IEnumerable<string> command)
+    internal static bool SongInfoParser(IEnumerable<string> command, out ArcaeaSong song, out int dif,
+                                        out string errMessage)
     {
+        song = null!;
+        dif = 2;
+        errMessage = "";
+
         var enumerable = command.ToArray();
 
-        if (enumerable.Length == 0) return (false, (-128, null));
+        if (enumerable.Length == 0) return false;
 
-        var (songstr, difinfo) = DifficultyInfo.DifficultyConverter(enumerable.Last());
+        (var songstr, dif) = DifficultyInfo.DifficultyConverter(enumerable[^1]);
 
-        var song = string.Join("", enumerable, 0, enumerable.Length - 1) + songstr;
+        songstr = string.Join("", enumerable, 0, enumerable.Length - 1) + songstr;
 
-        return (difinfo is >= 0, await SongInfo.GetByAlias(song, difinfo ?? 2));
+        var result = ArcaeaCharts.Query(songstr);
+
+        if (result is null) return false;
+
+        errMessage = result.Count switch
+                 {
+                     0 => MessageInfo.RobotReply.NoSongFound!,
+                     > 1 => result.Aggregate(MessageInfo.RobotReply.TooManySongFound,
+                                             (cur, i) => cur + "\n" + i[0].NameEn),
+                     _ => ""
+                 };
+
+        song = result[0];
+
+        return true;
     }
 }
