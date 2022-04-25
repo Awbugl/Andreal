@@ -88,13 +88,15 @@ internal static partial class ArcaeaCharts
     [NonSerialized] private static readonly ConcurrentDictionary<ArcaeaSong, List<string>> Names = new();
     [NonSerialized] private static readonly ConcurrentDictionary<string, List<ArcaeaSong>> AliasCache = new();
 
+    static ArcaeaCharts() { Init(); }
+
     public static void Init()
     {
         Songs.Clear();
         Aliases.Clear();
         Abbreviations.Clear();
         Names.Clear();
-        
+
         var slst = ArcaeaUnlimitedApi.SongList().Result!.DeserializeContent<SongListContent>().Songs;
 
         foreach (var songitem in slst)
@@ -128,8 +130,6 @@ internal static partial class ArcaeaCharts
             Names.TryAdd(value, names);
         }
     }
-
-    static ArcaeaCharts() { Init(); }
 
     private static string GetAbbreviation(string str)
     {
@@ -213,7 +213,7 @@ internal static partial class ArcaeaCharts
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
             foreach (var chart in song)
                 if (Math.Abs(chart.Rating - @const) < lerance)
-                    yield return (song.SongID,chart);
+                    yield return (song.SongID, chart);
     }
 
     private static IEnumerable<ArcaeaChart> GetByConstRange(double lowerlimit, double upperlimit)

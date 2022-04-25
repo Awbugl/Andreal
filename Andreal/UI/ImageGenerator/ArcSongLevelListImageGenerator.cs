@@ -27,9 +27,9 @@ internal class ArcSongLevelListImageGenerator
         {
             var y = 110 + i * 200;
 
-            var (sid,info) = List[i];
+            var (sid, info) = List[i];
 
-            using var song = await ArcaeaCharts.GetSongImg(sid,info.RatingClass);
+            using var song = await ArcaeaCharts.GetSongImg(sid, info.RatingClass);
 
             var color = song.MainColor;
 

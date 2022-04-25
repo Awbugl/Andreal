@@ -62,7 +62,7 @@ internal class ArcBest40ImageGenerator
         bg.Draw(new ImageModel(Path.ArcaeaDivider, 0, 4042, 2980));
 
         var overLen = Math.Min(B40data.OverflowList.Count, 9) + 30;
-        
+
         for (var i = 30; i < overLen; ++i)
         {
             var record = B40data.OverflowList[i - 30];

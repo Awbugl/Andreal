@@ -46,12 +46,12 @@ internal static class ArcaeaHelper
         if (result is null) return false;
 
         errMessage = result.Count switch
-                 {
-                     0 => MessageInfo.RobotReply.NoSongFound!,
-                     > 1 => result.Aggregate(MessageInfo.RobotReply.TooManySongFound,
-                                             (cur, i) => cur + "\n" + i[0].NameEn),
-                     _ => ""
-                 };
+                     {
+                         0 => MessageInfo.RobotReply.NoSongFound!,
+                         > 1 => result.Aggregate(MessageInfo.RobotReply.TooManySongFound,
+                                                 (cur, i) => cur + "\n" + i[0].NameEn),
+                         _ => ""
+                     };
 
         song = result[0];
 

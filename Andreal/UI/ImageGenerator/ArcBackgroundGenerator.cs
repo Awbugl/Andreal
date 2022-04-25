@@ -15,7 +15,7 @@ internal class ArcBackgroundGenerator
     public ArcBackgroundGenerator(RecordInfo recordInfo)
     {
         _sid = recordInfo.SongId;
-        _info = recordInfo.SongInfo; 
+        _info = recordInfo.SongInfo;
     }
 
     internal async Task<BackGround> ArcV1()

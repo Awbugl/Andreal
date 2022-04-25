@@ -27,17 +27,17 @@ public class ArcaeaChart
     [JsonProperty("jacket_designer")] public string JacketDesigner { get; set; }
     [JsonProperty("jacket_override")] public bool JacketOverride { get; set; }
     [JsonProperty("audio_override")] public bool AudioOverride { get; set; }
-    
+
     internal int RatingClass { get; set; }
-    
-    internal string GetSongName(byte length) =>
-        NameEn.Length < length + 3
-            ? NameEn
-            : $"{NameEn[..length]}...";
-    
+
     internal DifficultyInfo DifficultyInfo => DifficultyInfo.GetByIndex(RatingClass);
 
     internal string ConstString => $"[{DifficultyInfo.ShortStr} {Rating:0.0}]";
 
     internal string NameWithPackageAndConst => $"{NameEn}\n(Package: {SetFriendly})\n{ConstString}";
+
+    internal string GetSongName(byte length) =>
+        NameEn.Length < length + 3
+            ? NameEn
+            : $"{NameEn[..length]}...";
 }

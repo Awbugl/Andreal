@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Andreal.Data.Json.Arcaea.ArcaeaLimited;
 using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
-using Image = Andreal.UI.Image;
+using Andreal.UI;
 
 namespace Andreal.Model.Arcaea;
 
@@ -108,7 +108,7 @@ internal class RecordInfo
         }
     }
 
-    internal async Task<Image> GetSongImg() => await ArcaeaCharts.GetSongImg(SongId,Difficulty);
+    internal async Task<Image> GetSongImg() => await ArcaeaCharts.GetSongImg(SongId, Difficulty);
 
     internal string SongName(byte length) => SongInfo.GetSongName(length);
 

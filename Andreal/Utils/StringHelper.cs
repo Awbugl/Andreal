@@ -12,6 +12,5 @@ internal static class StringHelper
 
     internal static bool Equals(string? raw, string? seed) =>
         seed != null && raw != null
-                     && string.Equals(Reg.Replace(raw, ""), Reg.Replace(seed, ""),
-                                      StringComparison.OrdinalIgnoreCase);
+                     && string.Equals(Reg.Replace(raw, ""), Reg.Replace(seed, ""), StringComparison.OrdinalIgnoreCase);
 }

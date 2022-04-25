@@ -7,6 +7,15 @@ public class ArcaeaSong : List<ArcaeaChart>, IEquatable<ArcaeaSong>
 {
     internal string SongID { get; set; } = null!;
 
+    internal string NameWithPackage => $"{this[0].NameEn}\n(Package: {this[0].SetFriendly})";
+
+    public bool Equals(ArcaeaSong? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return SongID.Equals(other.SongID);
+    }
+
     internal async Task<MessageChain> FullConstString()
     {
         var msg = new MessageChain();
@@ -18,15 +27,6 @@ public class ArcaeaSong : List<ArcaeaChart>, IEquatable<ArcaeaSong>
         for (var i = 0; i <= Count; i++) msg.Append("\n" + this[i].ConstString);
 
         return msg;
-    }
-    
-    internal string NameWithPackage => $"{this[0].NameEn}\n(Package: {this[0].SetFriendly})";
-    
-    public bool Equals(ArcaeaSong? other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return SongID.Equals(other.SongID);
     }
 
     public override bool Equals(object? obj)
