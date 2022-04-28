@@ -28,7 +28,7 @@ internal class RecordInfo
         _score = recentdata.Score;
     }
 
-    
+
     public RecordInfo(ArcSongdata recentdata)
     {
         Difficulty = recentdata.Difficulty;

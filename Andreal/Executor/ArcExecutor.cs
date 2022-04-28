@@ -57,8 +57,7 @@ internal class ArcExecutor : ExecutorBase
             {
                 var unbinduser = User ?? new BotUserInfo
                                          {
-                                             Uin = Info.FromQQ,
-                                             UiVersion = (BotUserInfo.ImgVersion)new Random().Next(3)
+                                             Uin = Info.FromQQ, UiVersion = (BotUserInfo.ImgVersion)new Random().Next(3)
                                          };
 
                 unbinduser.ArcCode = 0;

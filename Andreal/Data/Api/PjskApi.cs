@@ -26,8 +26,7 @@ internal static class PjskApi
     }
 
     internal static async Task<PjskProfiles?> PjskProfile(long uid) =>
-        JsonConvert.DeserializeObject<PjskProfiles>(await
-                                                        GetString($"https://api.pjsekai.moe/api/user/{uid}/profile"));
+        JsonConvert.DeserializeObject<PjskProfiles>(await GetString($"https://api.pjsekai.moe/api/user/{uid}/profile"));
 
     internal static async Task<List<PjskMusics>?> PjskMusics() =>
         JsonConvert.DeserializeObject<List<PjskMusics>>(await

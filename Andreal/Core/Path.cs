@@ -82,7 +82,7 @@ internal class Path
 
     internal static Path ArcaeaBackground(int version, ArcaeaChart chart) =>
         new(ArcaeaBackgroundRoot + $"V{version}_{ArcaeaTempSong(chart)}.png");
-    
+
     internal static Path ArcaeaBg3Mask(int side) => new(ArcaeaSourceRoot + $"RawV3Bg_{side}.png");
 
     internal static async Task<Path> ArcaeaSong(ArcaeaChart chart)

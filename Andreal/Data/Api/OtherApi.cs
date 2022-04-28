@@ -31,8 +31,7 @@ internal static class OtherApi
         JsonConvert.DeserializeObject<YcmResponse>(await
                                                        GetString($"https://ycm.chinosk6.cn/get_car?car_type={carType}&time_limit=900&token=L4ETRgHBPUt8KSkvcO"));
 
-    internal static async Task<YcmResponse?>
-        AddCarApi(string carType, string roomid, string description, long uin) =>
+    internal static async Task<YcmResponse?> AddCarApi(string carType, string roomid, string description, long uin) =>
         JsonConvert.DeserializeObject<YcmResponse>(await
                                                        GetString($"https://ycm.chinosk6.cn/add_car?car_type={carType}&room_id={roomid}&description={description}&creator_id={uin}&data_from=AndreaBot&token=L4ETRgHBPUt8KSkvcO"));
 

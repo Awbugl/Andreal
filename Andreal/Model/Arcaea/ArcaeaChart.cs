@@ -9,7 +9,7 @@ namespace Andreal.Model.Arcaea;
 public class ArcaeaChart
 {
     private static readonly Dictionary<string, Stream> SongImage = new();
-    
+
     [JsonProperty("name_en")] public string NameEn { get; set; }
     [JsonProperty("name_jp")] public string NameJp { get; set; }
     [JsonProperty("artist")] public string Artist { get; set; }
@@ -31,7 +31,7 @@ public class ArcaeaChart
     [JsonProperty("jacket_designer")] public string JacketDesigner { get; set; }
     [JsonProperty("jacket_override")] public bool JacketOverride { get; set; }
     [JsonProperty("audio_override")] public bool AudioOverride { get; set; }
-    
+
     internal string SongID { get; set; }
 
     internal int RatingClass { get; set; }
@@ -46,7 +46,7 @@ public class ArcaeaChart
         NameEn.Length < length + 3
             ? NameEn
             : $"{NameEn[..length]}...";
-    
+
     internal async Task<Image> GetSongImage()
     {
         var path = await Path.ArcaeaSong(this);

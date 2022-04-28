@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Andreal.Data.Json.Pjsk;
 
 public class PjskRankings
-{    
+{
     [JsonProperty("userId")] public long UserID { get; set; }
 
     [JsonProperty("name")] public string Name { get; set; }

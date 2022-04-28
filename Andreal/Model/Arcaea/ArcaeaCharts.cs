@@ -69,7 +69,7 @@ internal static partial class ArcaeaCharts
         foreach (var songitem in slst)
         {
             songitem.Difficulties.SongID = songitem.SongID;
-            
+
             for (var i = 0; i < songitem.Difficulties.Count; ++i)
             {
                 songitem.Difficulties[i].RatingClass = i;
