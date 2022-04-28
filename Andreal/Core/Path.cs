@@ -138,9 +138,9 @@ internal class Path
         return pth;
     }
 
-    internal static Path ArcaeaCleartypeV3(sbyte cleartype) => new(ArcaeaSourceRoot + $"clear_{cleartype}.png");
-
     internal static Path ArcaeaCleartypeV1(sbyte cleartype) => new(ArcaeaSourceRoot + $"end_{cleartype}.png");
+
+    internal static Path ArcaeaCleartypeV3(sbyte cleartype) => new(ArcaeaSourceRoot + $"clear_{cleartype}.png");
 
     internal static Path ArcaeaCleartypeV4(sbyte cleartype) => new(ArcaeaSourceRoot + $"clear_badge_{cleartype}.png");
 
