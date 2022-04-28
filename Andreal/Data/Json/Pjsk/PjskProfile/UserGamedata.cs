@@ -6,7 +6,7 @@ namespace Andreal.Data.Json.Pjsk.PjskProfile;
 
 public class UserGamedata
 {
-    [JsonProperty("userId")] public long UserId { get; set; }
+    [JsonProperty("userId")] public long UserID { get; set; }
 
     [JsonProperty("name")] public string Name { get; set; }
 

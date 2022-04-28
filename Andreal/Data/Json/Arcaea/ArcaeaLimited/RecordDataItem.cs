@@ -7,7 +7,7 @@ namespace Andreal.Data.Json.Arcaea.ArcaeaLimited;
 [Serializable]
 public class RecordDataItem
 {
-    [JsonProperty("song_id")] public string SongId { get; set; }
+    [JsonProperty("song_id")] public string SongID { get; set; }
     [JsonProperty("difficulty")] public sbyte Difficulty { get; set; }
     [JsonProperty("score")] public int Score { get; set; }
     [JsonProperty("shiny_pure_count")] public string ShinyPureCount { get; set; }

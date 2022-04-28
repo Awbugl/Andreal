@@ -15,9 +15,9 @@ internal class RecordInfo
         Difficulty = difficulty == -128
             ? recentdata.Difficulty
             : difficulty;
-        SongInfo = ArcaeaCharts.QueryById(recentdata.SongId)![Difficulty];
+        SongInfo = ArcaeaCharts.QueryByID(recentdata.SongID)![Difficulty];
         Cleartype = 0;
-        SongId = recentdata.SongId;
+        SongID = recentdata.SongID;
         Rating = recentdata.PotentialValue.ToString("0.0000");
         Pure = recentdata.PureCount;
         MaxPure = recentdata.ShinyPureCount;
@@ -28,12 +28,13 @@ internal class RecordInfo
         _score = recentdata.Score;
     }
 
+    
     public RecordInfo(ArcSongdata recentdata)
     {
         Difficulty = recentdata.Difficulty;
-        SongInfo = ArcaeaCharts.QueryById(recentdata.SongId)![Difficulty];
+        SongInfo = ArcaeaCharts.QueryByID(recentdata.SongID)![Difficulty];
         Cleartype = recentdata.ClearType;
-        SongId = recentdata.SongId;
+        SongID = recentdata.SongID;
         Rating = recentdata.Rating.ToString("0.0000");
         Pure = recentdata.Pure;
         MaxPure = recentdata.MaxPure;
@@ -51,7 +52,7 @@ internal class RecordInfo
 
     internal bool IsRecent => Difficulty == -128;
 
-    internal string SongId { get; }
+    internal string SongID { get; }
 
     internal string Rating { get; }
 
@@ -108,7 +109,7 @@ internal class RecordInfo
         }
     }
 
-    internal async Task<Image> GetSongImg() => await ArcaeaCharts.GetSongImg(SongId, Difficulty);
+    internal Task<Image> GetSongImage() => SongInfo.GetSongImage();
 
     internal string SongName(byte length) => SongInfo.GetSongName(length);
 

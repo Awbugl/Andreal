@@ -4,9 +4,9 @@ namespace Andreal.Data.Json.Pjsk.PjskProfile;
 
 public class UserHonorsItem
 {
-    [JsonProperty("userId")] public long UserId { get; set; }
+    [JsonProperty("userId")] public long UserID { get; set; }
 
-    [JsonProperty("honorId")] public int HonorId { get; set; }
+    [JsonProperty("honorId")] public int HonorID { get; set; }
 
     [JsonProperty("level")] public int Level { get; set; }
 

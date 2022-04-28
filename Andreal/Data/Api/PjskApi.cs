@@ -25,9 +25,9 @@ internal static class PjskApi
         }
     }
 
-    internal static async Task<PjskProfiles?> PjskProfile(long userId) =>
+    internal static async Task<PjskProfiles?> PjskProfile(long uid) =>
         JsonConvert.DeserializeObject<PjskProfiles>(await
-                                                        GetString($"https://api.pjsekai.moe/api/user/{userId}/profile"));
+                                                        GetString($"https://api.pjsekai.moe/api/user/{uid}/profile"));
 
     internal static async Task<List<PjskMusics>?> PjskMusics() =>
         JsonConvert.DeserializeObject<List<PjskMusics>>(await
@@ -41,18 +41,18 @@ internal static class PjskApi
         JsonConvert.DeserializeObject<List<PjskMusicMetas>>(await
                                                                 GetString("https://minio.dnaroma.eu/sekai-best-assets/music_metas.json"));
 
-    internal static async Task<PjskRankings?> PjskUserRanking(long userId, int eventId) =>
+    internal static async Task<PjskRankings?> PjskUserRanking(long uid, int eventID) =>
         JsonConvert
             .DeserializeObject<
                 PjskEventUserRanking>(await
-                                          GetString($"https://api.pjsekai.moe/api/user/%7Buser_id%7D/event/{eventId}/ranking?targetUserId={userId}"))
+                                          GetString($"https://api.pjsekai.moe/api/user/%7Buser_id%7D/event/{eventID}/ranking?targetUserId={uid}"))
             ?.Rankings.FirstOrDefault();
 
-    internal static async Task<PjskRankings?> PjskEventRanking(long targetRank, int eventId) =>
+    internal static async Task<PjskRankings?> PjskEventRanking(long targetRank, int eventID) =>
         JsonConvert
             .DeserializeObject<
                 PjskEventUserRanking>(await
-                                          GetString($"https://api.pjsekai.moe/api/user/%7Buser_id%7D/event/{eventId}/ranking?targetRank={targetRank}"))
+                                          GetString($"https://api.pjsekai.moe/api/user/%7Buser_id%7D/event/{eventID}/ranking?targetRank={targetRank}"))
             ?.Rankings.FirstOrDefault();
 
     internal static async Task<PjskCurrentEventItem?> PjskCurrentEvent() =>

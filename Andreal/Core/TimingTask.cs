@@ -44,14 +44,14 @@ internal static class BackgroundTask
                                             = PjskApi.PjskMusicDifficulties().Result ?? musicDifficulties));
 
             foreach (var item in musics)
-                if (!SongInfo.CheckFull(item.Id))
+                if (!SongInfo.CheckFull(item.ID))
                 {
-                    var metas = musicMetas.Where(i => i.MusicId == item.Id).ToList();
+                    var metas = musicMetas.Where(i => i.MusicID == item.ID).ToList();
                     if (metas.Any())
                         SongInfo.Insert(item, metas, null);
                     else
                     {
-                        var difficulties = musicDifficulties.Where(i => i.MusicId == item.Id).ToList();
+                        var difficulties = musicDifficulties.Where(i => i.MusicID == item.ID).ToList();
                         if (difficulties.Any()) SongInfo.Insert(item, difficulties, null);
                     }
                 }

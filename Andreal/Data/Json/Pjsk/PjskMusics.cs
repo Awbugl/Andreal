@@ -6,7 +6,7 @@ namespace Andreal.Data.Json.Pjsk;
 
 public class PjskMusics
 {
-    [JsonProperty("id")] public string Id { get; set; }
+    [JsonProperty("id")] public string ID { get; set; }
 
     [JsonProperty("categories")] public List<string> Categories { get; set; }
 

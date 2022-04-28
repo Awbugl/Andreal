@@ -28,7 +28,7 @@ internal class OtherExecutor : ExecutorBase
 
     [CommandPrefix("/jrrp")]
     private async Task<MessageChain> Jrrp() =>
-        RobotReply.JrrpResult.Replace("$jrrp$", await OtherApi.JrrpApi(Info.FromQq));
+        RobotReply.JrrpResult.Replace("$jrrp$", await OtherApi.JrrpApi(Info.FromQQ));
 
     [CommandPrefix("/dismiss")]
     private async Task<MessageChain?> Dismiss()

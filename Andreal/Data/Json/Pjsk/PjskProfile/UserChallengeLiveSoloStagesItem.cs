@@ -9,9 +9,9 @@ public class UserChallengeLiveSoloStagesItem
     [JsonProperty("challengeLiveStageType")]
     public string ChallengeLiveStageType { get; set; }
 
-    [JsonProperty("characterId")] public int CharacterId { get; set; }
+    [JsonProperty("characterId")] public int CharacterID { get; set; }
 
-    [JsonProperty("challengeLiveStageId")] public int ChallengeLiveStageId { get; set; }
+    [JsonProperty("challengeLiveStageId")] public int ChallengeLiveStageID { get; set; }
 
     [JsonProperty("rank")] public int Rank { get; set; }
 }

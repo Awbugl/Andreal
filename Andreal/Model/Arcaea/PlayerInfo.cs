@@ -12,11 +12,11 @@ internal class PlayerInfo
 
     internal PlayerInfo(UserinfoDataItem recentdata, BotUserInfo user)
     {
-        _playerCode = user.ArcId.ToString("D9");
+        _playerCode = user.ArcCode.ToString("D9");
         _playerName = recentdata.DisplayName;
         _isHide = user.IsHide == 0;
         ImgVersion = user.UiVersion;
-        Partner = recentdata.Partner.PartnerId;
+        Partner = recentdata.Partner.PartnerID;
         IsAwakened = recentdata.Partner.IsAwakened;
         Potential = recentdata.Potential ?? -1;
     }

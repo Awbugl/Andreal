@@ -30,7 +30,7 @@ internal class PjskCurrentEventImageGenerator
         (_eventRankings is null
             ? ""
             : $"本期活动：\n{_currentEvent.Name} \n #{_eventRankings.Rank} {_eventRankings.Name} ({_eventRankings.Score}P)\n\n")
-        + $"当前线：\n{string.Join("\n", _rank.Select(async i => $"Rank {i} : {(await PjskApi.PjskEventRanking(i, _currentEvent.EventId))!.Score}P"))}\n\n"
+        + $"当前线：\n{string.Join("\n", _rank.Select(async i => $"Rank {i} : {(await PjskApi.PjskEventRanking(i, _currentEvent.EventID))!.Score}P"))}\n\n"
         + $"预测线：\n{string.Join("\n", _rank.Select(i => $"Rank {i} : {_predict[i]}P"))}";
 
     internal async Task<ImageMessage> Generate()
@@ -45,7 +45,7 @@ internal class PjskCurrentEventImageGenerator
         for (var index = 0; index < _rank.Length; index++)
         {
             bg.Draw(new
-                        TextWithStrokeModel((await PjskApi.PjskEventRanking(_rank[index], _currentEvent.EventId))!.Score.ToString(),
+                        TextWithStrokeModel((await PjskApi.PjskEventRanking(_rank[index], _currentEvent.EventID))!.Score.ToString(),
                                             Font.HummingPro24, Color.White, 240, 550 + index * 50, width: 180,
                                             height: 25, stringAlignment: StringAlignment.Far));
             bg.Draw(new TextWithStrokeModel(_predict[_rank[index]].ToString(), Font.HummingPro24, Color.White, 590,

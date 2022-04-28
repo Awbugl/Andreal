@@ -6,9 +6,9 @@ namespace Andreal.Data.Json.Pjsk.PjskProfile;
 
 public class UserMusicResultsItem
 {
-    [JsonProperty("userId")] public long UserId { get; set; }
+    [JsonProperty("userId")] public long UserID { get; set; }
 
-    [JsonProperty("musicId")] public int MusicId { get; set; }
+    [JsonProperty("musicId")] public int MusicID { get; set; }
 
     [JsonProperty("musicDifficulty")] public string MusicDifficulty { get; set; }
 

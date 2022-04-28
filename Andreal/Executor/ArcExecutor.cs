@@ -23,7 +23,7 @@ internal class ArcExecutor : ExecutorBase
 
     private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, sbyte dif = 3)
     {
-        var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcId, song.SongID, DifPriority[dif]);
+        var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, DifPriority[dif]);
 
         switch (data.Status)
         {
@@ -57,11 +57,11 @@ internal class ArcExecutor : ExecutorBase
             {
                 var unbinduser = User ?? new BotUserInfo
                                          {
-                                             QqId = Info.FromQq,
+                                             Uin = Info.FromQQ,
                                              UiVersion = (BotUserInfo.ImgVersion)new Random().Next(3)
                                          };
 
-                unbinduser.ArcId = 0;
+                unbinduser.ArcCode = 0;
 
                 BotUserInfo.Set(unbinduser);
                 return RobotReply.UnBindSuccess;
@@ -81,10 +81,10 @@ internal class ArcExecutor : ExecutorBase
 
         var user = User ?? new BotUserInfo
                            {
-                               QqId = Info.FromQq, UiVersion = (BotUserInfo.ImgVersion)new Random().Next(3)
+                               Uin = Info.FromQQ, UiVersion = (BotUserInfo.ImgVersion)new Random().Next(3)
                            };
 
-        user.ArcId = content.AccountInfo.Code;
+        user.ArcCode = content.AccountInfo.Code;
 
         BotUserInfo.Set(user);
 
@@ -102,7 +102,7 @@ internal class ArcExecutor : ExecutorBase
         return response.Cars.Aggregate("现有车牌:",
                                        (curr, room) =>
                                            curr
-                                           + $"\n\n{room.RoomId}   {room.AddTime.DateStringFromNow()}\n{Regex.Unescape(room.Description)}");
+                                           + $"\n\n{room.RoomID}   {room.AddTime.DateStringFromNow()}\n{Regex.Unescape(room.Description)}");
     }
 
     [CommandPrefix("/arc car")]
@@ -114,7 +114,7 @@ internal class ArcExecutor : ExecutorBase
 
         if (comment.Length < 4) return "描述信息过短将被视作无意义车牌，请添加更多描述。";
 
-        var response = await OtherApi.AddCarApi("arc", Command[0], comment, User.QqId);
+        var response = await OtherApi.AddCarApi("arc", Command[0], comment, User.Uin);
 
         return (response.Code switch
                 {
@@ -140,7 +140,7 @@ internal class ArcExecutor : ExecutorBase
                 var info = ArcaeaCharts.RandomSong(lower, upper);
                 return info == null
                     ? RobotReply.ParameterError
-                    : RobotReply.RandSongReply + info.NameWithPackageAndConst;
+                    : RobotReply.RandSongReply + info.GetSongImage() + info.NameWithPackageAndConst;
             }
             case 2:
             {
@@ -150,7 +150,7 @@ internal class ArcExecutor : ExecutorBase
                 var info = ArcaeaCharts.RandomSong(lower, upper);
                 return info == null
                     ? RobotReply.ParameterError
-                    : RobotReply.RandSongReply + info.NameWithPackageAndConst;
+                    : RobotReply.RandSongReply + info.GetSongImage() + info.NameWithPackageAndConst;
             }
         }
     }
@@ -243,7 +243,7 @@ internal class ArcExecutor : ExecutorBase
     private async Task<MessageChain> Best30()
     {
         if (User == null) return RobotReply.NotBind;
-        if (User.ArcId < 2) return RobotReply.NotBindArc;
+        if (User.ArcCode < 2) return RobotReply.NotBindArc;
 
 
         IBest30Data b30data;
@@ -254,13 +254,13 @@ internal class ArcExecutor : ExecutorBase
             if (!ArcaeaLimitedApi.Available) return null!;
             Info.SendMessage(RobotReply.Best30Querying);
 
-            playerInfo = new((await ArcaeaLimitedApi.Userinfo(User.ArcId))!, User);
-            b30data = new LimitedBest30Data((await ArcaeaLimitedApi.Userbest30(User.ArcId))!, playerInfo.Potential);
+            playerInfo = new((await ArcaeaLimitedApi.Userinfo(User.ArcCode))!, User);
+            b30data = new LimitedBest30Data((await ArcaeaLimitedApi.Userbest30(User.ArcCode))!, playerInfo.Potential);
         }
         else
         {
             Info.SendMessage(RobotReply.Best30Querying);
-            var data = await ArcaeaUnlimitedApi.UserBest30(User.ArcId);
+            var data = await ArcaeaUnlimitedApi.UserBest30(User.ArcCode);
             if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
             var content = data.DeserializeContent<UserBestsContent>();
             b30data = new Best30Data(content);
@@ -274,10 +274,10 @@ internal class ArcExecutor : ExecutorBase
     private async Task<MessageChain> Best40()
     {
         if (User == null) return RobotReply.NotBind;
-        if (User.ArcId < 2) return RobotReply.NotBindArc;
+        if (User.ArcCode < 2) return RobotReply.NotBindArc;
 
         Info.SendMessage(RobotReply.Best30Querying);
-        var data = await ArcaeaUnlimitedApi.UserBest40(User.ArcId);
+        var data = await ArcaeaUnlimitedApi.UserBest40(User.ArcCode);
         if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
 
         var content = data.DeserializeContent<UserBestsContent>();
@@ -296,9 +296,9 @@ internal class ArcExecutor : ExecutorBase
     private async Task<MessageChain> FloorOrCeil(bool isFloor)
     {
         if (User == null) return RobotReply.NotBind;
-        if (User.ArcId < 2) return RobotReply.NotBindArc;
+        if (User.ArcCode < 2) return RobotReply.NotBindArc;
 
-        var data = await ArcaeaUnlimitedApi.UserBest30(User.ArcId);
+        var data = await ArcaeaUnlimitedApi.UserBest30(User.ArcCode);
         if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
         var content = data.DeserializeContent<UserBestsContent>();
         IBest30Data b30data = new Best30Data(content);
@@ -321,7 +321,7 @@ internal class ArcExecutor : ExecutorBase
 
     private async Task<MessageChain> Recent()
     {
-        var data = await ArcaeaUnlimitedApi.UserInfo(User!.ArcId);
+        var data = await ArcaeaUnlimitedApi.UserInfo(User!.ArcCode);
         if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
         var content = data.DeserializeContent<UserInfoContent>();
 
@@ -335,7 +335,7 @@ internal class ArcExecutor : ExecutorBase
     private async Task<MessageChain> Search()
     {
         if (User == null) return RobotReply.NotBind;
-        if (User.ArcId < 2) return RobotReply.NotBindArc;
+        if (User.ArcCode < 2) return RobotReply.NotBindArc;
 
         if (CommandLength == 0) return await Recent();
         if (Command[0] == "b30") return await Best30();
@@ -358,9 +358,7 @@ internal class ArcExecutor : ExecutorBase
         if (CommandLength != 1) return RobotReply.ParameterLengthError;
         if (!double.TryParse(Command[0], out var num) || num > 12) return RobotReply.ParameterError;
         if (num < 8) return (TextMessage)"暂不支持查询8.0以下的定数。";
-        var list = ArcaeaCharts.GetByConst(num)
-                               .OrderBy<(string, ArcaeaChart), string>(((string sid, ArcaeaChart chart) i) =>
-                                                                           i.chart.NameEn).ToArray();
+        var list = ArcaeaCharts.GetByConst(num).OrderBy(i => i.NameEn).ToArray();
         if (list.Length == 0) return (TextMessage)"此定数在当前版本不存在对应谱面。";
         return await new ArcSongLevelListImageGenerator(list).Generate();
     }

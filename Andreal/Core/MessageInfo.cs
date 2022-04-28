@@ -32,13 +32,13 @@ internal class MessageInfo
 
     internal Bot Bot { get; set; }
     internal uint FromGroup { get; private set; }
-    internal uint FromQq { get; private set; }
+    internal uint FromQQ { get; private set; }
     internal string[] CommandWithoutPrefix { get; private set; }
     internal MessageInfoType MessageType { get; private set; }
     private MessageChain? ReplyMessages { get; set; }
     internal MessageStruct Message { get; set; }
 
-    internal Lazy<BotUserInfo?> UserInfo => new(() => BotUserInfo.Get(FromQq));
+    internal Lazy<BotUserInfo?> UserInfo => new(() => BotUserInfo.Get(FromQQ));
 
     internal static RobotReply RobotReply => GlobalConfig.RobotReply;
 
@@ -69,12 +69,12 @@ internal class MessageInfo
     }
 
     internal async Task<bool> PermissionCheck() =>
-        (await Bot.GetGroupMemberInfo(FromGroup, FromQq)).Role > RoleType.Member;
+        (await Bot.GetGroupMemberInfo(FromGroup, FromQQ)).Role > RoleType.Member;
 
-    internal bool MasterCheck() => FromQq == _master;
+    internal bool MasterCheck() => FromQQ == _master;
 
     private object SendPrivateMessage(MessageChain messages) =>
-        Bot.SendFriendMessage(FromQq, FromMessageChain(messages));
+        Bot.SendFriendMessage(FromQQ, FromMessageChain(messages));
 
     private object SendGroupMessage(MessageChain messages) =>
         Bot.SendGroupMessage(FromGroup, FromMessageChain(messages));
@@ -121,7 +121,7 @@ internal class MessageInfo
                                         CommandWithoutPrefix
                                             = rMsg[match.Length..]
                                                 .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries),
-                                        FromQq = fromQq,
+                                        FromQQ = fromQq,
                                         FromGroup = fromGroup,
                                         Message = message
                                     };
@@ -140,7 +140,7 @@ internal class MessageInfo
                                                           $"{RobotReply.APIQueryFailed}({exception.Message})",
                                                       _ => RobotReply.ExceptionOccured(e.InnerException!)
                                                   };
-                             Reporter.ExceptionReport(e.InnerException, info.FromQq);
+                             Reporter.ExceptionReport(e.InnerException, info.FromQQ);
                          }
                          catch (AggregateException e)
                          {
@@ -151,12 +151,12 @@ internal class MessageInfo
                                                           $"{RobotReply.APIQueryFailed}({exception.Message})",
                                                       _ => RobotReply.ExceptionOccured(e.InnerException!)
                                                   };
-                             Reporter.ExceptionReport(e.InnerException, info.FromQq);
+                             Reporter.ExceptionReport(e.InnerException, info.FromQQ);
                          }
                          catch (Exception e)
                          {
                              info.ReplyMessages = RobotReply.ExceptionOccured(e);
-                             Reporter.ExceptionReport(e, info.FromQq);
+                             Reporter.ExceptionReport(e, info.FromQQ);
                          }
                          finally
                          {
@@ -167,14 +167,14 @@ internal class MessageInfo
                              }
                              catch (Exception e)
                              {
-                                 Reporter.ExceptionReport(e, info.FromQq);
+                                 Reporter.ExceptionReport(e, info.FromQQ);
                                  try
                                  {
                                      info.SendMessage(RobotReply.SendMessageFailed);
                                  }
                                  catch (Exception ex)
                                  {
-                                     Reporter.ExceptionReport(ex, info.FromQq);
+                                     Reporter.ExceptionReport(ex, info.FromQQ);
                                  }
                              }
                          }

@@ -25,15 +25,15 @@ internal class PjskExecutor : ExecutorBase
     private async Task<MessageChain> Bind()
     {
         if (CommandLength != 1) return RobotReply.ParameterLengthError;
-        if (!long.TryParse(Command[0], out var userId)) return RobotReply.ParameterError;
+        if (!long.TryParse(Command[0], out var id)) return RobotReply.ParameterError;
 
-        var pjskProfile = await PjskApi.PjskProfile(userId);
+        var pjskProfile = await PjskApi.PjskProfile(id);
 
         if (pjskProfile?.User is null) return RobotReply.PjskUserBindFailed;
 
-        var user = User ?? new BotUserInfo { QqId = Info.FromQq };
+        var user = User ?? new BotUserInfo { Uin = Info.FromQQ };
 
-        user.PjskId = pjskProfile.User.UserGamedata.UserId;
+        user.PjskCode = pjskProfile.User.UserGamedata.UserID;
 
         BotUserInfo.Set(user);
 
@@ -76,22 +76,22 @@ internal class PjskExecutor : ExecutorBase
     private async Task<MessageChain> Profile()
     {
         if (User == null) return RobotReply.NotBind;
-        if (User.PjskId == 0) return RobotReply.NotBindPjsk;
+        if (User.PjskCode == 0) return RobotReply.NotBindPjsk;
 
         // 2020/09/16 10:00:00 (utc+9) so 9am in utc+8
-        // and add (Id/1000/1024/4096) seconds
+        // and add (ID/1000/1024/4096) seconds
         // thanks to nilcric.
 
         var registerDate
-            = new DateTime(2020, 9, 16, 9, 0, 0, DateTimeKind.Utc).AddSeconds((double)User.PjskId / 0xFA000000);
+            = new DateTime(2020, 9, 16, 9, 0, 0, DateTimeKind.Utc).AddSeconds((double)User.PjskCode / 0xFA000000);
 
         PjskCurrentEventItem? currentEvent = null;
         PjskProfiles? pjskProfile = null;
 
-        await Task.WhenAll(Task.Run(() => pjskProfile = PjskApi.PjskProfile(User.PjskId).Result),
+        await Task.WhenAll(Task.Run(() => pjskProfile = PjskApi.PjskProfile(User.PjskCode).Result),
                            Task.Run(() => currentEvent = PjskApi.PjskCurrentEvent().Result));
 
-        var eventRankings = await PjskApi.PjskUserRanking(User.PjskId, currentEvent.EventId);
+        var eventRankings = await PjskApi.PjskUserRanking(User.PjskCode, currentEvent.EventID);
         var userGamedata = pjskProfile.User.UserGamedata;
 
         return
@@ -99,7 +99,7 @@ internal class PjskExecutor : ExecutorBase
             + $"本期活动：{currentEvent.Name} \n" + (eventRankings == null
                 ? ""
                 : $"#{eventRankings.Rank}  ({eventRankings.Score}P)\n")
-            + $"\n详细信息请使用浏览器查看：\nhttps://profile.pjsekai.moe/#/user/{User.PjskId}";
+            + $"\n详细信息请使用浏览器查看：\nhttps://profile.pjsekai.moe/#/user/{User.PjskCode}";
 
         string Capture()
         {
@@ -146,7 +146,7 @@ internal class PjskExecutor : ExecutorBase
         await Task.WhenAll(Task.Run(async () => currentEvent = await PjskApi.PjskCurrentEvent()),
                            Task.Run(async () => predict = await PjskApi.PjskCurrentEventPredict()));
 
-        var eventRankings = await PjskApi.PjskUserRanking(User.PjskId, currentEvent.EventId);
+        var eventRankings = await PjskApi.PjskUserRanking(User.PjskCode, currentEvent.EventID);
         var generator = new PjskCurrentEventImageGenerator(currentEvent, eventRankings, predict);
         return User.IsText == 1
             ? generator.TextMessage
@@ -162,7 +162,7 @@ internal class PjskExecutor : ExecutorBase
         return response.Cars.Aggregate("现有车牌:",
                                        (curr, room) =>
                                            curr
-                                           + $"\n\n{room.RoomId}   {room.AddTime.DateStringFromNow()}\n{Regex.Unescape(room.Description)}");
+                                           + $"\n\n{room.RoomID}   {room.AddTime.DateStringFromNow()}\n{Regex.Unescape(room.Description)}");
     }
 
     [CommandPrefix("/pjsk car")]
@@ -178,7 +178,7 @@ internal class PjskExecutor : ExecutorBase
             && !comment.Contains("15w") && !comment.Contains("12w") && comment.Length < 4)
             return "描述信息过短将被视作无意义车牌，请添加更多描述。";
 
-        var response = await OtherApi.AddCarApi("pjsk", Command[0], comment, User.QqId);
+        var response = await OtherApi.AddCarApi("pjsk", Command[0], comment, User.Uin);
 
         return (response.Code switch
                 {
@@ -207,7 +207,7 @@ internal class PjskExecutor : ExecutorBase
         if (CommandLength == 0) return RobotReply.ParameterLengthError;
         var (status, result) = PjskHelper.SongNameConverter(Command);
         if (status != 0) return PjskHelper.GetSongAliasErrorMessage(RobotReply, status, result);
-        var sid = result[0].SongId;
+        var sid = result[0].SongID;
         return $"Expert谱面：\n{ChartImage(sid, "expert")}\nMaster谱面：\n{ChartImage(sid, "master")}";
 
         ImageMessage ChartImage(string songId, string dif)

@@ -6,7 +6,7 @@ namespace Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 
 public class ArcSongdata
 {
-    [JsonProperty("song_id")] public string SongId { get; set; }
+    [JsonProperty("song_id")] public string SongID { get; set; }
 
     [JsonProperty("difficulty")] public sbyte Difficulty { get; set; }
 

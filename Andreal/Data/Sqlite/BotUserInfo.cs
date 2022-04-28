@@ -9,31 +9,31 @@ namespace Andreal.Data.Sqlite;
 internal class BotUserInfo
 {
     private static Lazy<ConcurrentDictionary<long, BotUserInfo>> _list
-        = new(() => new(SqliteHelper.SelectAll<BotUserInfo>().ToDictionary(i => i.QqId)));
+        = new(() => new(SqliteHelper.SelectAll<BotUserInfo>().ToDictionary(i => i.Uin)));
 
-    [PrimaryKey] [Column("QQId")] public long QqId { get; set; }
-    [Column("ArcId")] public int ArcId { get; set; }
-    [Column("PjskId")] public long PjskId { get; set; }
+    [PrimaryKey] [Column("QQId")] public long Uin { get; set; }
+    [Column("ArcId")] public int ArcCode { get; set; }
+    [Column("PjskId")] public long PjskCode { get; set; }
     [Column("IsHide")] public int IsHide { get; set; }
     [Column("IsText")] public int IsText { get; set; }
     [Column("ImgVer")] public ImgVersion UiVersion { get; set; }
 
     internal static void Set(BotUserInfo user)
     {
-        if (_list.Value.ContainsKey(user.QqId))
+        if (_list.Value.ContainsKey(user.Uin))
         {
-            _list.Value[user.QqId] = user;
+            _list.Value[user.Uin] = user;
             SqliteHelper.Update(user);
         }
         else
         {
-            _list.Value.TryAdd(user.QqId, user);
+            _list.Value.TryAdd(user.Uin, user);
             SqliteHelper.Insert(user);
         }
     }
 
-    internal static BotUserInfo? Get(long qqid) =>
-        _list.Value.TryGetValue(qqid, out var user)
+    internal static BotUserInfo? Get(long uin) =>
+        _list.Value.TryGetValue(uin, out var user)
             ? user
             : null;
 

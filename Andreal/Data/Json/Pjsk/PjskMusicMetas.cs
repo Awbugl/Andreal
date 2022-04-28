@@ -6,7 +6,7 @@ namespace Andreal.Data.Json.Pjsk;
 
 public class PjskMusicMetas
 {
-    [JsonProperty("music_id")] public string MusicId { get; set; }
+    [JsonProperty("music_id")] public string MusicID { get; set; }
 
     [JsonProperty("difficulty")] public string Difficulty { get; set; }
 

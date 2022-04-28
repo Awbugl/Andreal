@@ -21,9 +21,9 @@ internal static class OtherApi
         return $"{data?.Content}\n  ----「{data?.From}」";
     }
 
-    internal static async Task<string> JrrpApi(long qqid) =>
+    internal static async Task<string> JrrpApi(long uin) =>
         await (await Client.PostAsync("http://api.kokona.tech:5555/jrrp",
-                                      new StringContent($"QQ=2967373629&v=20190114&QueryQQ={qqid}", Encoding.UTF8,
+                                      new StringContent($"QQ=2967373629&v=20190114&QueryQQ={uin}", Encoding.UTF8,
                                                         new("application/x-www-form-urlencoded")))).Content
                                                                                                    .ReadAsStringAsync();
 
@@ -32,9 +32,9 @@ internal static class OtherApi
                                                        GetString($"https://ycm.chinosk6.cn/get_car?car_type={carType}&time_limit=900&token=L4ETRgHBPUt8KSkvcO"));
 
     internal static async Task<YcmResponse?>
-        AddCarApi(string carType, string roomid, string description, long userid) =>
+        AddCarApi(string carType, string roomid, string description, long uin) =>
         JsonConvert.DeserializeObject<YcmResponse>(await
-                                                       GetString($"https://ycm.chinosk6.cn/add_car?car_type={carType}&room_id={roomid}&description={description}&creator_id={userid}&data_from=AndreaBot&token=L4ETRgHBPUt8KSkvcO"));
+                                                       GetString($"https://ycm.chinosk6.cn/add_car?car_type={carType}&room_id={roomid}&description={description}&creator_id={uin}&data_from=AndreaBot&token=L4ETRgHBPUt8KSkvcO"));
 
     internal static async Task<string?> BandoriYcmApi()
     {

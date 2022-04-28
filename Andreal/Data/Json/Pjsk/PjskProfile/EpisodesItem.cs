@@ -6,7 +6,7 @@ namespace Andreal.Data.Json.Pjsk.PjskProfile;
 
 public class EpisodesItem
 {
-    [JsonProperty("cardEpisodeId")] public int CardEpisodeId { get; set; }
+    [JsonProperty("cardEpisodeId")] public int CardEpisodeID { get; set; }
 
     [JsonProperty("scenarioStatus")] public string ScenarioStatus { get; set; }
 
