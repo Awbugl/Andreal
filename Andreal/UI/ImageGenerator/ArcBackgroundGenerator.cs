@@ -10,17 +10,12 @@ namespace Andreal.UI.ImageGenerator;
 internal class ArcBackgroundGenerator
 {
     private readonly ArcaeaChart _info;
-    private readonly string _sid;
 
-    public ArcBackgroundGenerator(RecordInfo recordInfo)
-    {
-        _sid = recordInfo.SongId;
-        _info = recordInfo.SongInfo;
-    }
+    public ArcBackgroundGenerator(RecordInfo recordInfo) { _info = recordInfo.SongInfo; }
 
     internal async Task<BackGround> ArcV1()
     {
-        var path = Path.ArcaeaBg1(_sid, _info.Difficulty);
+        var path = Path.ArcaeaBackground(1, _info);
         return path.FileExists
             ? new(path)
             : await GenerateArcV1(path);
@@ -28,7 +23,7 @@ internal class ArcBackgroundGenerator
 
     private async Task<BackGround> GenerateArcV1(Path path)
     {
-        using var song = await ArcaeaCharts.GetSongImg(_sid, _info.Difficulty);
+        using var song = await _info.GetSongImage();
         using var temp = song.Cut(new(0, 87, 512, 341));
         var background = new BackGround(temp, 1440, 960);
         using var masktmp = background.Blur(20).Cut(new(50, 50, 1340, 860)).Blur(80);
@@ -47,7 +42,7 @@ internal class ArcBackgroundGenerator
 
     internal async Task<BackGround> ArcV2()
     {
-        var path = Path.ArcaeaBg2(_sid, _info.Difficulty);
+        var path = Path.ArcaeaBackground(2, _info);
         return path.FileExists
             ? new(path)
             : await GenerateArcV2(path);
@@ -55,7 +50,7 @@ internal class ArcBackgroundGenerator
 
     private async Task<BackGround> GenerateArcV2(Path path)
     {
-        using var song = await ArcaeaCharts.GetSongImg(_sid, _info.Difficulty);
+        using var song = await _info.GetSongImage();
         using var temp = song.Cut(new(0, 112, 512, 288));
         var background = new BackGround(temp, 1920, 1080).Blur(60);
         background.FillColor(song.MainColor);
@@ -80,7 +75,7 @@ internal class ArcBackgroundGenerator
 
     internal async Task<BackGround> ArcV3()
     {
-        var path = Path.ArcaeaBg3(_sid, _info.Difficulty);
+        var path = Path.ArcaeaBackground(3, _info);
         return path.FileExists
             ? new(path)
             : await GenerateArcV3(path);
@@ -88,7 +83,7 @@ internal class ArcBackgroundGenerator
 
     private async Task<BackGround> GenerateArcV3(Path path)
     {
-        using var song = await ArcaeaCharts.GetSongImg(_sid, _info.Difficulty);
+        using var song = await _info.GetSongImage();
         using var temp = song.Cut(new(78, 0, 354, 512));
         var background = new BackGround(temp, 1000, 1444).Blur(10);
         background.FillColor(Color.White, 100);

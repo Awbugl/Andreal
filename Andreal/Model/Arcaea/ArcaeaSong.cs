@@ -22,7 +22,7 @@ public class ArcaeaSong : List<ArcaeaChart>, IEquatable<ArcaeaSong>
 
         for (var i = 0; i <= Count; i++)
             if (i == 2 || this[i].JacketOverride)
-                msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(SongID, 3)));
+                msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(this[i])));
 
         for (var i = 0; i <= Count; i++) msg.Append("\n" + this[i].ConstString);
 

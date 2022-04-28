@@ -1,4 +1,5 @@
 ﻿using Andreal.Data.Api;
+using Andreal.Model.Arcaea;
 using Andreal.Utils;
 
 namespace Andreal.Core;
@@ -79,30 +80,31 @@ internal class Path
 
     internal static Path BotConfig(uint qqid) => new(AndreaConfigRoot + $"BotInfo/{qqid}.andreal.konata.botinfo");
 
-    internal static Path ArcaeaBg1(string sid, int difficulty) =>
-        new(ArcaeaBackgroundRoot + $"V1_{sid}{(difficulty == 3 ? "_3" : "")}.png");
-
-    internal static Path ArcaeaBg2(string sid, int difficulty) =>
-        new(ArcaeaBackgroundRoot + $"V2_{sid}{(difficulty == 3 ? "_3" : "")}.png");
-
-    internal static Path ArcaeaBg3(string sid, int difficulty) =>
-        new(ArcaeaBackgroundRoot + $"V3_{sid}{(difficulty == 3 ? "_3" : "")}.png");
-
+    internal static Path ArcaeaBackground(int version, ArcaeaChart chart) =>
+        new(ArcaeaBackgroundRoot + $"V{version}_{ArcaeaTempSong(chart)}.png");
+    
     internal static Path ArcaeaBg3Mask(int side) => new(ArcaeaSourceRoot + $"RawV3Bg_{side}.png");
 
-    internal static async Task<Path> ArcaeaSong(string sid, int difficulty)
+    internal static async Task<Path> ArcaeaSong(ArcaeaChart chart)
     {
-        var song = sid switch
-                   {
-                       "stager" or "avril" => $"{sid}_{difficulty}",
-                       "melodyoflove"      => $"melodyoflove{(DateTime.Now.Hour is > 19 or < 6 ? "_night" : "")}",
-                       _                   => $"{sid}{(difficulty == 3 ? "_3" : "")}"
-                   };
+        var song = ArcaeaTempSong(chart);
 
         var pth = new Path($"{ArcaeaImageRoot}Song/{song}.jpg");
 
-        if (!pth.FileExists) await ArcaeaUnlimitedApi.SongAssets(sid, difficulty, pth);
+        if (!pth.FileExists) await ArcaeaUnlimitedApi.SongAssets(chart.SongID, chart.RatingClass, pth);
         return pth;
+    }
+
+    private static string ArcaeaTempSong(ArcaeaChart chart)
+    {
+        var song = chart switch
+                   {
+                       _ when chart.JacketOverride => $"{chart.SongID}_{chart.RatingClass}",
+                       _ when chart.SongID == "melodyoflove" =>
+                           $"melodyoflove{(DateTime.Now.Hour is > 19 or < 6 ? "_night" : "")}",
+                       _ => chart.SongID
+                   };
+        return song;
     }
 
     internal static Path ArcaeaRating(short potential)

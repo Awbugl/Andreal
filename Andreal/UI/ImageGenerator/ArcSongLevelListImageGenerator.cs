@@ -11,9 +11,9 @@ internal class ArcSongLevelListImageGenerator
 {
     private static readonly System.Drawing.Color WhiteBackground = Color.FromArgb(180, 245, 245, 245);
 
-    internal ArcSongLevelListImageGenerator((string, ArcaeaChart)[] list) { List = list; }
+    internal ArcSongLevelListImageGenerator(ArcaeaChart[] list) { List = list; }
 
-    private (string, ArcaeaChart)[] List { get; }
+    private ArcaeaChart[] List { get; }
 
     internal async Task<ImageMessage> Generate()
     {
@@ -27,9 +27,9 @@ internal class ArcSongLevelListImageGenerator
         {
             var y = 110 + i * 200;
 
-            var (sid, info) = List[i];
+            var info = List[i];
 
-            using var song = await ArcaeaCharts.GetSongImg(sid, info.RatingClass);
+            using var song = await info.GetSongImage();
 
             var color = song.MainColor;
 

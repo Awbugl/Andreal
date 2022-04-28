@@ -30,7 +30,7 @@ internal class ArcRecord5ImageGenerator
                                                 ? Math.Max(0, B30data.Best30List.Count - 5)
                                                 : 0)];
 
-            using var song = await record.GetSongImg();
+            using var song = await record.GetSongImage();
 
             bg.Draw(new ImageModel(song, 94, 304 + i * 340, 280, 280),
                     new TextWithStrokeModel(record.SongName(18), Font.KazesawaLight72, song.MainColor, 420,

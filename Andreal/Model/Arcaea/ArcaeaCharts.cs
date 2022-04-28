@@ -2,9 +2,7 @@
 using System.Text;
 using Andreal.Data.Api;
 using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
-using Andreal.UI;
 using Andreal.Utils;
-using Path = Andreal.Core.Path;
 
 namespace Andreal.Model.Arcaea;
 
@@ -12,9 +10,8 @@ internal static partial class ArcaeaCharts
 {
     private static readonly ConcurrentDictionary<string, ArcaeaSong> Songs = new();
     private static readonly ConcurrentDictionary<string, List<string>> Aliases = new();
-    private static readonly Dictionary<string, Stream> SongImage = new();
 
-    internal static ArcaeaSong? QueryById(string? songid) => GetById(songid);
+    internal static ArcaeaSong? QueryByID(string? songid) => GetByID(songid);
 
     internal static List<ArcaeaSong>? Query(string alias)
     {
@@ -22,7 +19,7 @@ internal static partial class ArcaeaCharts
 
         if (AliasCache.ContainsKey(alias)) return AliasCache[alias];
 
-        var data = GetById(alias) ?? GetByName(Songs, alias) ?? GetByAlias(alias);
+        var data = GetByID(alias) ?? GetByName(Songs, alias) ?? GetByAlias(alias);
 
         if (data != null) return new() { data };
 
@@ -40,37 +37,7 @@ internal static partial class ArcaeaCharts
         return GetByPriorityQueue(alias);
     }
 
-    internal static async Task<Image> GetSongImg(string sid, int difficulty)
-    {
-        var path = await Path.ArcaeaSong(sid, difficulty);
-
-        try
-        {
-            if (!SongImage.TryGetValue(path, out var stream))
-            {
-                await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-                var bytes = new byte[fileStream.Length];
-                fileStream.Read(bytes, 0, bytes.Length);
-                fileStream.Close();
-                stream = new MemoryStream(bytes);
-                SongImage.Add(path, stream);
-            }
-
-            var img = new Image(stream);
-            if (img.Width == 512) return img;
-            var newimg = new Image(img, 512, 512);
-            newimg.SaveAsPng(path);
-            img.Dispose();
-            return newimg;
-        }
-        catch
-        {
-            File.Delete(path);
-            throw new ArgumentException($"InvalidSongImage: {sid}, deleted.");
-        }
-    }
-
-    internal static List<string> GetSongAlias(string sid) => Aliases[sid];
+    internal static List<string> GetSongAlias(string songid) => Aliases[songid];
 
     internal static ArcaeaSong RandomSong() => Songs.Values.GetRandomItem();
 
@@ -102,7 +69,12 @@ internal static partial class ArcaeaCharts
         foreach (var songitem in slst)
         {
             songitem.Difficulties.SongID = songitem.SongID;
-            for (var i = 0; i < songitem.Difficulties.Count; ++i) songitem.Difficulties[i].RatingClass = i;
+            
+            for (var i = 0; i < songitem.Difficulties.Count; ++i)
+            {
+                songitem.Difficulties[i].RatingClass = i;
+                songitem.Difficulties[i].SongID = songitem.SongID;
+            }
 
             Aliases.TryAdd(songitem.SongID, songitem.Alias);
             Songs.TryAdd(songitem.SongID, songitem.Difficulties);
@@ -146,7 +118,7 @@ internal static partial class ArcaeaCharts
 
 internal static partial class ArcaeaCharts
 {
-    private static ArcaeaSong? GetById(string? songid) =>
+    private static ArcaeaSong? GetByID(string? songid) =>
         songid is not null && Songs.TryGetValue(songid, out var value)
             ? value
             : null;
@@ -162,7 +134,7 @@ internal static partial class ArcaeaCharts
     private static ArcaeaSong? GetByAlias(string alias)
     {
         Aliases.TryTakeKey<string, string, List<string>>(value => StringHelper.Equals(value, alias), out var result);
-        return GetById(result);
+        return GetByID(result);
     }
 
     private static List<ArcaeaSong>? GetByPriorityQueue(string alias)
@@ -170,7 +142,7 @@ internal static partial class ArcaeaCharts
         var dic = new PriorityQueue<ArcaeaSong, byte>();
 
         Aliases.ForAllItems<string, string, List<string>>((song, sid) =>
-                                                              Enqueue(dic, alias, sid, GetById(song)!, 1, 4));
+                                                              Enqueue(dic, alias, sid, GetByID(song)!, 1, 4));
 
         dic.TryPeek(out _, out var firstpriority);
 
@@ -204,7 +176,7 @@ internal static partial class ArcaeaCharts
         if (StringHelper.Contains(alias, key)) dic.Enqueue(song, lowerpriority);
     }
 
-    internal static IEnumerable<(string SongID, ArcaeaChart chart)> GetByConst(double @const)
+    internal static IEnumerable<ArcaeaChart> GetByConst(double @const)
     {
         const double lerance = 0.001;
 
@@ -213,7 +185,7 @@ internal static partial class ArcaeaCharts
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
             foreach (var chart in song)
                 if (Math.Abs(chart.Rating - @const) < lerance)
-                    yield return (song.SongID, chart);
+                    yield return chart;
     }
 
     private static IEnumerable<ArcaeaChart> GetByConstRange(double lowerlimit, double upperlimit)

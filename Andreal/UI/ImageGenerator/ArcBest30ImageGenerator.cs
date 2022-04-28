@@ -20,7 +20,7 @@ internal class ArcBest30ImageGenerator
     {
         var bg = new BackGround(Path.ArcaeaBest30Bg);
         bg.Draw(new TextOnlyModel(Info.PlayerName, Font.Andrea72, Color.White, 345, 175),
-                new TextOnlyModel($"ArcID: {Info.PlayerCode}", Font.ExoLight28, Color.White, 370, 320),
+                new TextOnlyModel($"ArcCode: {Info.PlayerCode}", Font.ExoLight28, Color.White, 370, 320),
                 new TextOnlyModel($"Total Best 30: {B30data.Best30Avg}", Font.Andrea60, Color.White, 145, 480),
                 new TextOnlyModel($"Recent Best 10: {B30data.Recent10Avg}", Font.Andrea60, Color.White, 1095, 480),
                 new ImageModel(await Path.ArcaeaPartnerIcon(Info.Partner, Info.IsAwakened), 75, 130, 255),
@@ -31,7 +31,7 @@ internal class ArcBest30ImageGenerator
         {
             var record = B30data.Best30List[i];
             int x = 75 + i % 2 * 950, y = 660 + i / 2 * 350;
-            using var song = await record.GetSongImg();
+            using var song = await record.GetSongImage();
 
             bg.Draw(
                     new PolygonModel(Color.White, new(x + 9, y), new(x + 891, y), new(x + 900, y + 9),

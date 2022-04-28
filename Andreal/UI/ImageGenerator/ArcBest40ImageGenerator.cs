@@ -20,7 +20,7 @@ internal class ArcBest40ImageGenerator
     {
         var bg = new BackGround(Path.ArcaeaBest40Bg);
         bg.Draw(new TextOnlyModel(Info.PlayerName, Font.Andrea108, Color.White, 560, 190),
-                new TextOnlyModel($"ArcID: {Info.PlayerCode}", Font.ExoLight42, Color.White, 590, 405),
+                new TextOnlyModel($"ArcCode: {Info.PlayerCode}", Font.ExoLight42, Color.White, 590, 405),
                 new TextOnlyModel("Total Best 30:", Font.Andrea90, Color.White, 1593, 150),
                 new TextOnlyModel("Recent Best 10:", Font.Andrea90, Color.White, 1595, 350),
                 new TextOnlyModel(B40data.Best30Avg, Font.Andrea90, Color.White, 2373, 150),
@@ -35,7 +35,7 @@ internal class ArcBest40ImageGenerator
             var record = B40data.Best30List[i];
             int x = 93 + i % 3 * 950, y = 590 + i / 3 * 350;
 
-            using var song = await record.GetSongImg();
+            using var song = await record.GetSongImage();
 
             bg.Draw(
                     new PolygonModel(Color.White, new(x + 9, y), new(x + 891, y), new(x + 900, y + 9),
@@ -68,7 +68,7 @@ internal class ArcBest40ImageGenerator
             var record = B40data.OverflowList[i - 30];
             int x = 93 + i % 3 * 950, y = 625 + i / 3 * 350;
 
-            using var song = await record.GetSongImg();
+            using var song = await record.GetSongImage();
 
             bg.Draw(
                     new PolygonModel(Color.White, new(x + 9, y), new(x + 891, y), new(x + 900, y + 9),

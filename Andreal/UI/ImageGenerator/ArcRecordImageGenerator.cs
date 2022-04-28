@@ -25,12 +25,12 @@ internal class ArcRecordImageGenerator
     {
         var bg = await new ArcBackgroundGenerator(RecordInfo).ArcV1();
 
-        using var song = await RecordInfo.GetSongImg();
+        using var song = await RecordInfo.GetSongImage();
 
         bg.Draw(new PartnerModel(PlayerInfo.Partner, PlayerInfo.IsAwakened, PlayerInfo.ImgVersion),
                 new PotentitalModel(PlayerInfo.Potential, 87, 60), new ImageModel(Path.ArcaeaGlass, 810, 240, 630),
                 new TextWithStrokeModel(PlayerInfo.PlayerName, Font.KazesawaLight40, Color.White, 275, 100),
-                new TextWithStrokeModel("ID " + PlayerInfo.PlayerCode, Font.KazesawaLight32, Color.White, 275, 160),
+                new TextWithStrokeModel("Code " + PlayerInfo.PlayerCode, Font.KazesawaLight32, Color.White, 275, 160),
                 new ImageModel(Path.ArcaeaCleartypeV1(RecordInfo.Cleartype), -56, 224, 700),
                 new ImageModel(song, 150, 430, 290),
                 new ImageModel(Path.ArcaeaDifficultyForV1(RecordInfo.Difficulty), 333, 680, 150),
@@ -67,7 +67,7 @@ internal class ArcRecordImageGenerator
                 new TextWithShadowModel(RecordInfo.Lost, Font.Exo32, 560, 525),
                 new TextWithShadowModel(RecordInfo.TimeStr, Font.Exo32, 350, 595),
                 new TextWithShadowModel(PlayerInfo.PlayerName, Font.Andrea56, 290, 60),
-                new TextWithShadowModel($"ArcID: {PlayerInfo.PlayerCode}", Font.Andrea28, 297, 150));
+                new TextWithShadowModel($"ArcCode: {PlayerInfo.PlayerCode}", Font.Andrea28, 297, 150));
         return bg;
     }
 
@@ -78,7 +78,7 @@ internal class ArcRecordImageGenerator
                 new ImageModel(await Path.ArcaeaPartnerIcon(PlayerInfo.Partner, PlayerInfo.IsAwakened), 150, 160, 160),
                 new PotentitalModel(PlayerInfo.Potential, 215, 215, 140),
                 new TextOnlyModel(PlayerInfo.PlayerName, Font.Andrea36, Color.Black, 340, 200),
-                new TextOnlyModel($"ArcID: {PlayerInfo.PlayerCode}", Font.GeosansLight20, Color.GnaqGray, 340, 270),
+                new TextOnlyModel($"ArcCode: {PlayerInfo.PlayerCode}", Font.GeosansLight20, Color.GnaqGray, 340, 270),
                 new TextOnlyModel($"{RecordInfo.DifficultyInfo.LongStr} | {RecordInfo.Const:0.0}", Font.Beatrice24,
                                   RecordInfo.DifficultyInfo.Color, 500, 925, StringAlignment.Center),
                 new TextOnlyModel($"{RecordInfo.Score}  {RecordInfo.Rate}", Font.Exo44, Color.Black, 500, 1130,
@@ -104,7 +104,7 @@ internal class ArcRecordImageGenerator
                 new TextOnlyModel($"Recent Top 10 Avg:  {b30data.Recent10Avg}", Font.ExoLight20, Color.AzusaGray, 195,
                                   832),
                 new TextOnlyModel($"Time:  {RecordInfo.TimeStr}", Font.ExoLight20, Color.AzusaGray, 195, 872),
-                new TextOnlyModel($"ArcID: {PlayerInfo.PlayerCode}", Font.ExoLight20, Color.Black, 195, 748),
+                new TextOnlyModel($"ArcCode: {PlayerInfo.PlayerCode}", Font.ExoLight20, Color.Black, 195, 748),
                 new TextOnlyModel(PlayerInfo.PlayerName, Font.Andrea36, Color.Black, 195, 685),
                 new TextOnlyModel($"{RecordInfo.SongName(30)} {RecordInfo.SongInfo.ConstString}", Font.Andrea36,
                                   Color.Black, 100, 470),
