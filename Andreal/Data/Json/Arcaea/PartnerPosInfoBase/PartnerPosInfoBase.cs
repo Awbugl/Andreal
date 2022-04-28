@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using Andreal.Core;
-using Andreal.Data.Sqlite;
 
 namespace Andreal.Data.Json.Arcaea.PartnerPosInfoBase;
 
@@ -20,17 +19,17 @@ internal static class PartnerPosInfoBase
         return ls;
     }
 
-    internal static PosInfoItem? Get(string partner, BotUserInfo.ImgVersion imgVersion)
+    internal static PosInfoItem? Get(string partner, ImgVersion imgVersion)
     {
         return imgVersion switch
                {
-                   BotUserInfo.ImgVersion.ImgV1 => Dict.Value["1"].TryGetValue(partner, out var result)
+                   ImgVersion.ImgV1 => Dict.Value["1"].TryGetValue(partner, out var result)
                        ? result
                        : ImgV1,
-                   BotUserInfo.ImgVersion.ImgV2 => Dict.Value["2"].TryGetValue(partner, out var result)
+                   ImgVersion.ImgV2 => Dict.Value["2"].TryGetValue(partner, out var result)
                        ? result
                        : ImgV2,
-                   BotUserInfo.ImgVersion.ImgV4 => Dict.Value["4"].TryGetValue(partner, out var result)
+                   ImgVersion.ImgV4 => Dict.Value["4"].TryGetValue(partner, out var result)
                        ? result
                        : ImgV4,
                    _ => null

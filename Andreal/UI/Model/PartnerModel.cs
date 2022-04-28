@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
+using Andreal.Core;
 using Andreal.Data.Json.Arcaea.PartnerPosInfoBase;
-using Andreal.Data.Sqlite;
 using Path = Andreal.Core.Path;
 
 namespace Andreal.UI.Model;
@@ -11,7 +11,7 @@ internal class PartnerModel : IGraphicsModel
 {
     private readonly ImageModel _imageModel;
 
-    internal PartnerModel(int partner, bool awakened, BotUserInfo.ImgVersion imgVersion)
+    internal PartnerModel(int partner, bool awakened, ImgVersion imgVersion)
     {
         var location = PartnerPosInfoBase.Get($"{partner}{(awakened ? "u" : "")}", imgVersion)!;
         _imageModel = new(Path.ArcaeaPartner(partner, awakened).Result, location.PositionX, location.PositionY,

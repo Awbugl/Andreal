@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Andreal.Core;
 using Andreal.Utils;
 using SQLite;
 
@@ -36,12 +37,4 @@ internal class BotUserInfo
         _list.Value.TryGetValue(uin, out var user)
             ? user
             : null;
-
-    internal enum ImgVersion
-    {
-        ImgV1 = 0,
-        ImgV2,
-        ImgV3,
-        ImgV4
-    }
 }

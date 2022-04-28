@@ -1,4 +1,5 @@
-﻿using Andreal.Data.Api;
+﻿using Andreal.Core;
+using Andreal.Data.Api;
 using Andreal.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Data.Sqlite;
 using Andreal.Message;
@@ -30,9 +31,9 @@ internal class RecordData
 
         switch (UserInfo.UiVersion)
         {
-            case BotUserInfo.ImgVersion.ImgV1: return await imageGenerator.Version1();
-            case BotUserInfo.ImgVersion.ImgV3: return await imageGenerator.Version3();
-            case BotUserInfo.ImgVersion.ImgV4:
+            case ImgVersion.ImgV1: return await imageGenerator.Version1();
+            case ImgVersion.ImgV3: return await imageGenerator.Version3();
+            case ImgVersion.ImgV4:
             {
                 var b30data = await ArcaeaUnlimitedApi.UserBest30(UserInfo.ArcCode);
                 return b30data!.Status != 0

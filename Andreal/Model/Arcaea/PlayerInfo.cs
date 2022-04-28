@@ -1,4 +1,5 @@
-﻿using Andreal.Data.Json.Arcaea.ArcaeaLimited;
+﻿using Andreal.Core;
+using Andreal.Data.Json.Arcaea.ArcaeaLimited;
 using Andreal.Data.Sqlite;
 
 namespace Andreal.Model.Arcaea;
@@ -42,7 +43,7 @@ internal class PlayerInfo
             ? _playerCode
             : "xxxxxxxxx";
 
-    internal BotUserInfo.ImgVersion ImgVersion { get; }
+    internal ImgVersion ImgVersion { get; }
 
     internal int Partner { get; }
 

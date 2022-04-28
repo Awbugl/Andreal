@@ -58,7 +58,7 @@ internal class ArcExecutor : ExecutorBase
             {
                 var unbinduser = User ?? new BotUserInfo
                                          {
-                                             Uin = Info.FromQQ, UiVersion = (BotUserInfo.ImgVersion)new Random().Next(3)
+                                             Uin = Info.FromQQ, UiVersion = (ImgVersion)new Random().Next(3)
                                          };
 
                 unbinduser.ArcCode = 0;
@@ -81,7 +81,7 @@ internal class ArcExecutor : ExecutorBase
 
         var user = User ?? new BotUserInfo
                            {
-                               Uin = Info.FromQQ, UiVersion = (BotUserInfo.ImgVersion)new Random().Next(3)
+                               Uin = Info.FromQQ, UiVersion = (ImgVersion)new Random().Next(3)
                            };
 
         user.ArcCode = content.AccountInfo.Code;
@@ -389,10 +389,10 @@ internal class ArcExecutor : ExecutorBase
         string imgversion;
         (User.UiVersion, imgversion) = version switch
                                        {
-                                           2 => (BotUserInfo.ImgVersion.ImgV2, "ImgV2"),
-                                           3 => (BotUserInfo.ImgVersion.ImgV3, "ImgV3"),
-                                           4 => (BotUserInfo.ImgVersion.ImgV4, "ImgV4"),
-                                           _ => (BotUserInfo.ImgVersion.ImgV1, "ImgV1")
+                                           2 => (ImgVersion.ImgV2, "ImgV2"),
+                                           3 => (ImgVersion.ImgV3, "ImgV3"),
+                                           4 => (ImgVersion.ImgV4, "ImgV4"),
+                                           _ => (ImgVersion.ImgV1, "ImgV1")
                                        };
         BotUserInfo.Set(User);
         return $"Arc查分显示样式已更改为{imgversion}。";
