@@ -184,7 +184,7 @@ internal static partial class ArcaeaCharts
         foreach (var song in Songs.Values)
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
             foreach (var chart in song)
-                if (Math.Abs(chart.Rating - @const) < lerance)
+                if (Math.Abs(chart.Const - @const) < lerance)
                     yield return chart;
     }
 
@@ -194,7 +194,7 @@ internal static partial class ArcaeaCharts
         foreach (var song in Songs.Values)
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
             foreach (var chart in song)
-                if (chart.Rating >= lowerlimit && chart.Rating <= upperlimit)
+                if (chart.Const >= lowerlimit && chart.Const <= upperlimit)
                     yield return chart;
     }
 }

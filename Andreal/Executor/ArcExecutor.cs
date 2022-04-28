@@ -7,6 +7,7 @@ using Andreal.Message;
 using Andreal.Model.Arcaea;
 using Andreal.UI.ImageGenerator;
 using Andreal.Utils;
+using Path = Andreal.Core.Path;
 
 namespace Andreal.Executor;
 
@@ -126,7 +127,7 @@ internal class ArcExecutor : ExecutorBase
     }
 
     [CommandPrefix("/arc rand", "随机选曲", "选曲")]
-    private MessageChain RandSong()
+    private async Task<MessageChain> RandSong()
     {
         switch (CommandLength)
         {
@@ -137,9 +138,16 @@ internal class ArcExecutor : ExecutorBase
                 var (lower, upper) = Command[0].ConvertToArcaeaRange();
                 if (lower < 0) return RobotReply.ParameterError;
                 var info = ArcaeaCharts.RandomSong(lower, upper);
-                return info == null
-                    ? RobotReply.ParameterError
-                    : RobotReply.RandSongReply + info.GetSongImage() + info.NameWithPackageAndConst;
+                if (info == null)
+                    return RobotReply.ParameterError;
+                else
+                {
+                    var chain = new MessageChain();
+                    chain.Append(RobotReply.RandSongReply);
+                    chain.Append(ImageMessage.FromPath(await Path.ArcaeaSong(info)));
+                    chain.Append(info.NameWithPackageAndConst);
+                    return chain;
+                }
             }
             case 2:
             {
@@ -147,9 +155,16 @@ internal class ArcExecutor : ExecutorBase
                 var (_, upper) = Command[1].ConvertToArcaeaRange();
                 if (lower < 0 || upper < 0 || lower > upper) return RobotReply.ParameterError;
                 var info = ArcaeaCharts.RandomSong(lower, upper);
-                return info == null
-                    ? RobotReply.ParameterError
-                    : RobotReply.RandSongReply + info.GetSongImage() + info.NameWithPackageAndConst;
+                if (info == null)
+                    return RobotReply.ParameterError;
+                else
+                {
+                    var chain = new MessageChain();
+                    chain.Append(RobotReply.RandSongReply);
+                    chain.Append(ImageMessage.FromPath(await Path.ArcaeaSong(info)));
+                    chain.Append(info.NameWithPackageAndConst);
+                    return chain;
+                }
             }
         }
     }
@@ -161,14 +176,14 @@ internal class ArcExecutor : ExecutorBase
         if (!short.TryParse(Command[0], out var far) || !short.TryParse(Command[1], out var lost))
             return RobotReply.ParameterError;
 
-        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(2), out var song, out var dif, out var errMessage))
             return errMessage;
 
         var arcsong = song[dif];
 
         var notes = arcsong.Note;
 
-        if (arcsong.Rating <= 0 || notes <= 0) return "此谱面的Note数量暂未被记录。";
+        if (arcsong.Const <= 0 || notes <= 0) return "此谱面的Note数量暂未被记录。";
 
         if (far + lost > notes) return RobotReply.ParameterError;
 
@@ -190,7 +205,7 @@ internal class ArcExecutor : ExecutorBase
 
         var arcsong = song[dif];
 
-        var defNum = arcsong.Rating;
+        var defNum = arcsong.Const;
         var mptt = ptt - defNum;
         if (defNum == 0 || ptt < 0 || mptt > 2) return RobotReply.ParameterError;
 
@@ -216,7 +231,7 @@ internal class ArcExecutor : ExecutorBase
 
         var arcsong = song[dif];
 
-        var defNum = arcsong.Rating;
+        var defNum = arcsong.Const;
         var ptt = score switch
                   {
                       >= 1e7   => defNum + 2,
@@ -233,7 +248,7 @@ internal class ArcExecutor : ExecutorBase
     {
         if (CommandLength == 0) return RobotReply.ParameterLengthError;
 
-        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out _, out var errMessage)) return errMessage;
+        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out _, out var errMessage)) return errMessage;
 
         return await song.FullConstString();
     }
@@ -342,7 +357,7 @@ internal class ArcExecutor : ExecutorBase
         RecordInfo recordInfo;
         PlayerInfo playerInfo;
 
-        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out _, out var errMessage)) return errMessage;
+        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out _, out var errMessage)) return errMessage;
 
         TextMessage exceptionInformation;
         (recordInfo, playerInfo, exceptionInformation) = await GetUserBest(song);
@@ -388,7 +403,7 @@ internal class ArcExecutor : ExecutorBase
     {
         if (CommandLength == 0) return RobotReply.ParameterLengthError;
 
-        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out _, out var errMessage)) return errMessage;
+        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out _, out var errMessage)) return errMessage;
 
         var alias = ArcaeaCharts.GetSongAlias(song.SongID);
 

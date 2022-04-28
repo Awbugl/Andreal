@@ -50,7 +50,7 @@ internal static class ArcaeaUnlimitedApi
     internal static async Task<ResponseRoot?> UserBest40(long ucode) =>
         await GetString($"user/best30?usercode={ucode:D9}&overflow=9");
 
-    internal static async Task<ResponseRoot?> SongList() => await GetString("test/song/list");
+    internal static async Task<ResponseRoot?> SongList() => await GetString("song/list");
 
     internal static async Task SongAssets(string sid, int difficulty, Path pth) =>
         await GetStream($"assets/song?songid={sid}&difficulty={difficulty}", pth);

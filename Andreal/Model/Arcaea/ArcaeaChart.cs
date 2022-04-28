@@ -14,7 +14,7 @@ public class ArcaeaChart
     [JsonProperty("name_jp")] public string NameJp { get; set; }
     [JsonProperty("artist")] public string Artist { get; set; }
     [JsonProperty("bpm")] public string Bpm { get; set; }
-    [JsonProperty("bpm_base")] public int BpmBase { get; set; }
+    [JsonProperty("bpm_base")] public double BpmBase { get; set; }
     [JsonProperty("set")] public string Set { get; set; }
     [JsonProperty("set_friendly")] public string SetFriendly { get; set; }
     [JsonProperty("time")] public int Time { get; set; }
@@ -34,11 +34,13 @@ public class ArcaeaChart
 
     internal string SongID { get; set; }
 
+    internal double Const => (double)Rating / 10;
+
     internal int RatingClass { get; set; }
 
     internal DifficultyInfo DifficultyInfo => DifficultyInfo.GetByIndex(RatingClass);
 
-    internal string ConstString => $"[{DifficultyInfo.ShortStr} {Rating:0.0}]";
+    internal string ConstString => $"[{DifficultyInfo.ShortStr} {Const:0.0}]";
 
     internal string NameWithPackageAndConst => $"{NameEn}\n(Package: {SetFriendly})\n{ConstString}";
 

@@ -20,11 +20,11 @@ public class ArcaeaSong : List<ArcaeaChart>, IEquatable<ArcaeaSong>
     {
         var msg = new MessageChain();
 
-        for (var i = 0; i <= Count; i++)
+        for (var i = 0; i < Count; i++)
             if (i == 2 || this[i].JacketOverride)
                 msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(this[i])));
-
-        for (var i = 0; i <= Count; i++) msg.Append("\n" + this[i].ConstString);
+        msg.Append(NameWithPackage);
+        for (var i = 0; i < Count; i++) msg.Append("\n" + this[i].ConstString);
 
         return msg;
     }
@@ -37,5 +37,6 @@ public class ArcaeaSong : List<ArcaeaChart>, IEquatable<ArcaeaSong>
         return Equals((ArcaeaSong)obj);
     }
 
+    // ReSharper disable once NonReadonlyMemberInGetHashCode
     public override int GetHashCode() => SongID.GetHashCode();
 }

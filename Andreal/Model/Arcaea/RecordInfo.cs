@@ -70,7 +70,7 @@ internal class RecordInfo
 
     internal DifficultyInfo DifficultyInfo => SongInfo.DifficultyInfo;
 
-    internal double Const => SongInfo.Rating;
+    internal double Const => SongInfo.Const;
 
     internal string Score
     {
