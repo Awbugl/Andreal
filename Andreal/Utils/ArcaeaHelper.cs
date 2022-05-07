@@ -43,18 +43,20 @@ internal static class ArcaeaHelper
 
         var result = ArcaeaCharts.Query(songstr);
 
-        if (result is null) return false;
+        if (result == null || result.Count == 0)
+        {
+            errMessage = MessageInfo.RobotReply.NoSongFound!;
+            return false;
+        }
 
-        errMessage = result.Count switch
-                     {
-                         0 => MessageInfo.RobotReply.NoSongFound!,
-                         > 1 => result.Aggregate(MessageInfo.RobotReply.TooManySongFound,
-                                                 (cur, i) => cur + "\n" + i[0].NameEn),
-                         _ => ""
-                     };
+        if (result.Count > 1)
+        {
+            errMessage = result.Aggregate(MessageInfo.RobotReply.TooManySongFound,
+                                          (cur, i) => cur + "\n" + i[0].NameEn);
+            return false;
+        }
 
         song = result[0];
-
         return true;
     }
 }

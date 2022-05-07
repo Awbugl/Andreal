@@ -18,13 +18,11 @@ namespace Andreal.Executor;
 [Serializable]
 internal class ArcExecutor : ExecutorBase
 {
-    private static readonly int[] DifPriority = { 0, 1, 3, 2 };
-
     public ArcExecutor(MessageInfo info) : base(info) { }
 
-    private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, sbyte dif = 3)
+    private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, int dif)
     {
-        var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, DifPriority[dif]);
+        var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, dif);
 
         switch (data.Status)
         {
@@ -79,10 +77,7 @@ internal class ArcExecutor : ExecutorBase
 
         var content = data.DeserializeContent<UserInfoContent>();
 
-        var user = User ?? new BotUserInfo
-                           {
-                               Uin = Info.FromQQ, UiVersion = (ImgVersion)new Random().Next(3)
-                           };
+        var user = User ?? new BotUserInfo { Uin = Info.FromQQ, UiVersion = (ImgVersion)new Random().Next(3) };
 
         user.ArcCode = content.AccountInfo.Code;
 
@@ -357,10 +352,11 @@ internal class ArcExecutor : ExecutorBase
         RecordInfo recordInfo;
         PlayerInfo playerInfo;
 
-        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out _, out var errMessage)) return errMessage;
+        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out var dif, out var errMessage)) 
+            return errMessage;
 
         TextMessage exceptionInformation;
-        (recordInfo, playerInfo, exceptionInformation) = await GetUserBest(song);
+        (recordInfo, playerInfo, exceptionInformation) = await GetUserBest(song, dif);
         if (recordInfo == null) return exceptionInformation;
 
         return await new RecordData(playerInfo, recordInfo, User).GetResult();
