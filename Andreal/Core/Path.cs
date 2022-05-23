@@ -71,6 +71,7 @@ internal class Path
             Directory.CreateDirectory(ArcaeaImageRoot + "Song/");
             Directory.CreateDirectory(ArcaeaImageRoot + "Char/");
             Directory.CreateDirectory(ArcaeaImageRoot + "Icon/");
+            Directory.CreateDirectory(ArcaeaImageRoot + "Preview/");
         }
     }
 
@@ -135,6 +136,13 @@ internal class Path
     {
         var pth = new Path(ArcaeaImageRoot + $"Icon/{partner}{(awakened ? "u" : "")}.png");
         if (!pth.FileExists) await ArcaeaUnlimitedApi.IconAssets(partner, awakened, pth);
+        return pth;
+    }
+
+    internal static async Task<Path> ArcaeaChartPreview(ArcaeaChart chart)
+    {
+        var pth = new Path(ArcaeaImageRoot + $"Preview/{chart.SongID}_{chart.RatingClass}.jpg");
+        if (!pth.FileExists) await ArcaeaUnlimitedApi.PreviewAssets(chart.SongID, chart.RatingClass, pth);
         return pth;
     }
 

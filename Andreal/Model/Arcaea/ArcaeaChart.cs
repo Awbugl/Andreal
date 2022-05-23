@@ -58,10 +58,9 @@ public class ArcaeaChart
             if (!SongImage.TryGetValue(path, out var stream))
             {
                 await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-                var bytes = new byte[fileStream.Length];
-                fileStream.Read(bytes, 0, bytes.Length);
+                stream = new MemoryStream(new byte[fileStream.Length]);
+                await fileStream.CopyToAsync(stream);
                 fileStream.Close();
-                stream = new MemoryStream(bytes);
                 SongImage.Add(path, stream);
             }
 

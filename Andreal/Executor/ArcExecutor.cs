@@ -174,6 +174,8 @@ internal class ArcExecutor : ExecutorBase
         if (!ArcaeaHelper.SongInfoParser(Command.Skip(2), out var song, out var dif, out var errMessage))
             return errMessage;
 
+        if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
+
         var arcsong = song[dif];
 
         var notes = arcsong.Note;
@@ -197,6 +199,8 @@ internal class ArcExecutor : ExecutorBase
 
         if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
             return errMessage;
+
+        if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
 
         var arcsong = song[dif];
 
@@ -224,6 +228,8 @@ internal class ArcExecutor : ExecutorBase
         if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
             return errMessage;
 
+        if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
+
         var arcsong = song[dif];
 
         var defNum = arcsong.Const;
@@ -235,6 +241,7 @@ internal class ArcExecutor : ExecutorBase
                           ? defNum + (score - 9.5e6) / 3e5
                           : 0
                   };
+
         return $"{arcsong.NameWithPackageAndConst}\n在分数为 {Command[0]} 时\nPtt为 {ptt:0.0000}";
     }
 
@@ -349,14 +356,9 @@ internal class ArcExecutor : ExecutorBase
         if (CommandLength == 0) return await Recent();
         if (Command[0] == "b30") return await Best30();
 
-        RecordInfo recordInfo;
-        PlayerInfo playerInfo;
+        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out var dif, out var errMessage)) return errMessage;
 
-        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out var dif, out var errMessage)) 
-            return errMessage;
-
-        TextMessage exceptionInformation;
-        (recordInfo, playerInfo, exceptionInformation) = await GetUserBest(song, dif);
+        var (recordInfo, playerInfo, exceptionInformation) = await GetUserBest(song, dif);
         if (recordInfo == null) return exceptionInformation;
 
         return await new RecordData(playerInfo, recordInfo, User).GetResult();
@@ -382,14 +384,13 @@ internal class ArcExecutor : ExecutorBase
 
         if (!int.TryParse(Command[0], out var version)) return RobotReply.ParameterError;
 
-        string imgversion;
-        (User.UiVersion, imgversion) = version switch
-                                       {
-                                           2 => (ImgVersion.ImgV2, "ImgV2"),
-                                           3 => (ImgVersion.ImgV3, "ImgV3"),
-                                           4 => (ImgVersion.ImgV4, "ImgV4"),
-                                           _ => (ImgVersion.ImgV1, "ImgV1")
-                                       };
+        (User.UiVersion, string imgversion) = version switch
+                                              {
+                                                  2 => (ImgVersion.ImgV2, "ImgV2"),
+                                                  3 => (ImgVersion.ImgV3, "ImgV3"),
+                                                  4 => (ImgVersion.ImgV4, "ImgV4"),
+                                                  _ => (ImgVersion.ImgV1, "ImgV1")
+                                              };
         BotUserInfo.Set(User);
         return $"Arc查分显示样式已更改为{imgversion}。";
     }
@@ -406,5 +407,17 @@ internal class ArcExecutor : ExecutorBase
         return alias.Count > 0
             ? $"{song.NameWithPackage}\n在数据库中的别名列表：\n{alias.Aggregate((i, j) => i + "\n" + j)}"
             : $"{song.NameWithPackage}\n该曲目暂无别名收录。";
+    }
+
+    [CommandPrefix("/arc chart", "查谱面")]
+    private async Task<MessageChain> Chart()
+    {
+        if (CommandLength == 0) return RobotReply.ParameterLengthError;
+
+        if (!ArcaeaHelper.SongInfoParser(Command, out var song, out var dif, out var errMessage)) return errMessage;
+        
+        if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
+
+        return ImageMessage.FromPath(await Path.ArcaeaChartPreview(song[dif]));
     }
 }

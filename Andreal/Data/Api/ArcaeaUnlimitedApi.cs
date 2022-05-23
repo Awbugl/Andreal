@@ -60,6 +60,9 @@ internal static class ArcaeaUnlimitedApi
 
     internal static async Task IconAssets(int partner, bool awakened, Path pth) =>
         await GetStream($"assets/icon?partner={partner}&awakened={(awakened ? "true" : "false")}", pth);
+        
+    internal static async Task PreviewAssets(string sid, int difficulty, Path pth) =>
+        await GetStream($"assets/preview?songid={sid}&difficulty={difficulty}", pth);
 
     internal static TextMessage GetErrorMessage(RobotReply info, int status, string message)
     {
