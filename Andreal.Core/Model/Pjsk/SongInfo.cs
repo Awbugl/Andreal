@@ -58,21 +58,10 @@ internal class SongInfo
 
     internal List<int> Levels { get; set; }
 
-    private void Init()
-    {
-        Abbreviations.TryAdd(SongID, Songname.GetAbbreviation());
-        foreach (var alias in Alias) Abbreviations.TryAdd(SongID, alias.GetAbbreviation());
-    }
-
     internal static bool CheckSongID(string songID) => _songList.Value.ContainsKey(songID);
 
     internal static bool CheckFull(string songID) =>
         _songList.Value.TryGetValue(songID, out var info) && info.FeverScore != "NA";
-
-    internal string GetSongName(byte length) =>
-        Songname.Length < length + 3
-            ? Songname
-            : $"{Songname[..length]}...";
 
     private ImageMessage SongImage()
     {
@@ -149,7 +138,6 @@ internal class SongInfo
                };
     }
 
-
     public bool Equals(SongInfo? other)
     {
         if (ReferenceEquals(other, null)) return false;
@@ -210,6 +198,12 @@ internal class SongInfo
             _songList.Value.TryAdd(item.ID, obj);
         else
             _songList.Value[item.ID] = obj;
+
+        Abbreviations.TryAdd(item.ID, item.Title.GetAbbreviation());
+        
+        if (alias is not null)
+            foreach (var i in alias)
+                Abbreviations.TryAdd(item.ID, i.GetAbbreviation());
     }
 
     internal static void Insert(PjskMusics item, List<PjskMusicDifficulties> musicMetas, IEnumerable<string>? alias)
@@ -233,6 +227,12 @@ internal class SongInfo
                   };
 
         if (!CheckSongID(item.ID)) _songList.Value.TryAdd(item.ID, obj);
+        
+        Abbreviations.TryAdd(item.ID, item.Title.GetAbbreviation());
+        
+        if (alias is not null)
+            foreach (var i in alias)
+                Abbreviations.TryAdd(item.ID, i.GetAbbreviation());
     }
 
     internal static SongInfo RandomSong() => _songList.Value.Values.GetRandomItem();
