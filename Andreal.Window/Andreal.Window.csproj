@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <ApplicationIcon>Assets\favicon.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.774.44" />
+        <PackageReference Include="Microsoft.Web.WebView2.DevToolsProtocolExtension" Version="1.0.824" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+        <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Git\Konata.Core\Konata.Core\Konata.Core.csproj" />
+        <ProjectReference Include="..\Andreal.Core\Andreal.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ApplicationDefinition Include="UI\App.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </ApplicationDefinition>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Assets\chevron-down.png" />
+      <Resource Include="Assets\close.png" />
+      <Resource Include="Assets\favicon.ico" />
+      <Resource Include="Assets\Fonts\Roboto-Light.ttf" />
+      <Resource Include="Assets\img_contact.png" />
+      <Resource Include="Assets\img_map.png" />
+      <Resource Include="Assets\img_message.png" />
+      <Resource Include="Assets\img_setting.png" />
+      <Resource Include="Assets\min.png" />
+    </ItemGroup>
+
+</Project>

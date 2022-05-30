@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="Andreal.Window.UI.UserControl.Accounts"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="500" d:DesignWidth="800" x:ClassModifier="internal">
+    <Grid x:Name="Grid">
+        <Grid.Resources>
+          
+        </Grid.Resources>
+
+        <DataGrid x:Name="List"
+                  ItemsSource="{Binding}"
+                  Width="800" Height="500"
+                  IsReadOnly="True" HorizontalAlignment="Stretch" AutoGenerateColumns="False"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  SelectionMode="Extended" CanUserAddRows="False">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="QQ" Binding="{Binding Robot}" Width="100" />
+                <DataGridTextColumn Header="昵称" Binding="{Binding Nick}" Width="100" />
+                <DataGridTextColumn Header="状态" Binding="{Binding State}" Width="100" />
+                <DataGridTextColumn Header="信息" Binding="{Binding Message}" Width="500" />
+            </DataGrid.Columns>
+            <DataGrid.Resources>
+                <ContextMenu x:Key="RawContextMenu">
+                    <MenuItem x:Name="Login" Header="上线" />
+                    <MenuItem x:Name="Offline" Header="离线" />
+                    <MenuItem x:Name="Remove" Header="删除" />
+                    <MenuItem Header="复制" Command="{x:Static ApplicationCommands.Copy}" />
+                </ContextMenu>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="OnMouseRightDown" />
+                    <Setter Property="ContextMenu" Value="{StaticResource  RawContextMenu}" />
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="添加新账号" Click="OnAddAccountCommandExecute" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</UserControl>
