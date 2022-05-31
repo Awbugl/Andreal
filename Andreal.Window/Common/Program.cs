@@ -93,7 +93,7 @@ internal static class Program
     public static async Task OnRemove(AccountLog log)
     {
         if (log.Bot.IsOnline()) await log.Bot.Logout();
-        log.Bot.Dispose();
+        log.Bot!.Dispose();
         var info = Config.Accounts.Find(i => i.Account == log.Robot);
         Config.Accounts.Remove(info!);
         await File.WriteAllTextAsync(Path.Config, JsonConvert.SerializeObject(Config));

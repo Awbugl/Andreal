@@ -38,12 +38,12 @@ internal partial class Accounts
                             {
                                 "上线" => new DelegateCommand
                                         {
-                                            CanExecuteFunc = () => _selectedobject?.Bot.IsOnline() == false,
+                                            CanExecuteFunc = () => _selectedobject?.Bot?.IsOnline() == false,
                                             CommandAction = OnLoginAccountCommandExecute
                                         },
                                 "离线" => new DelegateCommand
                                         {
-                                            CanExecuteFunc = () => _selectedobject?.Bot.IsOnline() == true,
+                                            CanExecuteFunc = () => _selectedobject?.Bot?.IsOnline() == true,
                                             CommandAction = OnLogoutAccountCommandExecute
                                         },
                                 "删除" => new DelegateCommand
@@ -53,7 +53,6 @@ internal partial class Accounts
                                         },
                                 _ => i.Command
                             };
-              
             }
         }
     }
@@ -62,11 +61,11 @@ internal partial class Accounts
 
     private async void OnLoginAccountCommandExecute(object parameter)
     {
-        var loginresult = await _selectedobject?.Bot.Login()!;
+        var loginresult = await _selectedobject?.Bot?.Login()!;
         await Program.OnLogin(_selectedobject.Bot, loginresult);
     }
 
-    private async void OnLogoutAccountCommandExecute(object parameter) { await _selectedobject!.Bot.Logout(); }
+    private async void OnLogoutAccountCommandExecute(object parameter) { await _selectedobject?.Bot?.Logout()!; }
 
     private async void OnDeleteAccountCommandExecute(object parameter) { await Program.OnRemove(_selectedobject!); }
 }
