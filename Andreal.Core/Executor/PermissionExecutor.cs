@@ -16,13 +16,13 @@ internal class PermissionExecutor : ExecutorBase
         if (Info.MasterCheck()) Info.SendMessageOnly(string.Join(" ", Command));
         return null;
     }
-    
+
     [CommandPrefix("/remove")]
-    private MessageChain? RemoveGroup()
+    private async Task<MessageChain?> RemoveGroup()
     {
         if (!Info.MasterCheck()) return null;
         if (CommandLength != 1) return RobotReply.ParameterLengthError;
-        Info.Bot.GroupLeave(uint.Parse(Command[0]));
+        await Info.Bot.GroupLeave(uint.Parse(Command[0]));
         return "Removed.";
     }
 

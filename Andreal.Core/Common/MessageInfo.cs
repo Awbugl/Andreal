@@ -25,9 +25,7 @@ internal class MessageInfo
     private static readonly Dictionary<string, string> AbbreviationPairs = new()
                                                                            {
                                                                                { "/a ", "/arc " },
-                                                                               { "/o ", "/osu " },
-                                                                               { "/p ", "/pjsk " },
-                                                                               { "/ar ", "/arc room " }
+                                                                               { "/p ", "/pjsk " }
                                                                            };
 
     internal Bot Bot { get; set; }
@@ -73,26 +71,48 @@ internal class MessageInfo
 
     internal bool MasterCheck() => FromQQ == _master;
 
-    private object SendPrivateMessage(MessageChain messages) =>
-        Bot.SendFriendMessage(FromQQ, FromMessageChain(messages));
-
-    private object SendGroupMessage(MessageChain messages) =>
-        Bot.SendGroupMessage(FromGroup, FromMessageChain(messages));
-
-    internal void SendMessage(MessageChain? message)
+    private async Task<bool> SendPrivateMessage(MessageChain messages)
     {
-        if (message is null) return;
-        _ = FromGroup != 0 && MessageType == MessageInfoType.Group
-            ? SendGroupMessage(message.Prepend(new ReplyMessage(Message)))
-            : SendPrivateMessage(message);
+        try
+        {
+            return await Bot.SendFriendMessage(FromQQ, FromMessageChain(messages));
+        }
+        catch (Exception e)
+        {
+            Reporter.ExceptionReport(e);
+            return false;
+        }
     }
 
-    internal void SendMessageOnly(MessageChain? message)
+    private async Task<bool> SendGroupMessage(MessageChain messages)
+    {
+        try
+        {
+            return await Bot.SendGroupMessage(FromGroup, FromMessageChain(messages));
+        }
+        catch (Exception e)
+        {
+            Reporter.ExceptionReport(e);
+            return false;
+        }
+    }
+
+    internal async void SendMessage(MessageChain? message)
     {
         if (message is null) return;
-        _ = FromGroup != 0 && MessageType == MessageInfoType.Group
-            ? SendGroupMessage(message)
-            : SendPrivateMessage(message);
+        if (FromGroup != 0 && MessageType == MessageInfoType.Group)
+            await SendGroupMessage(message.Prepend(new ReplyMessage(Message)));
+        else
+            await SendPrivateMessage(message);
+    }
+
+    internal async void SendMessageOnly(MessageChain? message)
+    {
+        if (message is null) return;
+        if (FromGroup != 0 && MessageType == MessageInfoType.Group)
+            await SendGroupMessage(message);
+        else
+            await SendPrivateMessage(message);
     }
 
     public static void Process(Bot bot, int messageType, uint fromGroup, uint fromQq, MessageStruct message)
@@ -175,7 +195,6 @@ internal class MessageInfo
                                  }
                              }
                          }
-
                          return;
                      }
                  });
@@ -192,9 +211,6 @@ internal class MessageInfo
             case "/a":
             case "/arc":
                 return "/arc info";
-            case "/o":
-            case "/osu":
-                return "/osu mode";
         }
 
         foreach (var (key, value) in

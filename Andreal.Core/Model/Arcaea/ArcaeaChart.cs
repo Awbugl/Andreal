@@ -57,16 +57,18 @@ public class ArcaeaChart
         if (!SongImage.TryGetValue(path, out var stream))
         {
             await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            stream = new MemoryStream(new byte[fileStream.Length]);
-            await fileStream.CopyToAsync(stream);
+            var bytes = new byte[fileStream.Length];
+            fileStream.Read(bytes, 0, bytes.Length);
+            await fileStream.FlushAsync();
             fileStream.Close();
+            stream = new MemoryStream(bytes);
             SongImage.TryAdd(path, stream);
         }
 
         var img = new Image(stream);
         if (img.Width == 512) return img;
         var newimg = new Image(img, 512, 512);
-        newimg.SaveAsJpgWithQuality(path,85);
+        newimg.SaveAsPng(path);
         img.Dispose();
         return newimg;
     }

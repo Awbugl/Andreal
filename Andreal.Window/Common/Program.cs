@@ -28,7 +28,7 @@ internal static class Program
 
     internal static AndrealConfig Config = JsonConvert.DeserializeObject<AndrealConfig>(File.ReadAllText(Path.Config))!;
 
-    public static readonly ConcurrentDictionary<uint, string> BotFriendList = new();
+    private static readonly ConcurrentDictionary<uint, string> BotFriendList = new();
 
     private static BotConfig _botConfig = BotConfig.Default();
 
@@ -127,6 +127,7 @@ internal static class Program
         bot.OnLog += OnLog;
         bot.OnBotOnline += OnBotOnline;
         bot.OnBotOffline += OnBotOffline;
+        bot.OnGroupMute += OnBotGroupMute;
     }
 
     internal static async Task ProgramInit()
@@ -210,7 +211,8 @@ internal static class Program
         Add(Messages,
             new()
             {
-                FromQQ = $"{(BotFriendList.ContainsKey(e.FriendUin) ? BotFriendList[e.FriendUin] : "")} ({e.FriendUin})",
+                FromQQ
+                    = $"{(BotFriendList.ContainsKey(e.FriendUin) ? BotFriendList[e.FriendUin] : "")} ({e.FriendUin})",
                 FromGroup = "-1 (私聊)",
                 Time = e.EventTime,
                 Message = e.Chain.ToString(),
@@ -222,19 +224,24 @@ internal static class Program
         if (Config.EnableHandleMessage) External.Process(b, 0, 0, e.FriendUin, e.Message);
     }
 
-    private static void OnFriendRequest(Bot b, FriendRequestEvent e)
+    private static async void OnFriendRequest(Bot b, FriendRequestEvent e)
     {
         if (Config.EnableHandleMessage)
             if (Config.Settings.FriendAdd)
-                b.ApproveFriendRequest(e.ReqUin, e.Token);
+                await b.ApproveFriendRequest(e.ReqUin, e.Token);
     }
 
-    private static void OnGroupInvite(Bot b, GroupInviteEvent e)
+    private static async void OnGroupInvite(Bot b, GroupInviteEvent e)
     {
         if (Config.EnableHandleMessage)
             if (Config.Settings.GroupAdd || e.InviterUin == Config.Master
                                          || Config.Settings.GroupInviterWhitelist.Contains(e.InviterUin))
-                b.ApproveGroupInvitation(e.GroupUin, e.InviterUin, e.Token);
+                await b.ApproveGroupInvitation(e.GroupUin, e.InviterUin, e.Token);
+    }
+    
+    private static async void OnBotGroupMute(Bot b, GroupMuteMemberEvent e)
+    {
+        if (e.MemberUin == b.Uin) await b.GroupLeave(e.GroupUin);
     }
 
     private static void OnCaptcha(Bot b, CaptchaEvent e)

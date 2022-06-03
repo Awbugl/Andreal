@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using Andreal.Core.Common;
 using Andreal.Window.Common;
@@ -12,19 +11,13 @@ internal partial class App
 {
     protected override void OnStartup(StartupEventArgs e)
     {
-        TaskScheduler.UnobservedTaskException += (_, args) =>
-                                                 {
-                                                     Reporter.ExceptionReport(args.Exception);
-                                                     args.SetObserved();
-                                                 };
-
-        DispatcherUnhandledException += (_, args) =>
-                                        {
-                                            Reporter.ExceptionReport(args.Exception);
-                                            args.Handled = true;
-                                        };
-
-        AppDomain.CurrentDomain.UnhandledException += (_, args) => 
+        Current.DispatcherUnhandledException += (_, args) =>
+                                                            {
+                                                                Reporter.ExceptionReport(args.Exception);
+                                                                args.Handled = true;
+                                                            };
+       
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
                                                           Reporter.ExceptionReport(args.ExceptionObject as Exception);
 
         Reporter.OnExceptionRecorded += exception =>
