@@ -14,7 +14,6 @@ internal partial class SliderVerify
 
     private string _ticketId = "";
 
-
     private string _ticket = "";
 
     internal SliderVerify(Bot bot, string sliderUrl)
@@ -54,8 +53,7 @@ internal partial class SliderVerify
                                                  if (args.RequestId != _ticketId) return;
                                                  
                                                  _ticketId = args.RequestId;
-                                                 _ticket = JObject.Parse((await CdpHelper.Network
-                                                                                         .GetResponseBodyAsync(_ticketId))
+                                                 _ticket = JObject.Parse((await CdpHelper.Network.GetResponseBodyAsync(_ticketId))
                                                                          .Body)["ticket"]!.ToString();
 
                                                  _bot.SubmitSliderTicket(_ticket);
