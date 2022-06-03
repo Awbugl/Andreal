@@ -16,6 +16,8 @@ internal partial class App
                                             Reporter.ExceptionReport(args.Exception);
                                             args.Handled = true;
                                         };
+        
+        AppDomain.CurrentDomain.UnhandledException+= (_, args) => Reporter.ExceptionReport(args.ExceptionObject as Exception);
 
         Reporter.OnExceptionRecorded += exception =>
                                         {
