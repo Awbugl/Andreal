@@ -53,23 +53,34 @@ public class ArcaeaChart
     internal async Task<Image> GetSongImage()
     {
         var path = await Path.ArcaeaSong(this);
-
-        if (!SongImage.TryGetValue(path, out var stream))
+        
+        try
         {
-            await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            var bytes = new byte[fileStream.Length];
-            fileStream.Read(bytes, 0, bytes.Length);
-            await fileStream.FlushAsync();
-            fileStream.Close();
-            stream = new MemoryStream(bytes);
-            SongImage.TryAdd(path, stream);
-        }
+            if (!SongImage.TryGetValue(path, out var stream))
+            {
+                await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+               
+                using var reader = new BinaryReader(fileStream);
+                var bytes = reader.ReadBytes((int)fileStream.Length);
+                stream = new MemoryStream(bytes);
+                reader.Close();
+                fileStream.Close();
 
-        var img = new Image(stream);
-        if (img.Width == 512) return img;
-        var newimg = new Image(img, 512, 512);
-        newimg.SaveAsPng(path);
-        img.Dispose();
-        return newimg;
+                SongImage.TryAdd(path, stream);
+            }
+
+            var img = new Image(stream);
+            if (img.Width == 512) return img;
+            var newimg = new Image(img, 512, 512);
+            newimg.SaveAsPng(path);
+            img.Dispose();
+            return newimg;
+        }
+        catch (Exception e)
+        {
+            SongImage.TryRemove(path, out var s);
+            s?.DisposeAsync();
+            throw new ArgumentException("GetSongImage Failed.", NameEn, e);
+        }
     }
 }

@@ -5,6 +5,7 @@ using Andreal.Core.Message;
 using Andreal.Core.Utils;
 using Konata.Core;
 using Konata.Core.Common;
+using Konata.Core.Exceptions.Model;
 using Konata.Core.Interfaces.Api;
 using Konata.Core.Message;
 using Konata.Core.Message.Model;
@@ -24,8 +25,7 @@ internal class MessageInfo
 
     private static readonly Dictionary<string, string> AbbreviationPairs = new()
                                                                            {
-                                                                               { "/a ", "/arc " },
-                                                                               { "/p ", "/pjsk " }
+                                                                               { "/a ", "/arc " }, { "/p ", "/pjsk " }
                                                                            };
 
     internal Bot Bot { get; set; }
@@ -77,7 +77,7 @@ internal class MessageInfo
         {
             return await Bot.SendFriendMessage(FromQQ, FromMessageChain(messages));
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             Reporter.ExceptionReport(e);
             return false;
@@ -90,7 +90,15 @@ internal class MessageInfo
         {
             return await Bot.SendGroupMessage(FromGroup, FromMessageChain(messages));
         }
-        catch (Exception e)
+        catch (MessagingException e)
+        {
+            Reporter.ExceptionReport(e);
+            if (e.Message.Contains("Ret => 120"))
+                await Bot.GroupLeave(FromGroup);
+            
+            return false;
+        }
+        catch(Exception e)
         {
             Reporter.ExceptionReport(e);
             return false;
@@ -195,6 +203,7 @@ internal class MessageInfo
                                  }
                              }
                          }
+
                          return;
                      }
                  });
