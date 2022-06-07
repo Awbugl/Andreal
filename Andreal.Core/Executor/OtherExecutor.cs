@@ -37,7 +37,7 @@ internal class OtherExecutor : ExecutorBase
         if (!IsGroup) return null;
         if (!Info.MasterCheck() && !await Info.PermissionCheck()) return null;
 
-        Info.SendMessage(RobotReply.GroupLeave);
+        await Info.SendMessage(RobotReply.GroupLeave);
         await Task.Delay(5000);
         await Bot.GroupLeave(Info.FromGroup);
 

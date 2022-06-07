@@ -58,7 +58,7 @@ public static class BackgroundTask
         }
         catch (Exception ex)
         {
-            Reporter.ExceptionReport(ex);
+            ExceptionLogger.Log(ex);
         }
     }
 }

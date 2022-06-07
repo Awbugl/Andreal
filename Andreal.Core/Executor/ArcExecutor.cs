@@ -262,14 +262,14 @@ internal class ArcExecutor : ExecutorBase
         if (Command.Length > 0 && Command[0] == "official")
         {
             if (!ArcaeaLimitedApi.Available) return null!;
-            Info.SendMessage(RobotReply.BestsQuerying);
+            await Info.SendMessage(RobotReply.BestsQuerying);
 
             playerInfo = new((await ArcaeaLimitedApi.Userinfo(User.ArcCode))!, User);
             b30data = new LimitedBest30Data((await ArcaeaLimitedApi.Userbest30(User.ArcCode))!, playerInfo.Potential);
         }
         else
         {
-            Info.SendMessage(RobotReply.BestsQuerying);
+            await Info.SendMessage(RobotReply.BestsQuerying);
             var data = await ArcaeaUnlimitedApi.UserBest30(User.ArcCode);
             if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
             var content = data.DeserializeContent<UserBestsContent>();
@@ -286,7 +286,7 @@ internal class ArcExecutor : ExecutorBase
         if (User == null) return RobotReply.NotBind;
         if (User.ArcCode < 2) return RobotReply.NotBindArc;
 
-        Info.SendMessage(RobotReply.BestsQuerying);
+        await Info.SendMessage(RobotReply.BestsQuerying);
         var data = await ArcaeaUnlimitedApi.UserBest40(User.ArcCode);
         if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
 

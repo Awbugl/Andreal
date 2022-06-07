@@ -77,9 +77,9 @@ internal class MessageInfo
         {
             return await Bot.SendFriendMessage(FromQQ, FromMessageChain(messages));
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            Reporter.ExceptionReport(e);
+            ExceptionLogger.Log(e);
             return false;
         }
     }
@@ -92,40 +92,37 @@ internal class MessageInfo
         }
         catch (MessagingException e)
         {
-            Reporter.ExceptionReport(e);
-            if (e.Message.Contains("Ret => 120"))
-                await Bot.GroupLeave(FromGroup);
-            
+            ExceptionLogger.Log(e);
+            if (e.Message.Contains("Ret => 120")) await Bot.GroupLeave(FromGroup);
+
             return false;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            Reporter.ExceptionReport(e);
+            ExceptionLogger.Log(e);
             return false;
         }
     }
 
-    internal async void SendMessage(MessageChain? message)
+    internal async Task<bool> SendMessage(MessageChain? message)
     {
-        if (message is null) return;
-        if (FromGroup != 0 && MessageType == MessageInfoType.Group)
-            await SendGroupMessage(message.Prepend(new ReplyMessage(Message)));
-        else
-            await SendPrivateMessage(message);
+        if (message is null) return false;
+        return FromGroup != 0 && MessageType == MessageInfoType.Group
+            ? await SendGroupMessage(message.Prepend(new ReplyMessage(Message)))
+            : await SendPrivateMessage(message);
     }
 
-    internal async void SendMessageOnly(MessageChain? message)
+    internal async Task<bool> SendMessageOnly(MessageChain? message)
     {
-        if (message is null) return;
-        if (FromGroup != 0 && MessageType == MessageInfoType.Group)
-            await SendGroupMessage(message);
-        else
-            await SendPrivateMessage(message);
+        if (message is null) return false;
+        return FromGroup != 0 && MessageType == MessageInfoType.Group
+            ? await SendGroupMessage(message)
+            : await SendPrivateMessage(message);
     }
 
     public static void Process(Bot bot, int messageType, uint fromGroup, uint fromQq, MessageStruct message)
     {
-        Task.Run(() =>
+        Task.Run(async () =>
                  {
                      var rMsg = Replace(message.Chain.ToString());
 
@@ -151,63 +148,44 @@ internal class MessageInfo
 
                          try
                          {
-                             var result = method.Invoke(Activator.CreateInstance(executor, info), null);
-                             info.ReplyMessages = result as MessageChain ?? (result as Task<MessageChain>)?.Result;
+                             info.ReplyMessages = method.Invoke(Activator.CreateInstance(executor, info), null) switch
+                                                  {
+                                                      Task<MessageChain> task => await task,
+                                                      MessageChain chain      => chain,
+                                                      _                       => null
+                                                  };
                          }
                          catch (TargetInvocationException e)
                          {
-                             info.ReplyMessages = e.InnerException switch
-                                                  {
-                                                      JsonReaderException or HttpRequestException
-                                                          or TaskCanceledException
-                                                          or TimeoutException =>
-                                                          RobotReply.OnAPIQueryFailed(e.InnerException),
-                                                      _ => RobotReply.OnExceptionOccured(e.InnerException!)
-                                                  };
-                             Reporter.ExceptionReport(e.InnerException);
+                             info.ReplyMessages = GetErrorMessage(e.InnerException!);
+                             ExceptionLogger.Log(e.InnerException);
                          }
                          catch (AggregateException e)
                          {
-                             info.ReplyMessages = e.InnerException switch
-                                                  {
-                                                      JsonReaderException or HttpRequestException
-                                                          or TaskCanceledException
-                                                          or TimeoutException =>
-                                                          RobotReply.OnAPIQueryFailed(e.InnerException),
-                                                      _ => RobotReply.OnExceptionOccured(e.InnerException!)
-                                                  };
-                             Reporter.ExceptionReport(e.InnerException);
+                             info.ReplyMessages = GetErrorMessage(e.InnerException!);
+                             ExceptionLogger.Log(e.InnerException);
                          }
                          catch (Exception e)
                          {
-                             info.ReplyMessages = RobotReply.OnExceptionOccured(e);
-                             Reporter.ExceptionReport(e);
+                             info.ReplyMessages = GetErrorMessage(e);
+                             ExceptionLogger.Log(e);
                          }
                          finally
                          {
-                             try
-                             {
-                                 info.SendMessage(info.ReplyMessages);
-                                 ++BotStatementHelper.ProcessCount;
-                             }
-                             catch (Exception e)
-                             {
-                                 Reporter.ExceptionReport(e);
-                                 try
-                                 {
-                                     info.SendMessage(RobotReply.SendMessageFailed);
-                                 }
-                                 catch (Exception ex)
-                                 {
-                                     Reporter.ExceptionReport(ex);
-                                 }
-                             }
+                             if (!await info.SendMessage(info.ReplyMessages))
+                                 await info.SendMessage(RobotReply.SendMessageFailed);
+                             ++BotStatementHelper.ProcessCount;
                          }
-
-                         return;
                      }
                  });
     }
+
+    private static TextMessage GetErrorMessage(Exception e) =>
+        e switch
+        {
+            JsonReaderException or HttpRequestException or TaskCanceledException or TimeoutException => RobotReply.OnAPIQueryFailed(e),
+            _ => RobotReply.OnExceptionOccured(e)
+        };
 
     private static string Replace(string rawMessage)
     {

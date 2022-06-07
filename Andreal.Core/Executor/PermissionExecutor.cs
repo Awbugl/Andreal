@@ -11,9 +11,9 @@ internal class PermissionExecutor : ExecutorBase
     public PermissionExecutor(MessageInfo info) : base(info) { }
 
     [CommandPrefix("/echo")]
-    private MessageChain? Echo()
+    private async Task<MessageChain?> Echo()
     {
-        if (Info.MasterCheck()) Info.SendMessageOnly(string.Join(" ", Command));
+        if (Info.MasterCheck()) await Info.SendMessageOnly(string.Join(" ", Command));
         return null;
     }
 

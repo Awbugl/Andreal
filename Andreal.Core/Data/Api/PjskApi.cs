@@ -20,7 +20,7 @@ internal static class PjskApi
         }
         catch (Exception ex)
         {
-            Reporter.ExceptionReport(ex);
+            ExceptionLogger.Log(ex);
             return "";
         }
     }

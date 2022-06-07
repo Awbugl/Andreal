@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -11,7 +10,6 @@ using Andreal.Core.Utils;
 using Andreal.Window.UI;
 using Konata.Core;
 using Konata.Core.Common;
-using Konata.Core.Events;
 using Konata.Core.Events.Model;
 using Konata.Core.Interfaces.Api;
 using Newtonsoft.Json;
@@ -124,7 +122,6 @@ internal static class Program
         bot.OnGroupInvite += OnGroupInvite;
         bot.OnFriendRequest += OnFriendRequest;
         bot.OnCaptcha += OnCaptcha;
-        bot.OnLog += OnLog;
         bot.OnBotOnline += OnBotOnline;
         bot.OnBotOffline += OnBotOffline;
         bot.OnGroupMute += OnBotGroupMute;
@@ -268,12 +265,6 @@ internal static class Program
             case CaptchaEvent.CaptchaType.Unknown:
                 break;
         }
-    }
-
-    private static void OnLog(Bot b, LogEvent e)
-    {
-        if (e.Tag == "PacketComponent") return;
-        Console.WriteLine(e.EventMessage);
     }
 
     /// <summary>
