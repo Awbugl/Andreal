@@ -23,18 +23,33 @@ public static class ArcaeaUnlimitedApi
 
     private static async Task GetStream(string url, Path filename)
     {
-        await using var fileStream
-            = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+        FileStream? fileStream = null;
 
         try
         {
+            fileStream = new(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
             await (await _client!.GetAsync(url)).EnsureSuccessStatusCode().Content.CopyToAsync(fileStream);
-            fileStream.Close();
         }
         catch
         {
-            fileStream.Close();
-            File.Delete(filename);
+            try
+            {
+                File.Delete(filename);
+            }
+            catch
+            {
+                // ignore
+            }
+            
+            throw;
+        }
+        finally
+        {
+            if (fileStream is not null)
+            {
+                fileStream.Close();
+                await fileStream.DisposeAsync();
+            }
         }
     }
 

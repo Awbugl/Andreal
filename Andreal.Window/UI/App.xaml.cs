@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using Andreal.Core.Common;
 using Andreal.Window.Common;
@@ -18,19 +19,13 @@ internal partial class App
                                                     args.Handled = true;
                                                 };
 
-        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
-                                                      { 
-                                                          ExceptionLogger.Log(args.ExceptionObject as Exception);
-                                                          try
-                                                          {
-                                                            
-                                                              Process.Start(AppContext.BaseDirectory + @"\Andreal.Window.exe");
-                                                          }
-                                                          catch
-                                                          {
-                                                              // ignore
-                                                          }
-                                                      };
+        TaskScheduler.UnobservedTaskException += (_, args) =>
+                                                 {
+                                                     ExceptionLogger.Log(args.Exception.InnerException);
+                                                     args.SetObserved();
+                                                 };
+
+        AppDomain.CurrentDomain.UnhandledException += (_, args) => ExceptionLogger.Log(args.ExceptionObject as Exception);
 
         ExceptionLogger.OnExceptionRecorded += exception =>
                                         {
