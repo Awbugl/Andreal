@@ -33,13 +33,11 @@ internal class ArcSongLevelListImageGenerator
 
             var color = song.MainColor;
 
-            bg.Draw(new RectangleModel(info.Side == (int)Side.Hikari
-                                           ? Color.Light
-                                           : Color.Conflict, new(212, y + 6, 140, 140)),
+            bg.Draw(new RectangleModel(Color.GetBySide(info.Side), new(212, y + 6, 140, 140)),
                     new ImageModel(Path.ArcaeaDivider, 40, 64 + i * 200, 1000, 32),
                     new ImageModel(song, 206, y, 140, 140),
                     new TextOnlyModel(info.GetSongName(22), Font.KazesawaRegular36, color, 380, y - 5),
-                    new TextOnlyModel($"{info.DifficultyInfo.LongStr}  {info.ConstString}  (+{info.Note})", Font.Exo20,
+                    new TextOnlyModel($"{info.DifficultyInfo.LongStr}  {info.Const:0.0}  (+{info.Note})", Font.Exo20,
                                       info.DifficultyInfo.Color, 390, y + 60),
                     new TextOnlyModel(info.SetFriendly, Font.Beatrice20, System.Drawing.Color.Black, 390, y + 100));
         }

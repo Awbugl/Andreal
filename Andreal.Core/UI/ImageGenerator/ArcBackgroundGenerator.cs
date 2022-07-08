@@ -64,15 +64,13 @@ internal class ArcBackgroundGenerator
                         new LineModel(Color.White, 3, new(0, 920), new(1920, 920)),
                         new LineModel(Color.White, 1, new(0, 705), new(1920, 705)),
                         new LineModel(Color.White, 1, new(0, 955), new(1920, 955)),
-                        new RectangleModel(_info.Side == (int)Side.Hikari
-                                               ? Color.Light
-                                               : Color.Conflict, new(145, 685, 320, 320)),
+                        new RectangleModel(Color.GetBySide(_info.Side), new(145, 685, 320, 320)),
                         new ImageModel(song, 130, 670, 320, 320),
                         new TextWithShadowModel(_info.GetSongName(50), Font.Andrea56, 510, 750));
         background.SaveAsPng(path);
         return background;
     }
-
+    
     internal async Task<BackGround> ArcV3()
     {
         var path = Path.ArcaeaBackground(3, _info);
