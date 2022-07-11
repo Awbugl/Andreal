@@ -21,34 +21,53 @@ public static class ArcaeaUnlimitedApi
         JsonConvert.DeserializeObject<ResponseRoot>(await (await _client!.SendAsync(new(HttpMethod.Get, url)))
                                                           .EnsureSuccessStatusCode().Content.ReadAsStringAsync());
 
-    private static async Task GetStream(string url, Path filename)
+    private static async Task GetImage(string url, Path filename)
     {
         FileStream? fileStream = null;
+        var message = (await _client!.GetAsync(url)).EnsureSuccessStatusCode();
+       
+        if (message.Content.Headers.ContentType?.MediaType?.StartsWith("image/") != true)
+            throw new ArgumentException(JsonConvert.DeserializeObject<ResponseRoot>(await message.Content
+                                                                                                 .ReadAsStringAsync())!
+                                                   .Message);
+
+        var exflag = false;
 
         try
         {
             fileStream = new(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-            await (await _client!.GetAsync(url)).EnsureSuccessStatusCode().Content.CopyToAsync(fileStream);
+            await message.Content.CopyToAsync(fileStream);
         }
         catch
         {
+            exflag = true;
+            throw;
+        }
+        finally
+        {
             try
             {
-                File.Delete(filename);
+                if (fileStream is not null)
+                {
+                    fileStream.Close();
+                    await fileStream.DisposeAsync();
+                }
             }
             catch
             {
                 // ignore
             }
-            
-            throw;
-        }
-        finally
-        {
-            if (fileStream is not null)
+
+            try
             {
-                fileStream.Close();
-                await fileStream.DisposeAsync();
+                if (exflag && File.Exists(filename))
+                {
+                    File.Delete(filename);
+                }
+            }
+            catch
+            {
+                // ignore
             }
         }
     }
@@ -69,16 +88,16 @@ public static class ArcaeaUnlimitedApi
     internal static async Task<ResponseRoot?> SongList() => await GetString("song/list");
 
     internal static async Task SongAssets(string sid, int difficulty, Path pth) =>
-        await GetStream($"assets/song?songid={sid}&difficulty={difficulty}", pth);
+        await GetImage($"assets/song?songid={sid}&difficulty={difficulty}", pth);
 
     internal static async Task CharAssets(int partner, bool awakened, Path pth) =>
-        await GetStream($"assets/char?partner={partner}&awakened={(awakened ? "true" : "false")}", pth);
+        await GetImage($"assets/char?partner={partner}&awakened={(awakened ? "true" : "false")}", pth);
 
     internal static async Task IconAssets(int partner, bool awakened, Path pth) =>
-        await GetStream($"assets/icon?partner={partner}&awakened={(awakened ? "true" : "false")}", pth);
+        await GetImage($"assets/icon?partner={partner}&awakened={(awakened ? "true" : "false")}", pth);
 
     internal static async Task PreviewAssets(string sid, int difficulty, Path pth) =>
-        await GetStream($"assets/preview?songid={sid}&difficulty={difficulty}", pth);
+        await GetImage($"assets/preview?songid={sid}&difficulty={difficulty}", pth);
 
     internal static TextMessage GetErrorMessage(RobotReply info, int status, string message)
     {

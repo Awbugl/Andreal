@@ -106,7 +106,7 @@ internal class MessageInfo
 
     internal async Task<bool> SendMessage(MessageChain? message)
     {
-        if (message is null) return false;
+        if (message is null) return true;
         return FromGroup != 0 && MessageType == MessageInfoType.Group
             ? await SendGroupMessage(message.Prepend(new ReplyMessage(Message)))
             : await SendPrivateMessage(message);
@@ -114,7 +114,7 @@ internal class MessageInfo
 
     internal async Task<bool> SendMessageOnly(MessageChain? message)
     {
-        if (message is null) return false;
+        if (message is null) return true;
         return FromGroup != 0 && MessageType == MessageInfoType.Group
             ? await SendGroupMessage(message)
             : await SendPrivateMessage(message);
