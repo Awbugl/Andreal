@@ -16,7 +16,7 @@ internal class ArcBackgroundGenerator
     internal async Task<BackGround> ArcV1()
     {
         var path = Path.ArcaeaBackground(1, _info);
-        return path.FileExists
+        return path.FileInfo.Exists
             ? new(path)
             : await GenerateArcV1(path);
     }
@@ -43,7 +43,7 @@ internal class ArcBackgroundGenerator
     internal async Task<BackGround> ArcV2()
     {
         var path = Path.ArcaeaBackground(2, _info);
-        return path.FileExists
+        return path.FileInfo.Exists
             ? new(path)
             : await GenerateArcV2(path);
     }
@@ -74,7 +74,7 @@ internal class ArcBackgroundGenerator
     internal async Task<BackGround> ArcV3()
     {
         var path = Path.ArcaeaBackground(3, _info);
-        return path.FileExists
+        return path.FileInfo.Exists
             ? new(path)
             : await GenerateArcV3(path);
     }

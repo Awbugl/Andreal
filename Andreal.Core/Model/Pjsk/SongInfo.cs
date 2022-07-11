@@ -66,7 +66,7 @@ internal class SongInfo
     private ImageMessage SongImage()
     {
         var pth = Path.PjskSong(SongID);
-        if (pth.FileExists) return ImageMessage.FromPath(pth);
+        if (!pth.FileInfo.Exists) return ImageMessage.FromPath(pth);
 
         var sid = SongID.PadLeft(3, '0');
         WebHelper.DownloadImage($"https://assets.pjsek.ai/file/pjsekai-assets/startapp/music/jacket/jacket_s_{sid}/jacket_s_{sid}.png",

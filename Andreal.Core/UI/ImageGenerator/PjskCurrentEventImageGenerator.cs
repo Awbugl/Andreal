@@ -59,7 +59,7 @@ internal class PjskCurrentEventImageGenerator
     private BackGround PjskEvent()
     {
         var path = Path.PjskEvent(_currentEvent.AssetbundleName);
-        return path.FileExists
+        return path.FileInfo.Exists
             ? new(path)
             : GeneratePjskEvent(path);
     }

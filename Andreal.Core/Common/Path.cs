@@ -77,7 +77,9 @@ public class Path
 
     private Path(string rawpath) { _rawpath = rawpath; }
 
-    public bool FileExists => File.Exists(this);
+    private FileInfo? _fileInfo;
+
+    public FileInfo FileInfo => _fileInfo ??= new(this);
 
     public static Path BotConfig(uint qqid) => new(AndreaConfigRoot + $"BotInfo/{qqid}.andreal.konata.botinfo");
 
@@ -92,7 +94,16 @@ public class Path
 
         var pth = new Path($"{ArcaeaImageRoot}Song/{song}.jpg");
 
-        if (!pth.FileExists) await ArcaeaUnlimitedApi.SongAssets(chart.SongID, chart.RatingClass, pth);
+        if (pth.FileInfo.Exists)
+        {
+            if (pth.FileInfo.Length > 10240)
+                return pth;
+            else
+                pth.FileInfo.Delete();
+        }
+
+        await ArcaeaUnlimitedApi.SongAssets(chart.SongID, chart.RatingClass, pth);
+
         return pth;
     }
 
@@ -129,21 +140,50 @@ public class Path
     {
         var pth = new Path(ArcaeaImageRoot + $"Char/{partner}{(awakened ? "u" : "")}.png");
 
-        if (!pth.FileExists) await ArcaeaUnlimitedApi.CharAssets(partner, awakened, pth);
+        if (pth.FileInfo.Exists)
+        {
+            if (pth.FileInfo.Length > 10240)
+                return pth;
+            else
+                pth.FileInfo.Delete();
+        }
+
+        await ArcaeaUnlimitedApi.CharAssets(partner, awakened, pth);
+
         return pth;
     }
 
     public static async Task<Path> ArcaeaPartnerIcon(int partner, bool awakened)
     {
         var pth = new Path(ArcaeaImageRoot + $"Icon/{partner}{(awakened ? "u" : "")}.png");
-        if (!pth.FileExists) await ArcaeaUnlimitedApi.IconAssets(partner, awakened, pth);
+
+        if (pth.FileInfo.Exists)
+        {
+            if (pth.FileInfo.Length > 10240)
+                return pth;
+            else
+                pth.FileInfo.Delete();
+        }
+
+        await ArcaeaUnlimitedApi.IconAssets(partner, awakened, pth);
+
         return pth;
     }
 
     public static async Task<Path> ArcaeaChartPreview(ArcaeaChart chart)
     {
         var pth = new Path(ArcaeaImageRoot + $"Preview/{chart.SongID}_{chart.RatingClass}.jpg");
-        if (!pth.FileExists) await ArcaeaUnlimitedApi.PreviewAssets(chart.SongID, chart.RatingClass, pth);
+
+        if (pth.FileInfo.Exists)
+        {
+            if (pth.FileInfo.Length > 10240)
+                return pth;
+            else
+                pth.FileInfo.Delete();
+        }
+
+        await ArcaeaUnlimitedApi.PreviewAssets(chart.SongID, chart.RatingClass, pth);
+
         return pth;
     }
 

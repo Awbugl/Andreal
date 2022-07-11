@@ -213,7 +213,7 @@ internal class PjskExecutor : ExecutorBase
         ImageMessage ChartImage(string songId, string dif)
         {
             var pth = Path.PjskChart(songId, dif);
-            if (!pth.FileExists)
+            if (!pth.FileInfo.Exists)
                 Image.ImageExtend
                      .PngWithWhiteBg(WebHelper.DownloadImage($"https://minio.dnaroma.eu/sekai-assets/music/charts/{songId.PadLeft(4, '0')}/{dif}.png"),
                                      pth);
