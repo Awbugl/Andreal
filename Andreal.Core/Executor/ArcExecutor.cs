@@ -246,6 +246,32 @@ internal class ArcExecutor : ExecutorBase
 
         if (!ArcaeaHelper.SongInfoParser(Command, out var song, out _, out var errMessage)) return errMessage;
 
+        if (song.SongID is "last" or "lasteternity")
+        {
+            var lastsong = ArcaeaCharts.QueryByID("last");
+            var lasteternitysong = ArcaeaCharts.QueryByID("lasteternity");
+            var msg = new MessageChain();
+
+            for (var i = 0; i < lastsong.Count; i++)
+                if (i == 2 || lastsong[i].JacketOverride)
+                    msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lastsong[i])));
+            
+            msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lasteternitysong[3])));
+            
+            msg.Append(lastsong.NameWithPackage);
+            
+            foreach (var t in lastsong)
+            {
+                msg.Append("\n" + t.ConstString);
+                if(t.AudioOverride) msg.Append($"  ({t.NameEn})");
+            }
+            
+            msg.Append(lasteternitysong[3].ConstString);
+            msg.Append($"  ({lasteternitysong[3].NameEn})");
+            
+            return msg;
+        }
+
         return await song.FullConstString();
     }
 
@@ -314,19 +340,6 @@ internal class ArcExecutor : ExecutorBase
         IBest30Data b30data = new Best30Data(content);
 
         return await new ArcRecord5ImageGenerator(b30data, isFloor).Generate();
-    }
-
-    private static double CalcSongConst(string scores, double rating)
-    {
-        var score = Convert.ToDouble(scores);
-        return score switch
-               {
-                   >= 10000000 => rating - 2,
-                   >= 9800000  => rating - 1 - (score - 9800000) / 200000,
-                   _ => rating > 0
-                       ? rating - (score - 9500000) / 300000
-                       : 0.0
-               };
     }
 
     private async Task<MessageChain> Recent()

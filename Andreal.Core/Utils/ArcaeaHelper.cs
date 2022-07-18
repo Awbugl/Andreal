@@ -57,6 +57,9 @@ internal static class ArcaeaHelper
         }
 
         song = result[0];
+
+        if (song.SongID == "lasteternity") dif = 3;
+        
         return true;
     }
 }
