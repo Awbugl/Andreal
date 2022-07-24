@@ -62,7 +62,7 @@ internal class DifficultyInfo
             foreach (var alias in value.Alias.Where(dif.EndsWith))
                 return (dif[..^alias.Length], key);
 
-        return (dif, 2);
+        return (dif, -1);
     }
 
     public static implicit operator string(DifficultyInfo info) => info.ShortStr;

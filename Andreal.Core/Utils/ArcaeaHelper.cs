@@ -30,7 +30,7 @@ internal static class ArcaeaHelper
                                         out string errMessage)
     {
         song = null!;
-        dif = 2;
+        dif = -1;
         errMessage = "";
 
         var enumerable = command.ToArray();

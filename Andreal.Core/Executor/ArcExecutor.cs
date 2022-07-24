@@ -20,25 +20,42 @@ internal class ArcExecutor : ExecutorBase
 {
     public ArcExecutor(MessageInfo info) : base(info) { }
 
-    private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, int dif)
+    private (RecordInfo?, PlayerInfo?, TextMessage?) GetValue(ResponseRoot data)
     {
-        var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, dif);
-
-        switch (data.Status)
+        if (data.Status == 0)
         {
-            case -14:
-            case -15:
-                return dif != 0
-                    ? await GetUserBest(song, --dif)
-                    : (null, null, RobotReply.NotPlayedTheSong);
-
-            case 0: break;
-
-            default: return (null, null, ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message));
+            var content = data.DeserializeContent<UserBestContent>();
+            return (new(content.Record), new(content.AccountInfo, User), null);
         }
 
-        var content = data.DeserializeContent<UserBestContent>();
-        return (new(content.Record), new(content.AccountInfo, User), null);
+        return (null, null, ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message));
+    }
+
+    private static int[] _difs = { 2, 3, 1, 0 };
+
+    private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, int dif)
+    {
+        if (dif == -1)
+        {
+            foreach (var i in _difs)
+            {
+                if (i == 3 && song.Count != 4) continue;
+
+                var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, i);
+
+                if (data.Status == -15) continue;
+
+                return GetValue(data);
+            }
+
+            return (null, null, RobotReply.NotPlayedTheSong);
+        }
+        else
+        {
+            var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, dif);
+
+            return GetValue(data);
+        }
     }
 
     [CommandPrefix("/arc download")]
@@ -168,6 +185,8 @@ internal class ArcExecutor : ExecutorBase
         if (!ArcaeaHelper.SongInfoParser(Command.Skip(2), out var song, out var dif, out var errMessage))
             return errMessage;
 
+        if (dif == -1) dif = 2;
+
         if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
 
         var arcsong = song[dif];
@@ -193,6 +212,8 @@ internal class ArcExecutor : ExecutorBase
 
         if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
             return errMessage;
+
+        if (dif == -1) dif = 2;
 
         if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
 
@@ -221,6 +242,8 @@ internal class ArcExecutor : ExecutorBase
 
         if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
             return errMessage;
+
+        if (dif == -1) dif = 2;
 
         if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
 
@@ -255,20 +278,20 @@ internal class ArcExecutor : ExecutorBase
             for (var i = 0; i < lastsong.Count; i++)
                 if (i == 2 || lastsong[i].JacketOverride)
                     msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lastsong[i])));
-            
+
             msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lasteternitysong[3])));
-            
+
             msg.Append(lastsong.NameWithPackage);
-            
+
             foreach (var t in lastsong)
             {
                 msg.Append("\n" + t.ConstString);
-                if(t.AudioOverride) msg.Append($"  ({t.NameEn})");
+                if (t.AudioOverride) msg.Append($"  ({t.NameEn})");
             }
-            
-            msg.Append(lasteternitysong[3].ConstString);
+
+            msg.Append("\n" + lasteternitysong[3].ConstString);
             msg.Append($"  ({lasteternitysong[3].NameEn})");
-            
+
             return msg;
         }
 
@@ -424,6 +447,8 @@ internal class ArcExecutor : ExecutorBase
         if (CommandLength == 0) return RobotReply.ParameterLengthError;
 
         if (!ArcaeaHelper.SongInfoParser(Command, out var song, out var dif, out var errMessage)) return errMessage;
+
+        if (dif == -1) dif = 2;
 
         if (dif == 3 && song.Count < 4) return RobotReply.NoBydChart;
 
