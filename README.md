@@ -1,6 +1,6 @@
 # Andreal-Konata
 
-基于Konata的AndreaBot开源版本，保留了大多数功能。
+基于Konata的开源AndreaBot。
 
 ----
 
@@ -8,7 +8,7 @@
 
 > 本项目的Arcaea数据来源于ArcaeaUnlimitedApi。
 >
-> 本项目的图片UI设计来源于 GNAQ、雨笙Fracture (按首字母排序)。
+> 本项目的图片UI设计来源于 GNAQ、linwenxuan04、雨笙Fracture (按首字母排序)。
 
 #### 数据共享协议
 
@@ -108,6 +108,25 @@ Q: **想要自己部署Andreal需要具备什么知识？部署在哪里？**
 > A: 按照教程/指北逐步操作即可；可部署在您的电脑，或您自行租赁的云服务器上。
 
 ----
+Q:  **如何申请ArcaeaUnlimitedApi Token？**
+
+> A:  请在QQ/Discord上私聊联系Awbugl（或加入QQ群 191234485），并提供Bot代称(格式要求：仅有字母+数字组成，8-16字符，用于Token)、预计每日峰值调用次数
+>
+> Token申请一般会在7个工作日内回复。友善交流（可能）会提升处理效率。
+>
+> Token申请成功后请及时加群 IOLab QA Center，Bot技术问题请在QA群提问。
+
+----
+Q:  **Bot都有哪些指令可用？**
+
+> A:  请查看Wiki：https://www.showdoc.com.cn/andrea
+
+----
+Q:  **Bot是怎么实现Arcaea查分的？**
+
+> A:  请查看专栏：https://www.bilibili.com/read/cv15871643
+
+----
 Q:  **为什么部署之后Bot无法查分？**
 
 > A:  请检查
@@ -118,9 +137,9 @@ Q:  **为什么部署之后Bot无法查分？**
 >
 > ApiToken是否申请并正确填写
 
-----    
-Q:  **配置文件时出现了问题/无法访问Github下载文件？**
+----
+Q:  **无法访问Github下载文件？**
 
-> A:  可加入QQ群 191234485 ，提供文件副本下载及问题解答。
+> A:  可加入QQ群 191234485 ，提供文件副本下载。
 
 ----
