@@ -67,5 +67,9 @@ internal partial class Accounts
 
     private async void OnLogoutAccountCommandExecute(object parameter) { await _selectedobject?.Bot?.Logout()!; }
 
-    private async void OnDeleteAccountCommandExecute(object parameter) { await Program.OnRemove(_selectedobject!); }
+    private async void OnDeleteAccountCommandExecute(object parameter)
+    {
+        await Program.OnRemove(_selectedobject!);
+        _selectedobject = null;
+    }
 }

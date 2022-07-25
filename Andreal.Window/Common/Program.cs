@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Andreal.Core.Common;
 using Andreal.Core.Utils;
@@ -13,6 +13,8 @@ using Konata.Core.Common;
 using Konata.Core.Events.Model;
 using Konata.Core.Interfaces.Api;
 using Newtonsoft.Json;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.Forms.MessageBox;
 using Path = Andreal.Core.Common.Path;
 
 
@@ -108,7 +110,7 @@ internal static class Program
                    WtLoginEvent.Type.VerifyDeviceLock     => "需要设备锁验证",
                    WtLoginEvent.Type.LoginDenied          => "登录被其他设备拒绝",
                    WtLoginEvent.Type.InvalidUinOrPassword => "QQ号或密码不正确",
-                   WtLoginEvent.Type.HighRiskEnvironment  => "高风险环境，被TX禁止登录",
+                   WtLoginEvent.Type.HighRiskEnvironment  => "高风险环境，被tx拒绝登录",
                    WtLoginEvent.Type.InvalidSmsCode       => "短信验证码不正确",
                    WtLoginEvent.Type.TokenExpired         => "快速登录Token已过期",
                    _                                      => ""
@@ -235,7 +237,7 @@ internal static class Program
                                          || Config.Settings.GroupInviterWhitelist.Contains(e.InviterUin))
                 await b.ApproveGroupInvitation(e.GroupUin, e.InviterUin, e.Token);
     }
-    
+
     private static async void OnBotGroupMute(Bot b, GroupMuteMemberEvent e)
     {
         if (e.MemberUin == b.Uin) await b.GroupLeave(e.GroupUin);
@@ -256,7 +258,13 @@ internal static class Program
             case CaptchaEvent.CaptchaType.Slider:
                 Application.Current.Dispatcher.Invoke(() =>
                                                       {
-                                                          var window = new SliderVerify(b, e.SliderUrl);
+                                                          System.Windows.Window window
+                                                              = MessageBox.Show("是否使用Webview滑块验证？\n选择否将使用滑块验证助手",
+                                                                                "需要滑块验证", MessageBoxButtons.YesNo)
+                                                                == DialogResult.Yes
+                                                                  ? new SliderVerify(b, e.SliderUrl)
+                                                                  : new SliderSubmit(b, e.SliderUrl);
+
                                                           window.Show();
                                                       });
                 break;
