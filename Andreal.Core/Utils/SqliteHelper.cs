@@ -13,7 +13,7 @@ internal static class SqliteHelper
                            SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.SharedCache
                            | SQLiteOpenFlags.FullMutex);
 
-        DbConnection.Execute("CREATE TABLE IF NOT EXISTS [BotUserInfo]([QQId] INTEGER PRIMARY KEY NOT NULL, [ArcId] INTEGER DEFAULT(-1), [PjskId] INTEGER DEFAULT(0),[IsHide] INTEGER DEFAULT(0), [IsText] INTEGER DEFAULT(0), [ImgVer] INTEGER DEFAULT(0));");
+        DbConnection.Execute("CREATE TABLE IF NOT EXISTS [BotUserInfo]([QQId] INTEGER PRIMARY KEY NOT NULL, [ArcId] INTEGER DEFAULT(-1), [IsHide] INTEGER DEFAULT(0), [IsText] INTEGER DEFAULT(0), [ImgVer] INTEGER DEFAULT(0));");
     }
 
     internal static IEnumerable<T> SelectAll<T>() where T : new() => DbConnection.Table<T>();
