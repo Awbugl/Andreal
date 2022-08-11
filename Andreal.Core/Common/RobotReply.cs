@@ -5,25 +5,13 @@ namespace Andreal.Core.Common;
 
 public class RobotReply
 {
-    internal TextMessage OnExceptionOccured(Exception ex) => ExceptionOccured.Replace("$exception$",ex.Message);
-
-    internal TextMessage OnAPIQueryFailed(Exception ex) => APIQueryFailed.Replace("$exception$",ex.Message);
-
-    internal TextMessage OnAPIQueryFailed(int status, string message) => APIQueryFailed.Replace("$exception$",$"{status}: {message}");
-
-    internal TextMessage OnJrrpResult(string value) =>JrrpResult.Replace("$jrrp$", value);
-    
-    internal TextMessage OnBindSuccess(string value) =>BindSuccess.Replace("$info$", value);
-   
     [JsonProperty("NotBind")] public string NotBind { get; set; } = "";
     [JsonProperty("NotBindArc")] public string NotBindArc { get; set; } = "";
-    [JsonProperty("NotBindPjsk")] public string NotBindPjsk { get; set; } = "";
     [JsonProperty("ParameterLengthError")] public string ParameterLengthError { get; set; } = "";
     [JsonProperty("ParameterError")] public string ParameterError { get; set; } = "";
     [JsonProperty("ConfigNotFound")] public string ConfigNotFound { get; set; } = "";
     [JsonProperty("NotPlayedTheSong")] public string NotPlayedTheSong { get; set; } = "";
     [JsonProperty("BestsQuerying")] public string BestsQuerying { get; set; } = "";
-    [JsonProperty("PjskUserBindFailed")] public string PjskUserBindFailed { get; set; } = "";
     [JsonProperty("ArcUidNotFound")] public string ArcUidNotFound { get; set; } = "";
     [JsonProperty("TooManyArcUid")] public string TooManyArcUid { get; set; } = "";
     [JsonProperty("NoSongFound")] public string? NoSongFound { get; set; } = "";
@@ -42,4 +30,10 @@ public class RobotReply
     [JsonProperty("BelowTheThreshold")] public string BelowTheThreshold { get; set; } = "";
     [JsonProperty("NeedUpdateAUA")] public string NeedUpdateAUA { get; set; } = "";
     [JsonProperty("ExceptionOccured")] public string ExceptionOccured { get; set; } = "";
+    internal TextMessage OnExceptionOccured(Exception ex) => ExceptionOccured.Replace("$exception$", ex.Message);
+    internal TextMessage OnAPIQueryFailed(Exception ex) => APIQueryFailed.Replace("$exception$", ex.Message);
+    internal TextMessage OnAPIQueryFailed(int status, string message) =>
+        APIQueryFailed.Replace("$exception$", $"{status}: {message}");
+    internal TextMessage OnJrrpResult(string value) => JrrpResult.Replace("$jrrp$", value);
+    internal TextMessage OnBindSuccess(string value) => BindSuccess.Replace("$info$", value);
 }

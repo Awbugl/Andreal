@@ -1,4 +1,4 @@
-namespace Andreal.Core.Common;
+namespace Andreal.Core.Data.Sqlite;
 
 internal enum ImgVersion
 {

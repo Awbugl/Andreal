@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using Andreal.Core.Common;
 using Andreal.Core.Utils;
 using SQLite;
 
@@ -14,7 +13,6 @@ internal class BotUserInfo
 
     [PrimaryKey] [Column("QQId")] public long Uin { get; set; }
     [Column("ArcId")] public int ArcCode { get; set; }
-    [Column("PjskId")] public long PjskCode { get; set; }
     [Column("IsHide")] public int IsHide { get; set; }
     [Column("IsText")] public int IsText { get; set; }
     [Column("ImgVer")] public ImgVersion UiVersion { get; set; }

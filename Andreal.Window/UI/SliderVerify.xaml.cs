@@ -39,14 +39,10 @@ internal partial class SliderVerify
         }
         catch
         {
-           if (MessageBox.Show("未找到Webview运行时！是否下载Webview安装包？（安装后请重启Andreal）\n选择否将使用滑块验证助手", "提示", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-               System.Diagnostics.Process.Start("https://go.microsoft.com/fwlink/p/?LinkId=2124703");
-           else
-           {
-               var window = new SliderSubmit(_bot, _sliderUrl);
-               window.Show();
-           }
-           Close();
+            MessageBox.Show("未找到Webview运行时！请安装Webview后重启Andreal\n将使用滑块验证助手继续验证", "提示");
+            var window = new SliderSubmit(_bot, _sliderUrl);
+            window.ShowDialog();
+            Close();
         }
 
         await

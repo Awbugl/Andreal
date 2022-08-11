@@ -116,7 +116,7 @@ internal static class StackBlur
                         sumOutA += *(stackPixPtr + A);
 
                         if (i <= 0) continue;
-                        
+
                         t = nRound + 1 - i;
 
                         if (i <= wm) srcPixPtr += 4;
@@ -243,7 +243,7 @@ internal static class StackBlur
                         sumOutA += *(stackPixPtr + A);
 
                         if (i <= 0) continue;
-                        
+
                         t = nRound + 1 - i;
 
                         if (i <= hm) srcPixPtr += stride;

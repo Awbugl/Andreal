@@ -9,10 +9,8 @@ internal static class Color
                                                   Tairitsu = FromArgb(150, 50, 20, 75),
                                                   Achromic = FromArgb(150, 180, 180, 180),
                                                   PmColor = FromArgb(150, 180, 200), ArcGray = FromArgb(60, 60, 60),
-                                                  ArcPurple = FromArgb(31, 30, 51),
-                                                  ArcRed = FromArgb (104, 9, 52),
-                                                  GnaqGray = FromArgb(110, 110, 110),
-                                                  AzusaGray = FromArgb(90, 90, 90);
+                                                  ArcPurple = FromArgb(31, 30, 51), ArcRed = FromArgb(104, 9, 52),
+                                                  GnaqGray = FromArgb(110, 110, 110), AzusaGray = FromArgb(90, 90, 90);
 
     internal static System.Drawing.Color FromArgb(int alpha, System.Drawing.Color baseColor) =>
         System.Drawing.Color.FromArgb(alpha, baseColor);

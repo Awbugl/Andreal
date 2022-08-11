@@ -70,7 +70,7 @@ internal class ArcBackgroundGenerator
         background.SaveAsPng(path);
         return background;
     }
-    
+
     internal async Task<BackGround> ArcV3()
     {
         var path = Path.ArcaeaBackground(3, _info);

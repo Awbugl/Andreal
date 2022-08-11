@@ -12,7 +12,6 @@ public class Path
     private static readonly string ArcaeaImageRoot = BaseDirectory + "/Andreal/Arcaea/";
     private static readonly string ArcaeaSourceRoot = BaseDirectory + "/Andreal/Source/";
     private static readonly string AndreaOtherRoot = BaseDirectory + "/Andreal/Other/";
-    private static readonly string PjskImageRoot = BaseDirectory + "/Andreal/Pjsk/";
     public static readonly string AndreaConfigRoot = BaseDirectory + "/Andreal/Config/";
     public static readonly string TempImageRoot = BaseDirectory + "/Andreal/TempImage/";
 
@@ -23,8 +22,6 @@ public class Path
     public static readonly Path PartnerConfig = new(AndreaConfigRoot + "positioninfo.json");
 
     public static readonly Path RobotReply = new(AndreaConfigRoot + "replytemplate.json");
-
-    public static readonly Path PjskAlias = new(AndreaConfigRoot + "pjskalias.json");
 
     public static readonly Path ArcaeaConstListBg = new(ArcaeaSourceRoot + "ConstList.jpg");
 
@@ -44,6 +41,8 @@ public class Path
 
     private readonly string _rawpath;
 
+    private FileInfo? _fileInfo;
+
     static Path()
     {
         if (!Directory.Exists(ArcaeaBackgroundRoot)) Directory.CreateDirectory(ArcaeaBackgroundRoot);
@@ -57,14 +56,6 @@ public class Path
             Directory.CreateDirectory(AndreaConfigRoot + "BotInfo/");
         }
 
-        if (!Directory.Exists(PjskImageRoot))
-        {
-            Directory.CreateDirectory(PjskImageRoot);
-            Directory.CreateDirectory(PjskImageRoot + "Song/");
-            Directory.CreateDirectory(PjskImageRoot + "Chart/");
-            Directory.CreateDirectory(PjskImageRoot + "EventBg/");
-        }
-
         if (!Directory.Exists(ArcaeaImageRoot))
         {
             Directory.CreateDirectory(ArcaeaImageRoot);
@@ -76,8 +67,6 @@ public class Path
     }
 
     private Path(string rawpath) { _rawpath = rawpath; }
-
-    private FileInfo? _fileInfo;
 
     public FileInfo FileInfo => _fileInfo ??= new(this);
 
@@ -96,10 +85,8 @@ public class Path
 
         if (pth.FileInfo.Exists)
         {
-            if (pth.FileInfo.Length > 10240)
-                return pth;
-            else
-                pth.FileInfo.Delete();
+            if (pth.FileInfo.Length > 10240) return pth;
+            pth.FileInfo.Delete();
         }
 
         await ArcaeaUnlimitedApi.SongAssets(chart.SongID, chart.RatingClass, pth);
@@ -142,10 +129,8 @@ public class Path
 
         if (pth.FileInfo.Exists)
         {
-            if (pth.FileInfo.Length > 10240)
-                return pth;
-            else
-                pth.FileInfo.Delete();
+            if (pth.FileInfo.Length > 10240) return pth;
+            pth.FileInfo.Delete();
         }
 
         await ArcaeaUnlimitedApi.CharAssets(partner, awakened, pth);
@@ -159,10 +144,8 @@ public class Path
 
         if (pth.FileInfo.Exists)
         {
-            if (pth.FileInfo.Length > 10240)
-                return pth;
-            else
-                pth.FileInfo.Delete();
+            if (pth.FileInfo.Length > 10240) return pth;
+            pth.FileInfo.Delete();
         }
 
         await ArcaeaUnlimitedApi.IconAssets(partner, awakened, pth);
@@ -176,10 +159,8 @@ public class Path
 
         if (pth.FileInfo.Exists)
         {
-            if (pth.FileInfo.Length > 10240)
-                return pth;
-            else
-                pth.FileInfo.Delete();
+            if (pth.FileInfo.Length > 10240) return pth;
+            pth.FileInfo.Delete();
         }
 
         await ArcaeaUnlimitedApi.PreviewAssets(chart.SongID, chart.RatingClass, pth);
@@ -196,13 +177,6 @@ public class Path
     public static Path ArcaeaDifficultyForV1(int difficulty) => new(ArcaeaSourceRoot + $"con_{difficulty}.png");
 
     public static Path RandImageFileName() => new(TempImageRoot + $"{RandStringHelper.GetRandString()}.jpg");
-
-    public static Path PjskSong(string sid) => new(PjskImageRoot + $"Song/{sid}.png");
-
-    public static Path PjskChart(string sid, string dif) => new(PjskImageRoot + $"Chart/{sid}_{dif}.png");
-
-    public static Path PjskEvent(string currentEventAssetbundleName) =>
-        new(PjskImageRoot + $"EventBg/{currentEventAssetbundleName}.png");
 
     public static Path ArcaeaBg4(int difficulty, string package)
     {

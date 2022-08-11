@@ -23,11 +23,6 @@ internal class MessageInfo
 
     private static readonly Dictionary<(Type, MethodInfo), string[]> MethodPrefixs = GetMethodPrefixs();
 
-    private static readonly Dictionary<string, string> AbbreviationPairs = new()
-                                                                           {
-                                                                               { "/a ", "/arc " }, { "/p ", "/pjsk " }
-                                                                           };
-
     internal Bot Bot { get; set; }
     internal uint FromGroup { get; private set; }
     internal uint FromQQ { get; private set; }
@@ -183,7 +178,8 @@ internal class MessageInfo
     private static TextMessage GetErrorMessage(Exception e) =>
         e switch
         {
-            JsonReaderException or HttpRequestException or TaskCanceledException or TimeoutException => RobotReply.OnAPIQueryFailed(e),
+            JsonReaderException or HttpRequestException or TaskCanceledException or TimeoutException => RobotReply
+                .OnAPIQueryFailed(e),
             _ => RobotReply.OnExceptionOccured(e)
         };
 
@@ -200,12 +196,9 @@ internal class MessageInfo
                 return "/arc info";
         }
 
-        foreach (var (key, value) in
-                 AbbreviationPairs.Where(i => rawMessage.StartsWith(i.Key, StringComparison.OrdinalIgnoreCase)))
-            rawMessage = value + rawMessage[key.Length..];
+        if (rawMessage.StartsWith("/a ", StringComparison.OrdinalIgnoreCase)) rawMessage = "/arc " + rawMessage[3..];
 
-        return string.Join(" ",
-                           rawMessage.Split(new char[] { '\n', '\t', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+        return string.Join(" ", rawMessage.Split(new char[] { '\n', '\t', '\r' }, StringSplitOptions.RemoveEmptyEntries));
     }
 
     private static Dictionary<(Type, MethodInfo), string[]> GetMethodPrefixs()

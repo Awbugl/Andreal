@@ -1,5 +1,5 @@
-﻿using Andreal.Core.Common;
-using Andreal.Core.Data.Json.Arcaea.ArcaeaLimited;
+﻿using Andreal.Core.Data.Json.Arcaea.ArcaeaLimited;
+using Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Core.Data.Sqlite;
 
 namespace Andreal.Core.Model.Arcaea;
@@ -22,7 +22,7 @@ internal class PlayerInfo
         Potential = recentdata.Potential ?? -1;
     }
 
-    public PlayerInfo(Data.Json.Arcaea.ArcaeaUnlimited.AccountInfo accountInfo, BotUserInfo user)
+    public PlayerInfo(AccountInfo accountInfo, BotUserInfo user)
     {
         _playerCode = accountInfo.Code.ToString("D9");
         _playerName = accountInfo.Name;

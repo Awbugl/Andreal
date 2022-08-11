@@ -7,7 +7,7 @@ public static class BotStatementHelper
     private static readonly DateTime Time = DateTime.Now;
 
     internal static ulong ProcessCount = 0, ExceptionCount = 0, WebExceptionCount = 0;
-    
+
     public static ulong GroupMessageCount = 0, PrivateMessageCount = 0;
 
     internal static TextMessage Statement =>

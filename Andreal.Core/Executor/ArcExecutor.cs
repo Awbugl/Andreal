@@ -18,6 +18,7 @@ namespace Andreal.Core.Executor;
 [Serializable]
 internal class ArcExecutor : ExecutorBase
 {
+    private static int[] _difs = { 2, 3, 1, 0 };
     public ArcExecutor(MessageInfo info) : base(info) { }
 
     private (RecordInfo?, PlayerInfo?, TextMessage?) GetValue(ResponseRoot data)
@@ -30,8 +31,6 @@ internal class ArcExecutor : ExecutorBase
 
         return (null, null, ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message));
     }
-
-    private static int[] _difs = { 2, 3, 1, 0 };
 
     private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, int dif)
     {
@@ -50,7 +49,7 @@ internal class ArcExecutor : ExecutorBase
 
             return (null, null, RobotReply.NotPlayedTheSong);
         }
-        else
+
         {
             var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, dif);
 

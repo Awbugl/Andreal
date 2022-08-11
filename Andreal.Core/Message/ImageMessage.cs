@@ -1,5 +1,4 @@
 ﻿using Andreal.Core.UI;
-using Andreal.Core.Utils;
 using Path = Andreal.Core.Common.Path;
 
 namespace Andreal.Core.Message;
@@ -14,14 +13,6 @@ public class ImageMessage : IMessage
     public override string ToString() => _path;
 
     internal static ImageMessage FromPath(Path path) => new(path);
-
-    internal static ImageMessage FromUrl(string url, Path? pth = null)
-    {
-        using var img = WebHelper.GetImage(url);
-        pth ??= Path.RandImageFileName();
-        img.SaveAsJpgWithQuality(pth);
-        return FromPath(pth);
-    }
 
     public static implicit operator ImageMessage(Image value)
     {

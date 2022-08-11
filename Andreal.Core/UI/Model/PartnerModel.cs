@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
-using Andreal.Core.Common;
 using Andreal.Core.Data.Json.Arcaea.PartnerPosInfoBase;
+using Andreal.Core.Data.Sqlite;
 using Path = Andreal.Core.Common.Path;
 
 namespace Andreal.Core.UI.Model;

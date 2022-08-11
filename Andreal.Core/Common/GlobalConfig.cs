@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using Andreal.Core.Data.Json.Arcaea.PartnerPosInfoBase;
-using Andreal.Core.Data.Json.Pjsk;
 using Newtonsoft.Json;
 
 namespace Andreal.Core.Common;
@@ -11,11 +10,7 @@ public static class GlobalConfig
         = new(JsonConvert.DeserializeObject<Dictionary<string, List<PosInfoItem>>>(File.ReadAllText(Path.PartnerConfig))
               !);
 
-    public static RobotReply RobotReply
-        = JsonConvert.DeserializeObject<RobotReply>(File.ReadAllText(Path.RobotReply))!;
-
-    internal static List<PjskAlias> PjskAlias
-        = JsonConvert.DeserializeObject<List<PjskAlias>>(File.ReadAllText(Path.PjskAlias))!;
+    public static RobotReply RobotReply = JsonConvert.DeserializeObject<RobotReply>(File.ReadAllText(Path.RobotReply))!;
 
     internal static void Init(string file)
     {
@@ -30,10 +25,6 @@ public static class GlobalConfig
 
             case "replytemplate.json":
                 RobotReply = JsonConvert.DeserializeObject<RobotReply>(File.ReadAllText(Path.RobotReply))!;
-                return;
-
-            case "pjskalias.json":
-                PjskAlias = JsonConvert.DeserializeObject<List<PjskAlias>>(File.ReadAllText(Path.PjskAlias))!;
                 return;
         }
     }

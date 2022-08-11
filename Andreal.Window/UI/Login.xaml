@@ -83,10 +83,10 @@
 
         <Button
             Height="20"
-                Width="20"
-                Margin="250,0,0,0"
-                BorderThickness="0"
-                Style="{StaticResource CloseBtn}" Click="OnCloseBtnClick">
+            Width="20"
+            Margin="250,0,0,0"
+            BorderThickness="0"
+            Style="{StaticResource CloseBtn}" Click="OnCloseBtnClick">
 
             <Button.Background>
                 <ImageBrush ImageSource="../Assets/close.png" />
@@ -112,18 +112,18 @@
                        Background="#23262A">
             </TextBlock>
             <PasswordBox x:Name="PwdBox" Width="160" VerticalAlignment="Center"
-                         BorderThickness="0,0,0,1" Foreground="DarkGray" 
-                         InputMethod.IsInputMethodEnabled="False"
+                         BorderThickness="0,0,0,1" Foreground="DarkGray"
+                         InputMethod.IsInputMethodEnabled="False" KeyDown="OnKeyDown"
                          Height="30" FontSize="16" Background="#23262A" />
-        </StackPanel> 
+        </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Height="50" Width="196">
-        <Button
-            Margin="0,-20,0,0"
-                Height="30"
-                Width="200"
-                Style="{StaticResource BtnStyle}" Click="OnLoginBtnClick">
-            <TextBlock TextWrapping="Wrap" Text="登录"  FontSize="16" VerticalAlignment="Center" />
-        </Button>
-        </StackPanel> 
+            <Button x:Name="LoginButton"
+                    Margin="0,-20,0,0"
+                    Height="30"
+                    Width="200"
+                    Style="{StaticResource BtnStyle}" Click="OnLoginBtnClick">
+                <TextBlock TextWrapping="Wrap" Text="登录" FontSize="16" VerticalAlignment="Center" />
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

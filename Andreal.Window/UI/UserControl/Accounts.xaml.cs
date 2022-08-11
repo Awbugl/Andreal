@@ -9,8 +9,6 @@ namespace Andreal.Window.UI.UserControl;
 
 internal partial class Accounts
 {
-    private AccountLog? _selectedobject;
-
     public Accounts()
     {
         InitializeComponent();
@@ -21,55 +19,75 @@ internal partial class Accounts
 
     private void OnAccountsChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        var b = List.GetBindingExpression(ItemsControl.ItemsSourceProperty);
-        b?.UpdateTarget();
+        List.GetBindingExpression(ItemsControl.ItemsSourceProperty)?.UpdateTarget();
     }
 
     private void OnMouseRightDown(object? sender, MouseButtonEventArgs e)
     {
-        if (((DataGridRow)sender!).Item is AccountLog item)
-        {
-            _selectedobject = item;
+        if (sender is not DataGridRow row) return;
 
-            foreach (var items in ((DataGridRow)sender).ContextMenu.Items)
+        if (row.Item is AccountLog item)
+        {
+            foreach (var items in row.ContextMenu!.Items)
             {
                 var i = (MenuItem)items;
+                i.CommandParameter = item;
                 i.Command = i.Header switch
                             {
-                                "上线" => new DelegateCommand
-                                        {
-                                            CanExecuteFunc = () => _selectedobject?.Bot?.IsOnline() == false,
-                                            CommandAction = OnLoginAccountCommandExecute
-                                        },
-                                "离线" => new DelegateCommand
-                                        {
-                                            CanExecuteFunc = () => _selectedobject?.Bot?.IsOnline() == true,
-                                            CommandAction = OnLogoutAccountCommandExecute
-                                        },
-                                "删除" => new DelegateCommand
-                                        {
-                                            CanExecuteFunc = () => _selectedobject is not null,
-                                            CommandAction = OnDeleteAccountCommandExecute
-                                        },
-                                _ => i.Command
+                                "上线" => LoginAccountCommand,
+                                "离线" => LogoutAccountCommand,
+                                "删除" => DeleteAccountCommand,
+                                _    => i.Command
                             };
             }
         }
     }
 
-    private void OnAddAccountCommandExecute(object parameter, RoutedEventArgs routedEventArgs) { new Login().Show(); }
+    public ICommand LoginAccountCommand =>
+        new DelegateCommand
+        {
+            CanExecuteFunc = (obj) =>
+                             {
+                                 try
+                                 {
+                                     return (obj as AccountLog)?.Bot?.IsOnline() == false;
+                                 }
+                                 catch
+                                 {
+                                     return false;
+                                 }
+                             },
+            CommandAction = bot =>
+                            {
+                                var log = bot as AccountLog;
+                                var loginresult = log!.Bot.Login().Result;
+                                Program.OnLogin(log.Bot!, loginresult).RunSynchronously();
+                            }
+        };
 
-    private async void OnLoginAccountCommandExecute(object parameter)
-    {
-        var loginresult = await _selectedobject?.Bot?.Login()!;
-        await Program.OnLogin(_selectedobject.Bot, loginresult);
-    }
+    public ICommand LogoutAccountCommand =>
+        new DelegateCommand
+        {
+            CanExecuteFunc = (obj) =>
+                             {
+                                 try
+                                 {
+                                     return (obj as AccountLog)?.Bot?.IsOnline() == true;
+                                 }
+                                 catch
+                                 {
+                                     return false;
+                                 }
+                             },
+            CommandAction = bot => (bot as AccountLog)?.Bot?.Logout().RunSynchronously()
+        };
 
-    private async void OnLogoutAccountCommandExecute(object parameter) { await _selectedobject?.Bot?.Logout()!; }
+    public ICommand DeleteAccountCommand =>
+        new DelegateCommand
+        {
+            CanExecuteFunc = (obj) => obj is not null,
+            CommandAction = bot => Program.OnRemove((bot as AccountLog)!).RunSynchronously()
+        };
 
-    private async void OnDeleteAccountCommandExecute(object parameter)
-    {
-        await Program.OnRemove(_selectedobject!);
-        _selectedobject = null;
-    }
+    private void OnAddAccountCommandExecute(object parameter, RoutedEventArgs routedEventArgs) { new Login().ShowDialog(); }
 }

@@ -80,7 +80,6 @@ internal partial class Setting
             return;
         }
 
-
         var config = new AndrealConfig
                      {
                          Master = master,

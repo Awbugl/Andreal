@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Andreal.Core.Common;
+using Andreal.Core.Data.Sqlite;
 
 namespace Andreal.Core.Data.Json.Arcaea.PartnerPosInfoBase;
 

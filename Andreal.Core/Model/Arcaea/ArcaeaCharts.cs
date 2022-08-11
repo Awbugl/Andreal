@@ -91,7 +91,7 @@ public static partial class ArcaeaCharts
                     names.Add(value[index].NameEn);
 
                     if (string.IsNullOrWhiteSpace(value[index].NameJp)) continue;
-                    
+
                     abbrs.Add(value[index].NameJp.GetAbbreviation());
                     names.Add(value[index].NameJp);
                 }

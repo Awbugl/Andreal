@@ -11,6 +11,7 @@ using Andreal.Window.UI;
 using Konata.Core;
 using Konata.Core.Common;
 using Konata.Core.Events.Model;
+using Konata.Core.Interfaces;
 using Konata.Core.Interfaces.Api;
 using Newtonsoft.Json;
 using Application = System.Windows.Application;
@@ -29,6 +30,7 @@ internal static class Program
     internal static AndrealConfig Config = JsonConvert.DeserializeObject<AndrealConfig>(File.ReadAllText(Path.Config))!;
 
     private static readonly ConcurrentDictionary<uint, string> BotFriendList = new();
+    private static readonly ConcurrentDictionary<uint, ConfigJson> BotInfos = new();
 
     private static BotConfig _botConfig = BotConfig.Default();
 
@@ -42,17 +44,17 @@ internal static class Program
         Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.Remove, obj);
     }
 
-    internal static void RemoveAt<T>(ObservableCollection<T> collection)
+    internal static void RemoveFirst<T>(ObservableCollection<T> collection)
     {
         Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.RemoveAt, 0);
     }
 
 
-    internal static async Task<(bool Success, WtLoginEvent.Type Type)> OnLogin(string uin, string password)
+    internal static async Task OnPreLogin(uint uin, string password)
     {
-        var info = new AccountInfo() { Account = uint.Parse(uin), Password = password };
+        var info = new AccountInfo() { Account = uin, Password = password };
 
-        var bot = info.GenerateBotInstance(_botConfig);
+        var bot = GenerateBotInstance(info);
 
         Init(bot);
 
@@ -67,13 +69,12 @@ internal static class Program
         }
 
         await OnLogin(bot, loginresult);
-
-        return loginresult;
     }
 
     internal static async Task OnLogin(Bot bot, (bool Success, WtLoginEvent.Type Type) loginresult)
     {
         var log = Accounts.First(i => i.Bot == bot);
+
         if (loginresult.Success)
         {
             UpdateKeystore(bot.Uin, bot.KeyStore);
@@ -85,18 +86,36 @@ internal static class Program
         }
         else
         {
-            log.State = "登陆失败";
+            log.State = "登录失败";
             log.Message = Translate(loginresult.Type);
+
+            MessageBox.Show($"QQ {log.Robot} \n登录失败，请重新登录！\n原因：" + Translate(loginresult.Type), "登录失败！");
+
+            switch (loginresult.Type)
+            {
+                case WtLoginEvent.Type.Unknown:
+                case WtLoginEvent.Type.InvalidUinOrPassword:
+                case WtLoginEvent.Type.LoginDenied:
+                case WtLoginEvent.Type.HighRiskEnvironment:
+                    await OnRemove(log);
+                    break;
+            }
         }
     }
 
     public static async Task OnRemove(AccountLog log)
     {
-        if (log.Bot.IsOnline()) await log.Bot.Logout();
-        log.Bot!.Dispose();
+        if (log.Bot?.IsOnline() == true) await log.Bot.Logout();
+
         var info = Config.Accounts.Find(i => i.Account == log.Robot);
         Config.Accounts.Remove(info!);
         await File.WriteAllTextAsync(Path.Config, JsonConvert.SerializeObject(Config));
+
+        var pth = Path.BotConfig(log.Robot);
+        if (File.Exists(pth)) File.Delete(pth);
+        BotInfos.TryRemove(log.Robot, out _);
+
+        log.Bot?.Dispose();
         Remove(Accounts, log);
     }
 
@@ -108,10 +127,10 @@ internal static class Program
                    WtLoginEvent.Type.CheckSms             => "需要短信验证",
                    WtLoginEvent.Type.CheckSlider          => "需要滑块验证",
                    WtLoginEvent.Type.VerifyDeviceLock     => "需要设备锁验证",
-                   WtLoginEvent.Type.LoginDenied          => "登录被其他设备拒绝",
-                   WtLoginEvent.Type.InvalidUinOrPassword => "QQ号或密码不正确",
-                   WtLoginEvent.Type.HighRiskEnvironment  => "高风险环境，被tx拒绝登录",
                    WtLoginEvent.Type.InvalidSmsCode       => "短信验证码不正确",
+                   WtLoginEvent.Type.InvalidUinOrPassword => "QQ号或密码不正确",
+                   WtLoginEvent.Type.LoginDenied          => "当前上网环境异常",
+                   WtLoginEvent.Type.HighRiskEnvironment  => "当前上网环境异常",
                    WtLoginEvent.Type.TokenExpired         => "快速登录Token已过期",
                    _                                      => ""
                };
@@ -145,7 +164,7 @@ internal static class Program
 
         foreach (var info in Config.Accounts)
         {
-            var bot = info.GenerateBotInstance(_botConfig);
+            var bot = GenerateBotInstance(info);
             Init(bot);
             Add(Accounts, new(bot, info.Account, "登录中", ""));
             var loginresult = await bot.Login();
@@ -167,7 +186,7 @@ internal static class Program
         switch (e.Type)
         {
             case BotOfflineEvent.OfflineType.NetworkDown:
-                log.State = "网络掉线，重新连接中...";
+                log.State = "网络连接失败，重新连接中...";
                 log.Message = $"掉线时间: {e.EventTime}";
                 break;
 
@@ -197,7 +216,7 @@ internal static class Program
                 Robot = $"{b.Name} ({b.Uin})"
             });
 
-        if (Messages.Count > 100) RemoveAt(Messages);
+        if (Messages.Count > 100) RemoveFirst(Messages);
 
         if (Config.EnableHandleMessage)
             if (e.MemberUin != b.Uin)
@@ -218,7 +237,7 @@ internal static class Program
                 Robot = $"{b.Name} ({b.Uin})"
             });
 
-        if (Messages.Count > 100) RemoveAt(Messages);
+        if (Messages.Count > 100) RemoveFirst(Messages);
 
         if (Config.EnableHandleMessage) External.Process(b, 0, 0, e.FriendUin, e.Message);
     }
@@ -251,7 +270,7 @@ internal static class Program
                 Application.Current.Dispatcher.Invoke(() =>
                                                       {
                                                           var window = new SmsCodeVerify(b, e.Phone);
-                                                          window.Show();
+                                                          window.ShowDialog();
                                                       });
                 break;
 
@@ -265,7 +284,7 @@ internal static class Program
                                                                   ? new SliderVerify(b, e.SliderUrl)
                                                                   : new SliderSubmit(b, e.SliderUrl);
 
-                                                          window.Show();
+                                                          window.ShowDialog();
                                                       });
                 break;
 
@@ -275,16 +294,24 @@ internal static class Program
         }
     }
 
-    /// <summary>
-    ///     Update keystore
-    /// </summary>
-    /// <returns></returns>
     private static void UpdateKeystore(uint qqid, BotKeyStore keystore)
     {
         var pth = Path.BotConfig(qqid);
-        if (!File.Exists(pth)) return;
-        var cfg = JsonConvert.DeserializeObject<ConfigJson>(File.ReadAllText(pth))!;
-        cfg = new() { Device = cfg.Device, KeyStore = keystore };
+
+        ConfigJson cfg = new() { KeyStore = keystore, Device = BotInfos[qqid].Device };
+
         File.WriteAllText(pth, JsonConvert.SerializeObject(cfg));
+    }
+
+    private static Bot GenerateBotInstance(AccountInfo info)
+    {
+        var pth = Path.BotConfig(info.Account);
+
+        var cfg = File.Exists(pth)
+            ? JsonConvert.DeserializeObject<ConfigJson>(File.ReadAllText(pth))!
+            : new() { Device = BotDevice.Default(), KeyStore = new(info.Account.ToString(), info.Password) };
+
+        BotInfos[info.Account] = cfg;
+        return BotFather.Create(_botConfig, cfg.Device, cfg.KeyStore);
     }
 }

@@ -1,5 +1,4 @@
-﻿using Andreal.Core.Common;
-using Andreal.Core.Data.Api;
+﻿using Andreal.Core.Data.Api;
 using Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Core.Data.Sqlite;
 using Andreal.Core.Message;
@@ -41,7 +40,8 @@ internal class RecordData
                     : await imageGenerator.Version4(new Best30Data(b30data.DeserializeContent<UserBestsContent>()));
             }
             case ImgVersion.ImgV2:
-            default: return await imageGenerator.Version2();
+            default:
+                return await imageGenerator.Version2();
         }
     }
 }

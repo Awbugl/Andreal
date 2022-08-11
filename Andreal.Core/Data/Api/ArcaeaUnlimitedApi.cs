@@ -25,7 +25,7 @@ public static class ArcaeaUnlimitedApi
     {
         FileStream? fileStream = null;
         var message = (await _client!.GetAsync(url)).EnsureSuccessStatusCode();
-       
+
         if (message.Content.Headers.ContentType?.MediaType?.StartsWith("image/") != true)
             throw new ArgumentException(JsonConvert.DeserializeObject<ResponseRoot>(await message.Content
                                                                                                  .ReadAsStringAsync())!
@@ -60,10 +60,7 @@ public static class ArcaeaUnlimitedApi
 
             try
             {
-                if (exflag && File.Exists(filename))
-                {
-                    File.Delete(filename);
-                }
+                if (exflag && File.Exists(filename)) File.Delete(filename);
             }
             catch
             {

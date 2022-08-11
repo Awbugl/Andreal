@@ -24,11 +24,11 @@ public class ArcaeaSong : List<ArcaeaChart>, IEquatable<ArcaeaSong>
             if (i == 2 || this[i].JacketOverride)
                 msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(this[i])));
         msg.Append(NameWithPackage);
-        
+
         for (var i = 0; i < Count; i++)
         {
             msg.Append("\n" + this[i].ConstString);
-            if(this[i].AudioOverride) msg.Append($"  ({this[i].NameEn})");
+            if (this[i].AudioOverride) msg.Append($"  ({this[i].NameEn})");
         }
 
         return msg;

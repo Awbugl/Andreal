@@ -53,13 +53,13 @@ public class ArcaeaChart
     internal async Task<Image> GetSongImage()
     {
         var path = await Path.ArcaeaSong(this);
-        
+
         try
         {
             if (!SongImage.TryGetValue(path, out var stream))
             {
                 await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-               
+
                 using var reader = new BinaryReader(fileStream);
                 var bytes = reader.ReadBytes((int)fileStream.Length);
                 stream = new MemoryStream(bytes);

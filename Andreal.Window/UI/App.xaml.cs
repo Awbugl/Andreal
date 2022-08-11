@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using Andreal.Core.Common;
@@ -31,7 +30,7 @@ internal partial class App
                                         {
                                             Program.Add(Program.Exceptions,
                                                         new() { Time = DateTime.Now, Exception = exception });
-                                            if (Program.Exceptions.Count > 100) Program.RemoveAt(Program.Exceptions);
+                                            if (Program.Exceptions.Count > 100) Program.RemoveFirst(Program.Exceptions);
                                         };
 
         FindResource("Taskbar");

@@ -27,8 +27,7 @@ internal class OtherExecutor : ExecutorBase
     private static async Task<MessageChain> Hitokoto() => await OtherApi.HitokotoApi();
 
     [CommandPrefix("/jrrp")]
-    private async Task<MessageChain> Jrrp() =>
-        RobotReply.OnJrrpResult(await OtherApi.JrrpApi(Info.FromQQ));
+    private async Task<MessageChain> Jrrp() => RobotReply.OnJrrpResult(await OtherApi.JrrpApi(Info.FromQQ));
 
     [CommandPrefix("/dismiss")]
     private async Task<MessageChain?> Dismiss()

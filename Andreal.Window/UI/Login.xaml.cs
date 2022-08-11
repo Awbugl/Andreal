@@ -1,5 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Andreal.Window.Common;
 
@@ -19,18 +21,22 @@ internal partial class Login
             return;
         }
 
-        if (!uint.TryParse(UserTextBox.Text, out _))
+        if (!uint.TryParse(UserTextBox.Text, out var uin) || uin <= 10000)
         {
-            MessageBox.Show("请正确输入QQ号！");
+            MessageBox.Show("请输入正确的QQ号！");
             return;
         }
 
-        var loginresult = await Program.OnLogin(UserTextBox.Text, PwdBox.Password);
-
-        if (!loginresult.Success)
-            MessageBox.Show("登陆失败！ 原因：" + loginresult.Type, "登陆失败！");
-        else
+        if (Program.Accounts.Any(i => i.Robot == uin))
+        {
+            MessageBox.Show("此QQ号已登录或正在登录中！");
             Close();
+            return;
+        }
+
+        await Program.OnPreLogin(uin, PwdBox.Password);
+
+        Close();
     }
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -45,10 +51,12 @@ internal partial class Login
         }
     }
 
-    private void OnCloseBtnClick(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
+    private void OnCloseBtnClick(object sender, RoutedEventArgs e) { Close(); }
 
     private void OnPreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text);
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter) LoginButton.RaiseEvent(new(ButtonBase.ClickEvent));
+    }
 }
