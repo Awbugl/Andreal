@@ -1,6 +1,6 @@
 # Andreal-Konata
 
-基于Konata的开源AndreaBot。
+基于Konata的开源ArcaeaBot。
 
 ----
 
@@ -65,10 +65,6 @@
 
 * Bot回复模板
 
-**pjskalias.json**
-
-* Pjsk别名库
-
 **Andreal.db**
 
 * 用户绑定信息数据库
@@ -113,6 +109,8 @@ Q:  **如何申请ArcaeaUnlimitedApi Token？**
 > A:  请在QQ/Discord上私聊联系Awbugl（或加入QQ群 191234485），并提供Bot代称(格式要求：仅有字母+数字组成，8-16字符，用于Token)、预计每日峰值调用次数
 >
 > Token申请一般会在7个工作日内回复。友善交流（可能）会提升处理效率。
+>
+> Token申请成功前请不要退群，以免无法联系您。
 >
 > Token申请成功后请及时加群 IOLab QA Center，Bot技术问题请在QA群提问。
 
