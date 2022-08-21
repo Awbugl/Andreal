@@ -57,12 +57,7 @@ internal partial class Accounts
                                      return false;
                                  }
                              },
-            CommandAction = bot =>
-                            {
-                                var log = bot as AccountLog;
-                                var loginresult = log!.Bot.Login().Result;
-                                Program.OnLogin(log.Bot!, loginresult).RunSynchronously();
-                            }
+            CommandAction = OnLoginAccountCommandExecute
         };
 
     public ICommand LogoutAccountCommand =>
@@ -79,15 +74,39 @@ internal partial class Accounts
                                      return false;
                                  }
                              },
-            CommandAction = bot => (bot as AccountLog)?.Bot?.Logout().RunSynchronously()
+            CommandAction = OnLogoutAccountCommandExecute
         };
 
     public ICommand DeleteAccountCommand =>
         new DelegateCommand
         {
-            CanExecuteFunc = (obj) => obj is not null,
-            CommandAction = bot => Program.OnRemove((bot as AccountLog)!).RunSynchronously()
+            CanExecuteFunc = (obj) =>
+                             {
+                                 try
+                                 {
+                                     return obj != null;
+                                 }
+                                 catch
+                                 {
+                                     return false;
+                                 }
+                             },
+            CommandAction = OnDeleteAccountCommandExecute
         };
 
-    private void OnAddAccountCommandExecute(object parameter, RoutedEventArgs routedEventArgs) { new Login().ShowDialog(); }
+    private void OnAddAccountCommandExecute(object parameter, RoutedEventArgs routedEventArgs)
+    {
+        new Login().ShowDialog();
+    }
+
+    private async void OnLoginAccountCommandExecute(object bot)
+    {
+        var log = bot as AccountLog;
+        var loginresult = await log!.Bot.Login();
+        await Program.OnLogin(log.Bot!, loginresult);
+    }
+
+    private async void OnLogoutAccountCommandExecute(object bot) { await (bot as AccountLog)?.Bot?.Logout()!; }
+
+    private async void OnDeleteAccountCommandExecute(object bot) { await Program.OnRemove((bot as AccountLog)!); }
 }

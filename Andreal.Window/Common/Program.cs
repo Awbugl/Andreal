@@ -49,8 +49,7 @@ internal static class Program
         Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.RemoveAt, 0);
     }
 
-
-    internal static async Task OnPreLogin(uint uin, string password)
+    internal static async Task OnPreLogin(uint uin, string password, bool retry = true)
     {
         var info = new AccountInfo() { Account = uin, Password = password };
 
@@ -58,7 +57,8 @@ internal static class Program
 
         Init(bot);
 
-        Add(Accounts, new(bot, info.Account, "登录中", ""));
+        var log = new AccountLog(bot, info.Account, "登录中", "");
+        Add(Accounts, log);
 
         var loginresult = await bot.Login();
 
@@ -66,6 +66,20 @@ internal static class Program
         {
             Config.Accounts.Add(info);
             await File.WriteAllTextAsync(Path.Config, JsonConvert.SerializeObject(Config));
+        }
+        else if (retry)
+        {
+            switch (loginresult.Type)
+            {
+                case WtLoginEvent.Type.Unknown:
+                case WtLoginEvent.Type.LoginDenied:
+                case WtLoginEvent.Type.HighRiskEnvironment:
+                {
+                    Remove(Accounts, log);
+                    await OnPreLogin(uin, password, false);
+                    return;
+                }
+            }
         }
 
         await OnLogin(bot, loginresult);
