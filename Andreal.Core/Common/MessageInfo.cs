@@ -66,50 +66,23 @@ internal class MessageInfo
 
     internal bool MasterCheck() => FromQQ == _master;
 
-    private async Task<bool> SendPrivateMessage(MessageChain messages)
-    {
-        try
-        {
-            return await Bot.SendFriendMessage(FromQQ, FromMessageChain(messages));
-        }
-        catch (Exception e)
-        {
-            ExceptionLogger.Log(e);
-            return false;
-        }
-    }
+    private Task<int> SendPrivateMessage(MessageChain messages) =>
+        Bot.SendFriendMessage(FromQQ, FromMessageChain(messages));
 
-    private async Task<bool> SendGroupMessage(MessageChain messages)
-    {
-        try
-        {
-            return await Bot.SendGroupMessage(FromGroup, FromMessageChain(messages));
-        }
-        catch (MessagingException e)
-        {
-            ExceptionLogger.Log(e);
-            if (e.Message.Contains("Ret => 120")) await Bot.GroupLeave(FromGroup);
+    private Task<int> SendGroupMessage(MessageChain messages) =>
+        Bot.SendGroupMessage(FromGroup, FromMessageChain(messages));
 
-            return false;
-        }
-        catch (Exception e)
-        {
-            ExceptionLogger.Log(e);
-            return false;
-        }
-    }
-
-    internal async Task<bool> SendMessage(MessageChain? message)
+    internal async Task<int> SendMessage(MessageChain? message)
     {
-        if (message is null) return true;
+        if (message is null) return -1;
         return FromGroup != 0 && MessageType == MessageInfoType.Group
             ? await SendGroupMessage(message.Prepend(new ReplyMessage(Message)))
             : await SendPrivateMessage(message);
     }
 
-    internal async Task<bool> SendMessageOnly(MessageChain? message)
+    internal async Task<int> SendMessageOnly(MessageChain? message)
     {
-        if (message is null) return true;
+        if (message is null) return -1;
         return FromGroup != 0 && MessageType == MessageInfoType.Group
             ? await SendGroupMessage(message)
             : await SendPrivateMessage(message);
@@ -167,9 +140,25 @@ internal class MessageInfo
                          }
                          finally
                          {
-                             if (!await info.SendMessage(info.ReplyMessages))
-                                 await info.SendMessage(RobotReply.SendMessageFailed);
-                             ++BotStatementHelper.ProcessCount;
+                             try
+                             {
+                                 var result = await info.SendMessage(info.ReplyMessages);
+                                 
+                                 if (result != 0)
+                                 {
+                                     if (result == 120 && info.MessageType == MessageInfoType.Group)
+                                         await bot.GroupLeave(fromGroup);
+                                     else
+                                         await info.SendMessage(RobotReply.SendMessageFailed);
+                                 }
+
+                                 ++BotStatementHelper.ProcessCount;
+                             }
+                             catch (Exception e)
+                             {
+                                 info.ReplyMessages = GetErrorMessage(e);
+                                 ExceptionLogger.Log(e);
+                             }
                          }
                      }
                  });
@@ -198,7 +187,8 @@ internal class MessageInfo
 
         if (rawMessage.StartsWith("/a ", StringComparison.OrdinalIgnoreCase)) rawMessage = "/arc " + rawMessage[3..];
 
-        return string.Join(" ", rawMessage.Split(new char[] { '\n', '\t', '\r' }, StringSplitOptions.RemoveEmptyEntries));
+        return string.Join(" ",
+                           rawMessage.Split(new char[] { '\n', '\t', '\r' }, StringSplitOptions.RemoveEmptyEntries));
     }
 
     private static Dictionary<(Type, MethodInfo), string[]> GetMethodPrefixs()

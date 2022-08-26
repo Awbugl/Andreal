@@ -36,21 +36,21 @@ internal partial class SliderVerify
         {
             await WebBrowser.EnsureCoreWebView2Async();
             await CdpHelper.Network.EnableAsync();
+
+            await
+                CdpHelper.Network
+                         .SetUserAgentOverrideAsync("Mozilla/5.0 (Linux; Android 10; PCT-AL10 Build/HUAWEIPCT-AL10; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 MQQBrowser/6.2 TBS/046011 Mobile Safari/537.36 V1_AND_SQ_8.8.88_2770_YYB_D A_8088800 QQ/8.8.88.7830 NetType/WIFI WebP/0.3.0 Pixel/1080",
+                                                    platform: "Android");
+
+            WebBrowser.CoreWebView2.Navigate(_sliderUrl);
         }
         catch
         {
-            MessageBox.Show("未找到Webview运行时！请安装Webview后重启Andreal\n将使用滑块验证助手继续验证", "提示");
+            MessageBox.Show("未找到Webview运行时！\n将使用滑块验证助手进行扫码验证", "提示");
             var window = new SliderSubmit(_bot, _sliderUrl);
             window.ShowDialog();
             Close();
         }
-
-        await
-            CdpHelper.Network
-                     .SetUserAgentOverrideAsync("Mozilla/5.0 (Linux; Android 10; PCT-AL10 Build/HUAWEIPCT-AL10; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/89.0.4389.72 MQQBrowser/6.2 TBS/046011 Mobile Safari/537.36 V1_AND_SQ_8.8.88_2770_YYB_D A_8088800 QQ/8.8.88.7830 NetType/WIFI WebP/0.3.0 Pixel/1080",
-                                                platform: "Android");
-
-        WebBrowser.CoreWebView2.Navigate(_sliderUrl);
 
         CdpHelper.Network.ResponseReceived += (_, args) =>
                                               {

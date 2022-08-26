@@ -160,6 +160,7 @@ internal static class Program
         bot.OnBotOnline += OnBotOnline;
         bot.OnBotOffline += OnBotOffline;
         bot.OnGroupMute += OnBotGroupMute;
+        bot.OnGroupMessageBlocked += OnGroupMessageBlocked;
     }
 
     internal static async Task ProgramInit()
@@ -213,6 +214,17 @@ internal static class Program
             case BotOfflineEvent.OfflineType.UserLoggedOut:
                 log.State = "手动离线";
                 break;
+        }
+    }
+
+    private static void OnGroupMessageBlocked(Bot b, GroupMessageBlockedEvent e)
+    {
+        var log = Accounts.First(i => i.Bot == b);
+        
+        if (log.State == "在线")
+        {
+            log.State = "在线（发送群消息受限）";
+            log.Message += "请访问 https://accounts.qq.com/safe/message/unlock?lock_info=5_5 解除限制。";
         }
     }
 
@@ -292,7 +304,7 @@ internal static class Program
                 Application.Current.Dispatcher.Invoke(() =>
                                                       {
                                                           System.Windows.Window window
-                                                              = MessageBox.Show("是否使用Webview滑块验证？\n选择否将使用滑块验证助手",
+                                                              = MessageBox.Show("是否使用Webview进行滑块验证？\n选择否将使用扫码验证",
                                                                                 "需要滑块验证", MessageBoxButtons.YesNo)
                                                                 == DialogResult.Yes
                                                                   ? new SliderVerify(b, e.SliderUrl)

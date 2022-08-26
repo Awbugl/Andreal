@@ -100,7 +100,7 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
         set
         {
             _nick = value;
-            OnPropertyChanged(nameof(Nick));
+            OnPropertyChanged();
         }
     }
 
@@ -110,7 +110,7 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
         set
         {
             _state = value;
-            OnPropertyChanged(nameof(State));
+            OnPropertyChanged();
         }
     }
 
@@ -120,7 +120,7 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
         set
         {
             _message = value;
-            OnPropertyChanged(nameof(Message));
+            OnPropertyChanged();
         }
     }
 
