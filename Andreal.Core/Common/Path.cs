@@ -11,7 +11,6 @@ public class Path
     public static readonly string ArcaeaBackgroundRoot = BaseDirectory + "/Andreal/Background/";
     private static readonly string ArcaeaImageRoot = BaseDirectory + "/Andreal/Arcaea/";
     private static readonly string ArcaeaSourceRoot = BaseDirectory + "/Andreal/Source/";
-    private static readonly string AndreaOtherRoot = BaseDirectory + "/Andreal/Other/";
     public static readonly string AndreaConfigRoot = BaseDirectory + "/Andreal/Config/";
     public static readonly string TempImageRoot = BaseDirectory + "/Andreal/TempImage/";
 
@@ -48,7 +47,6 @@ public class Path
         if (!Directory.Exists(ArcaeaBackgroundRoot)) Directory.CreateDirectory(ArcaeaBackgroundRoot);
         if (!Directory.Exists(ArcaeaSourceRoot)) Directory.CreateDirectory(ArcaeaSourceRoot);
         if (!Directory.Exists(TempImageRoot)) Directory.CreateDirectory(TempImageRoot);
-        if (!Directory.Exists(AndreaOtherRoot)) Directory.CreateDirectory(AndreaOtherRoot);
 
         if (!Directory.Exists(AndreaConfigRoot))
         {
