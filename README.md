@@ -29,7 +29,7 @@
 * 若一切顺利，此时您的Bot就已可用。
 
 
-注：ArcaeaUnlimitedApi: 由TheSnowfield与Awbugl基于BotArcAPI开发的项目。详情请咨询Awbugl。
+注：ArcaeaUnlimitedApi: 由TheSnowfield与Awbugl基于BotArcAPI开发的第三方查分API。
 
 ----
 
