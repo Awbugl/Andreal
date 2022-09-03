@@ -28,8 +28,7 @@
 
 * 若一切顺利，此时您的Bot就已可用。
 
-
-注：ArcaeaUnlimitedApi: 由TheSnowfield与Awbugl基于BotArcAPI开发的第三方查分API。
+注：ArcaeaUnlimitedApi: 由 TheSnowfield 与 Awbugl 基于 BotArcAPI 开发的第三方查分API。
 
 ----
 
@@ -42,14 +41,13 @@
 
 ##### Bot迁移时，只迁移配置文件夹即可。
 
-
-| 文件（夹）              | 说明               |
-|:-------------------|:-----------------|
-| config.json        | Andreal主要配置文件    |
-| positioninfo.json  | Arcaea图查立绘位置配置文件 |
-| replytemplate.json | Bot回复模板          |
-| Andreal.db         | 用户绑定信息数据库        |
-| BotInfo/           | Bot登录信息文件夹       |
+| 文件（夹）                | 说明               |
+|:---------------------|:-----------------|
+| config.json          | Andreal主要配置文件    |
+| positioninfo.json    | Arcaea图查立绘位置配置文件 |
+| replytemplate.json   | Bot回复模板          |
+| Andreal.db           | 用户绑定信息数据库        |
+| BotInfo/             | Bot登录信息文件夹       |
 
 ----
 
@@ -58,6 +56,8 @@
 > 使用Andreal服务将默认您允许Andreal收集/记录关于您的使用记录，包括且不限于Arcaea用户名、游玩记录等；
 >
 > **我们将与其他ArcaeaBot共享我们从您那里收集的Arcaea用户名**。
+
+----
 
 #### 常见问题
 
@@ -83,12 +83,12 @@ Q: **如何申请ArcaeaUnlimitedApi Token？**
 ----
 Q: **Bot都有哪些指令可用？**
 
-> A: 请查看Wiki：https://www.showdoc.com.cn/andrea
+> A: 请查看[Wiki](https://www.showdoc.com.cn/andrea)
 
 ----
 Q: **Bot是怎么实现Arcaea查分的？**
 
-> A: https://www.bilibili.com/read/cv15871643
+> A: 请查看[相关专栏](https://www.bilibili.com/read/cv15871643)
 
 ----
 Q: **为什么部署之后Bot无法查分？**
@@ -114,6 +114,7 @@ Q: **无法访问Github下载文件？**
 
 > [爱发电](https://afdian.net/a/Awbugl)
 
+----
 
 #### 感谢
 
