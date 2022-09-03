@@ -1,6 +1,8 @@
-# Andreal-Konata
+# Andreal
 
-基于Konata的开源ArcaeaBot。
+基于ArcaeaUnlimitedApi和Konata的开源ArcaeaBot。
+
+> 遇到问题看文末.jpg
 
 ----
 
@@ -9,10 +11,12 @@
 > 本项目的Arcaea数据来源于ArcaeaUnlimitedApi。
 >
 > 本项目的图片UI设计来源于 GNAQ、linwenxuan04、雨笙Fracture (按首字母排序)。
+>
+> 感谢所有赞助者的支持。
 
 #### 数据共享协议
 
-> 使用Andreal将默认您允许Andreal收集/记录关于您的使用记录，包括且不限于Arcaea用户名、游玩记录等；
+> 使用Andreal服务将默认您允许Andreal收集/记录关于您的使用记录，包括且不限于Arcaea用户名、游玩记录等；
 >
 > **我们将与其他ArcaeaBot共享我们从您那里收集的Arcaea用户名**。
 
@@ -26,15 +30,15 @@
 
 #### 部署方法
 
-* 向Awbugl申请 ArcaeaUnlimitedApi Token
+* 向Awbugl申请 ArcaeaUnlimitedApi Token（申请方法详见*常见问题*）
 
-* 下载 [OneKeyAndreal](https://github.com/Awbugl/Andreal/releases/)
+* [下载最新版本Andreal](https://github.com/Awbugl/Andreal/releases/)
 
 * 安装 Fonts 目录下的字体文件
 
-* 运行Andreal.Window.exe
+* 运行 Andreal.Window.exe
 
-* 基础配置页面填写查分Api和Token
+* 填写基础配置页面的配置项并保存
 
 * 账号管理界面右键添加新帐号
 
@@ -45,7 +49,7 @@
 
 ----
 
-#### 配置文件介绍 
+#### 配置文件介绍
 
 **请勿自行操作、删除、泄露给第三方**
 
@@ -79,19 +83,9 @@
 
 #### 常见问题
 
-Q: **什么是Andreal？**
-
-> A: 基于ArcaeaUnlimitedApi的AndreaBot开源项目。Andreal = real andrea。
-
-----
-Q: **我部署Andreal会得到什么？**
-
-> A: 自己的Arc查分Bot。
-
-----
 Q: **使用Andreal有何限制？**
 
-> A: 除了违法行为与盈利行为以外，您可以任意应用这份开源项目。
+> A: 除了违法行为与商业盈利行为以外，您可以任意应用这份开源项目。
 
 ----
 Q: **用户信息在哪里存储？**
@@ -101,33 +95,32 @@ Q: **用户信息在哪里存储？**
 ----
 Q: **想要自己部署Andreal需要具备什么知识？部署在哪里？**
 
-> A: 按照教程/指北逐步操作即可；可部署在您的电脑，或您自行租赁的云服务器上。
+> A: 按照教程/指北逐步操作即可；可部署在您的电脑（不建议），或您自行租赁的云服务器上。
 
 ----
-Q:  **如何申请ArcaeaUnlimitedApi Token？**
+Q:  **如何申请ArcaeaUnlimitedApi Token？**
 
-> A:  请在QQ/Discord上私聊联系Awbugl（或加入QQ群 191234485），并提供Bot代称(格式要求：仅有字母+数字组成，8-16字符，用于Token)、预计每日峰值调用次数
->
-> Token申请一般会在7个工作日内回复。友善交流（可能）会提升处理效率。
->
-> Token申请成功前请不要退群，以免无法联系您。
->
-> Token申请成功后请及时加群 IOLab QA Center，Bot技术问题请在QA群提问。
+> A:
+> 请在QQ/Discord上私聊联系Awbugl（或加入QQ群 191234485），并提供Token预计用途、预计每日峰值调用次数、(如果是Bot)Bot代称及依赖的框架；
 
-----
-Q:  **Bot都有哪些指令可用？**
+> Token申请一般会在5个工作日内回复。友善交流（可能）会提升处理效率；Token申请成功前请不要退群，以免无法联系您。
 
-> A:  请查看Wiki：https://www.showdoc.com.cn/andrea
+> 使用Andreal搭建Bot请在Token申请成功后加入 IOLab QA Center（574250621），Andreal技术问题请在QA群提问。
 
 ----
-Q:  **Bot是怎么实现Arcaea查分的？**
+Q:  **Bot都有哪些指令可用？**
 
-> A:  请查看专栏：https://www.bilibili.com/read/cv15871643
+> A:  请查看Wiki：https://www.showdoc.com.cn/andrea
 
 ----
-Q:  **为什么部署之后Bot无法查分？**
+Q:  **Bot是怎么实现Arcaea查分的？**
 
-> A:  请检查
+> A:  请查看专栏：https://www.bilibili.com/read/cv15871643
+
+----
+Q:  **为什么部署之后Bot无法查分？**
+
+> A:  请检查
 >
 > 配置项配置是否正确
 >
@@ -136,8 +129,14 @@ Q:  **为什么部署之后Bot无法查分？**
 > ApiToken是否申请并正确填写
 
 ----
-Q:  **无法访问Github下载文件？**
+Q:  **无法访问Github下载文件？**
 
-> A:  可加入QQ群 191234485 ，提供文件副本下载。
+> A:  可加入QQ群 191234485 ，提供文件副本下载。
 
 ----
+
+#### 赞助
+
+###### 赞助所得将全部用于API的服务器维护。
+
+> [爱发电](https://afdian.net/a/Awbugl)
