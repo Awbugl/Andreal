@@ -1,30 +1,30 @@
 # Andreal
 
-基于ArcaeaUnlimitedApi和Konata的开源ArcaeaBot。
+基于 ArcaeaUnlimitedAPI 和 Konata 的开源 ArcaeaBot。
 
 ----
 
 #### 用户须知
 
-> 您应知悉，使用本项目将违反 [Arcaea使用条款](https://arcaea.lowiro.com/zh/terms_of_service) 中的 3.2-4 和 3.2-6，以及 [Arcaea二次创作管理条例](https://arcaea.lowiro.com/zh/derivative_policy) 。
+> 您应知悉，使用本项目将违反 [Arcaea 使用条款](https://arcaea.lowiro.com/zh/terms_of_service) 中的 3.2-4 和 3.2-6，以及 [Arcaea 二次创作管理条例](https://arcaea.lowiro.com/zh/derivative_policy) 。
 >
-> 因使用本项目而造成的损失，Andreal开发组不予承担任何责任。
+> 因使用本项目而造成的损失，Andreal 开发组不予承担任何责任。
 
 ----
 
-#### 部署方法
+#### 部署步骤
 
-* 向Awbugl申请 ArcaeaUnlimitedApi Token（申请方法详见常见问题）
+1.  申请 `ArcaeaUnlimitedApi Token`（详见常见问题）
 
-* [下载最新版本Andreal](https://github.com/Awbugl/Andreal/releases/)
+2.  [下载最新版本 Andreal](https://github.com/Awbugl/Andreal/releases/)
 
-* 安装 Fonts 目录下的字体文件
+3.  安装 Fonts 目录下的字体文件
 
-* 运行 Andreal.Window.exe
+4.  运行 Andreal.Window.exe
 
-* 填写基础配置页面的配置项并保存
+5.  填写基础配置页面的配置项并保存
 
-* 账号管理界面右键添加新帐号
+6.  账号管理界面右键添加新帐号
 
 * 若一切顺利，此时您的Bot就已可用。
 
@@ -32,14 +32,11 @@
 
 ----
 
-#### 配置文件介绍
+#### 配置文件夹 `..\Andreal\Andreal\Config\`
 
-##### 文件目录:
-> ..\Andreal\Andreal\Config\
-
-##### 请勿自行操作、删除、泄露给第三方
-
-##### Bot迁移时，只迁移配置文件夹即可。
+>  请勿自行操作、删除、泄露给第三方
+> 
+>  Bot迁移时，只迁移配置文件夹即可。
 
 | 文件（夹）                | 说明               |
 |:---------------------|:-----------------|
@@ -53,58 +50,52 @@
 
 #### 数据共享协议
 
-> 使用Andreal服务将默认您允许Andreal收集/记录关于您的使用记录，包括且不限于Arcaea用户名、游玩记录等；
+> 使用 ArcaeaUnlimitedAPI 服务将默认您允许 ArcaeaUnlimitedAPI 收集/记录关于您的使用记录，包括且不限于 Arcaea 用户名、游玩记录等；
 >
-> **我们将与其他ArcaeaBot共享我们从您那里收集的Arcaea用户名**。
+> **我们将与其他 ArcaeaBot 共享我们从您那里收集的 Arcaea 用户名**。
 
 ----
 
 #### 常见问题
 
-Q: **使用Andreal有何限制？**
 
-> A: 除了违法行为与商业盈利行为以外，您可以任意应用这份开源项目。
+**1. 如何申请ArcaeaUnlimitedApi Token？**
 
-----
-Q: **用户信息在哪里存储？**
-
-> A: Andreal使用本地sqlite存储用户数据。由于**数据共享协议**，我们将共享用户的Arcaea用户名、游玩记录等，请知悉。
-
-----
-Q: **如何申请ArcaeaUnlimitedApi Token？**
-
-> A:
-> 请在QQ/Discord上私聊联系Awbugl（或加入QQ群 191234485），并提供Token预计用途、预计每日峰值调用次数、(如果是Bot)Bot代称及依赖的框架；
-
+> 请在 QQ / Discord 私聊联系 Awbugl（或加入 IO鸽子窝 `191234485`），并提供 用途、预计每日峰值调用次数、(如果是Bot)Bot代称及依赖的框架；
+>
 > Token申请一般会在5个工作日内回复。友善交流（可能）会提升处理效率；Token申请成功前请不要退群，以免无法联系您。
-
-> 使用Andreal搭建Bot请在Token申请成功后加入 IOLab QA Center（574250621），Andreal技术问题请在QA群提问。
-
-----
-Q: **Bot都有哪些指令可用？**
-
-> A: 请查看[Wiki](https://www.showdoc.com.cn/andrea)
-
-----
-Q: **Bot是怎么实现Arcaea查分的？**
-
-> A: 请查看[相关专栏](https://www.bilibili.com/read/cv15871643)
-
-----
-Q: **为什么部署之后Bot无法查分？**
-
-> A: 请检查
 >
-> 配置项配置是否正确
->
-> Andreal是否为最新版本
->
-> ApiToken是否申请并正确填写
+> 使用Andreal搭建Bot请在Token申请成功后加入 IOLab QA Center `574250621`，Andreal技术问题请在QA群提问。
 
 ----
-Q: **无法访问Github下载文件？**
+**2. Bot都有哪些指令可用？**
 
-> A: 可加入QQ群 191234485 ，提供文件副本下载。
+>  请查看 [Wiki](https://www.showdoc.com.cn/andrea)
+
+----
+**3. 无法访问Github下载文件？**
+
+>  IO鸽子窝 `191234485` 提供文件副本下载。
+
+----
+**4. 用户信息在哪里存储？**
+
+>  Andreal 使用本地 sqlite 存储用户数据。由于**数据共享协议**，我们将共享用户的 Arcaea 用户名、游玩记录等，请知悉。
+
+----
+**5. Bot是怎么实现Arcaea查分的？**
+
+>  请查看 [相关专栏](https://www.bilibili.com/read/cv15871643)
+
+----
+**6. 为什么部署之后Bot无法查分？**
+
+>  请检查配置项是否正确填写；Andreal 是否为最新版本
+
+----
+**7. 使用 Andreal 有何限制？**
+
+>  除了违法行为与商业盈利行为以外，您可以任意应用这份开源项目。****
 
 ----
 
@@ -118,7 +109,7 @@ Q: **无法访问Github下载文件？**
 
 #### 感谢
 
-> 本项目的Arcaea数据来源于ArcaeaUnlimitedApi。
+> 本项目的 Arcaea 数据来源于 ArcaeaUnlimitedApi。
 >
 > 本项目的图片UI设计来源于 GNAQ、linwenxuan04、雨笙Fracture (按首字母排序)。
 >
