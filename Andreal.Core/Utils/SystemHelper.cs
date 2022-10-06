@@ -9,7 +9,11 @@ internal static class SystemHelper
     public static void Init(AndrealConfig andrealConfig)
     {
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-        ServicePointManager.ServerCertificateValidationCallback = (_, _, _, _) => true;
+        ServicePointManager.ServerCertificateValidationCallback = (
+            _,
+            _,
+            _,
+            _) => true;
         ServicePointManager.DefaultConnectionLimit = 512;
         ServicePointManager.Expect100Continue = false;
         ServicePointManager.UseNagleAlgorithm = false;

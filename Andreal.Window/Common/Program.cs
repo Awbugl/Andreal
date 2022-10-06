@@ -18,7 +18,6 @@ using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Path = Andreal.Core.Common.Path;
 
-
 namespace Andreal.Window.Common;
 
 internal static class Program
@@ -35,23 +34,17 @@ internal static class Program
     private static BotConfig _botConfig = BotConfig.Default();
 
     internal static void Add<T>(ObservableCollection<T> collection, T obj)
-    {
-        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.Add, obj);
-    }
+        => Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.Add, obj);
 
     private static void Remove<T>(ObservableCollection<T> collection, T obj)
-    {
-        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.Remove, obj);
-    }
+        => Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.Remove, obj);
 
     internal static void RemoveFirst<T>(ObservableCollection<T> collection)
-    {
-        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.RemoveAt, 0);
-    }
+        => Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, collection.RemoveAt, 0);
 
     internal static async Task OnPreLogin(uint uin, string password, bool retry = true)
     {
-        var info = new AccountInfo() { Account = uin, Password = password };
+        var info = new AccountInfo { Account = uin, Password = password };
 
         var bot = GenerateBotInstance(info);
 
@@ -95,8 +88,9 @@ internal static class Program
             log.Nick = bot.Name;
 
             foreach (var friend in await bot.GetFriendList(true))
-                if (!BotFriendList.ContainsKey(friend.Uin))
-                    BotFriendList.TryAdd(friend.Uin, friend.Name);
+            {
+                if (!BotFriendList.ContainsKey(friend.Uin)) BotFriendList.TryAdd(friend.Uin, friend.Name);
+            }
         }
         else
         {
@@ -134,21 +128,19 @@ internal static class Program
     }
 
     private static string Translate(WtLoginEvent.Type type)
-    {
-        return type switch
-               {
-                   WtLoginEvent.Type.Unknown              => "未知原因",
-                   WtLoginEvent.Type.CheckSms             => "需要短信验证",
-                   WtLoginEvent.Type.CheckSlider          => "需要滑块验证",
-                   WtLoginEvent.Type.VerifyDeviceLock     => "需要设备锁验证",
-                   WtLoginEvent.Type.InvalidSmsCode       => "短信验证码不正确",
-                   WtLoginEvent.Type.InvalidUinOrPassword => "QQ号或密码不正确",
-                   WtLoginEvent.Type.LoginDenied          => "当前上网环境异常",
-                   WtLoginEvent.Type.HighRiskEnvironment  => "当前上网环境异常",
-                   WtLoginEvent.Type.TokenExpired         => "快速登录Token已过期",
-                   _                                      => ""
-               };
-    }
+        => type switch
+           {
+               WtLoginEvent.Type.Unknown              => "未知原因",
+               WtLoginEvent.Type.CheckSms             => "需要短信验证",
+               WtLoginEvent.Type.CheckSlider          => "需要滑块验证",
+               WtLoginEvent.Type.VerifyDeviceLock     => "需要设备锁验证",
+               WtLoginEvent.Type.InvalidSmsCode       => "短信验证码不正确",
+               WtLoginEvent.Type.InvalidUinOrPassword => "QQ号或密码不正确",
+               WtLoginEvent.Type.LoginDenied          => "当前上网环境异常",
+               WtLoginEvent.Type.HighRiskEnvironment  => "当前上网环境异常",
+               WtLoginEvent.Type.TokenExpired         => "快速登录Token已过期",
+               _                                      => ""
+           };
 
     private static void Init(Bot bot)
     {
@@ -220,7 +212,7 @@ internal static class Program
     private static void OnGroupMessageBlocked(Bot b, GroupMessageBlockedEvent e)
     {
         var log = Accounts.First(i => i.Bot == b);
-        
+
         if (log.State == "在线")
         {
             log.State = "在线（发送群消息受限）";
@@ -255,8 +247,7 @@ internal static class Program
         Add(Messages,
             new()
             {
-                FromQQ
-                    = $"{(BotFriendList.ContainsKey(e.FriendUin) ? BotFriendList[e.FriendUin] : "")} ({e.FriendUin})",
+                FromQQ = $"{(BotFriendList.ContainsKey(e.FriendUin) ? BotFriendList[e.FriendUin] : "")} ({e.FriendUin})",
                 FromGroup = "-1 (私聊)",
                 Time = e.EventTime,
                 Message = e.Chain.ToString(),
@@ -278,8 +269,7 @@ internal static class Program
     private static async void OnGroupInvite(Bot b, GroupInviteEvent e)
     {
         if (Config.EnableHandleMessage)
-            if (Config.Settings.GroupAdd || e.InviterUin == Config.Master
-                                         || Config.Settings.GroupInviterWhitelist.Contains(e.InviterUin))
+            if (Config.Settings.GroupAdd || e.InviterUin == Config.Master || Config.Settings.GroupInviterWhitelist.Contains(e.InviterUin))
                 await b.ApproveGroupInvitation(e.GroupUin, e.InviterUin, e.Token);
     }
 
@@ -294,24 +284,22 @@ internal static class Program
         {
             case CaptchaEvent.CaptchaType.Sms:
                 Application.Current.Dispatcher.Invoke(() =>
-                                                      {
-                                                          var window = new SmsCodeVerify(b, e.Phone);
-                                                          window.ShowDialog();
-                                                      });
+                {
+                    var window = new SmsCodeVerify(b, e.Phone);
+                    window.ShowDialog();
+                });
                 break;
 
             case CaptchaEvent.CaptchaType.Slider:
                 Application.Current.Dispatcher.Invoke(() =>
-                                                      {
-                                                          System.Windows.Window window
-                                                              = MessageBox.Show("是否使用Webview进行滑块验证？\n选择否将使用扫码验证",
-                                                                                "需要滑块验证", MessageBoxButtons.YesNo)
-                                                                == DialogResult.Yes
-                                                                  ? new SliderVerify(b, e.SliderUrl)
-                                                                  : new SliderSubmit(b, e.SliderUrl);
+                {
+                    System.Windows.Window window
+                        = MessageBox.Show("是否使用Webview进行滑块验证？\n选择否将使用扫码验证", "需要滑块验证", MessageBoxButtons.YesNo) == DialogResult.Yes
+                              ? new SliderVerify(b, e.SliderUrl)
+                              : new SliderSubmit(b, e.SliderUrl);
 
-                                                          window.ShowDialog();
-                                                      });
+                    window.ShowDialog();
+                });
                 break;
 
             default:
@@ -334,8 +322,8 @@ internal static class Program
         var pth = Path.BotConfig(info.Account);
 
         var cfg = File.Exists(pth)
-            ? JsonConvert.DeserializeObject<ConfigJson>(File.ReadAllText(pth))!
-            : new() { Device = BotDevice.Default(), KeyStore = new(info.Account.ToString(), info.Password) };
+                      ? JsonConvert.DeserializeObject<ConfigJson>(File.ReadAllText(pth))!
+                      : new() { Device = BotDevice.Default(), KeyStore = new(info.Account.ToString(), info.Password) };
 
         BotInfos[info.Account] = cfg;
         return BotFather.Create(_botConfig, cfg.Device, cfg.KeyStore);

@@ -12,8 +12,13 @@ internal class TextOnlyModel : IGraphicsModel
     private readonly StringAlignment _stringAlignment;
     private readonly string _text;
 
-    internal TextOnlyModel(string text, System.Drawing.Font font, System.Drawing.Color color, int posX, int posY,
-                           StringAlignment stringAlignment = StringAlignment.Near)
+    internal TextOnlyModel(
+        string text,
+        System.Drawing.Font font,
+        System.Drawing.Color color,
+        int posX,
+        int posY,
+        StringAlignment stringAlignment = StringAlignment.Near)
     {
         _text = text;
         _color = color;

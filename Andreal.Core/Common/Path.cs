@@ -22,6 +22,8 @@ public class Path
 
     public static readonly Path RobotReply = new(AndreaConfigRoot + "replytemplate.json");
 
+    public static readonly Path TmpSongList = new(AndreaConfigRoot + "tempsonglist.json");
+
     public static readonly Path ArcaeaConstListBg = new(ArcaeaSourceRoot + "ConstList.jpg");
 
     public static readonly Path ArcaeaDivider = new(ArcaeaSourceRoot + "Divider.png");
@@ -64,14 +66,16 @@ public class Path
         }
     }
 
-    private Path(string rawpath) { _rawpath = rawpath; }
+    private Path(string rawpath)
+    {
+        _rawpath = rawpath;
+    }
 
     public FileInfo FileInfo => _fileInfo ??= new(this);
 
     public static Path BotConfig(uint qqid) => new(AndreaConfigRoot + $"BotInfo/{qqid}.andreal.konata.botinfo");
 
-    public static Path ArcaeaBackground(int version, ArcaeaChart chart) =>
-        new(ArcaeaBackgroundRoot + $"V{version}_{ArcaeaTempSong(chart)}.png");
+    public static Path ArcaeaBackground(int version, ArcaeaChart chart) => new(ArcaeaBackgroundRoot + $"V{version}_{ArcaeaTempSong(chart)}.png");
 
     public static Path ArcaeaBg3Mask(int side) => new(ArcaeaSourceRoot + $"RawV3Bg_{side}.png");
 
@@ -96,10 +100,9 @@ public class Path
     {
         var song = chart switch
                    {
-                       _ when chart.JacketOverride => $"{chart.SongID}_{chart.RatingClass}",
-                       _ when chart.SongID == "melodyoflove" =>
-                           $"melodyoflove{(DateTime.Now.Hour is > 19 or < 6 ? "_night" : "")}",
-                       _ => chart.SongID
+                       _ when chart.JacketOverride           => $"{chart.SongID}_{chart.RatingClass}",
+                       _ when chart.SongID == "melodyoflove" => $"melodyoflove{(DateTime.Now.Hour is > 19 or < 6 ? "_night" : "")}",
+                       _                                     => chart.SongID
                    };
         return song;
     }
@@ -179,17 +182,17 @@ public class Path
     public static Path ArcaeaBg4(int difficulty, string package)
     {
         var backgroundImgV4 = difficulty == 3
-            ? "Beyond"
-            : package switch
-              {
-                  "base"                 => "Arcaea",
-                  "core" or "yugamu"     => "Lost World",
-                  "rei" or "prelude"     => "Spire of Convergence",
-                  "mirai" or "nijuusei"  => "Outer Reaches",
-                  "shiawase" or "zettai" => "Dormant Echoes",
-                  "vs" or "extend"       => "Boundless Divide",
-                  _                      => "Event"
-              };
+                                  ? "Beyond"
+                                  : package switch
+                                    {
+                                        "base"                 => "Arcaea",
+                                        "core" or "yugamu"     => "Lost World",
+                                        "rei" or "prelude"     => "Spire of Convergence",
+                                        "mirai" or "nijuusei"  => "Outer Reaches",
+                                        "shiawase" or "zettai" => "Dormant Echoes",
+                                        "vs" or "extend"       => "Boundless Divide",
+                                        _                      => "Event"
+                                    };
         return new(ArcaeaSourceRoot + $"V4Bg-{backgroundImgV4}.png");
     }
 

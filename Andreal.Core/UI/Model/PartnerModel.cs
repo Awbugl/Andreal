@@ -14,9 +14,8 @@ internal class PartnerModel : IGraphicsModel
     internal PartnerModel(int partner, bool awakened, ImgVersion imgVersion)
     {
         var location = PartnerPosInfoBase.Get($"{partner}{(awakened ? "u" : "")}", imgVersion)!;
-        _imageModel = new(Path.ArcaeaPartner(partner, awakened).Result, location.PositionX, location.PositionY,
-                          location.Size, location.Size);
+        _imageModel = new(Path.ArcaeaPartner(partner, awakened).Result, location.PositionX, location.PositionY, location.Size, location.Size);
     }
 
-    void IGraphicsModel.Draw(Graphics g) { (_imageModel as IGraphicsModel).Draw(g); }
+    void IGraphicsModel.Draw(Graphics g) => (_imageModel as IGraphicsModel).Draw(g);
 }

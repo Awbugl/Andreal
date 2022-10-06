@@ -5,7 +5,10 @@ public class TextMessage : IMessage
 {
     private readonly string _message;
 
-    private TextMessage(string message) { _message = message; }
+    private TextMessage(string message)
+    {
+        _message = message;
+    }
 
     public override string ToString() => _message;
 

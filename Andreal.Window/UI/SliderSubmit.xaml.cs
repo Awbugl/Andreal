@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using Konata.Core;
 using Konata.Core.Interfaces.Api;
@@ -28,10 +29,8 @@ internal partial class SliderSubmit
         using var qrCode = new QRCode(qrCodeData);
         using var qrCodeImage = qrCode.GetGraphic(4);
 
-        Image.Source
-            = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(qrCodeImage.GetHbitmap(), IntPtr.Zero,
-                                                                           Int32Rect.Empty,
-                                                                           BitmapSizeOptions.FromEmptyOptions());
+        Image.Source = Imaging.CreateBitmapSourceFromHBitmap(qrCodeImage.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
+                                                             BitmapSizeOptions.FromEmptyOptions());
     }
 
     private void OnSubmit(object sender, RoutedEventArgs e)
@@ -52,5 +51,5 @@ internal partial class SliderSubmit
         }
     }
 
-    private void OnPasteButtonClick(object sender, RoutedEventArgs e) { CodeBox.Text = Clipboard.GetText(); }
+    private void OnPasteButtonClick(object sender, RoutedEventArgs e) => CodeBox.Text = Clipboard.GetText();
 }

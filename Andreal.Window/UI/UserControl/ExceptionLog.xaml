@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:core="clr-namespace:Andreal.Core"
              xmlns:common="clr-namespace:Andreal.Window.Common"
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="800" x:ClassModifier="internal">
@@ -28,8 +27,7 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="复制"
-                              Command="{x:Static ApplicationCommands.Copy}">
-                    </MenuItem>
+                              Command="{x:Static ApplicationCommands.Copy}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 

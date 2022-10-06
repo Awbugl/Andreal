@@ -11,7 +11,11 @@ internal class TextWithShadowModel : IGraphicsModel
     private readonly int _posX, _posY;
     private readonly string _text;
 
-    internal TextWithShadowModel(string text, System.Drawing.Font font, int posX, int posY)
+    internal TextWithShadowModel(
+        string text,
+        System.Drawing.Font font,
+        int posX,
+        int posY)
     {
         _text = text;
         _font = font;

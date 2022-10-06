@@ -38,23 +38,18 @@ internal class ArcBest40ImageGenerator
             using var song = await record.GetSongImage();
 
             bg.Draw(
-                    new PolygonModel(Color.White, new(x + 9, y), new(x + 891, y), new(x + 900, y + 9),
-                                     new(x + 900, y + 291), new(x + 891, y + 300), new(x + 9, y + 300), new(x, y + 291),
-                                     new(x, y + 9)),
-                    new PolygonModel(record.DifficultyInfo.Color, new(x + 278, y + 22), new(x + 278, y + 70),
-                                     new(x + 503, y + 70), new(x + 458, y + 22)),
-                    new ImageModel(song, x + 22, y + 22, 256, 256),
-                    new TextOnlyModel($"[{record.Const:0.0}] {record.SongName(11)}", Font.Beatrice36, song.MainColor,
-                                      x + 295, y + 80),
+                    new PolygonModel(Color.White, new(x + 9, y), new(x + 891, y), new(x + 900, y + 9), new(x + 900, y + 291), new(x + 891, y + 300),
+                                     new(x + 9, y + 300), new(x, y + 291), new(x, y + 9)),
+                    new PolygonModel(record.DifficultyInfo.Color, new(x + 278, y + 22), new(x + 278, y + 70), new(x + 503, y + 70),
+                                     new(x + 458, y + 22)), new ImageModel(song, x + 22, y + 22, 256, 256),
+                    new TextOnlyModel($"[{record.Const:0.0}] {record.SongName(11)}", Font.Beatrice36, song.MainColor, x + 295, y + 80),
                     new TextOnlyModel(record.Score, Font.Exo44, song.MainColor, x + 290, y + 145),
                     new TextOnlyModel(record.Rating, Font.Exo26, System.Drawing.Color.White, x + 297, y + 24),
                     new TextOnlyModel($"#{i + 1}", Font.Beatrice26, System.Drawing.Color.Black, x + 800, y + 24),
-                    new TextOnlyModel($"Pure: {record.Pure} (+{record.MaxPure})", Font.Beatrice20,
-                                      System.Drawing.Color.FromArgb(105, 68, 100), x + 300, y + 235),
-                    new TextOnlyModel($"Far: {record.Far}", Font.Beatrice20,
-                                      System.Drawing.Color.FromArgb(216, 157, 49), x + 570, y + 235),
-                    new TextOnlyModel($"Lost: {record.Lost}", Font.Beatrice20,
-                                      System.Drawing.Color.FromArgb(159, 83, 109), x + 730, y + 235));
+                    new TextOnlyModel($"Pure: {record.Pure} (+{record.MaxPure})", Font.Beatrice20, System.Drawing.Color.FromArgb(105, 68, 100),
+                                      x + 300, y + 235),
+                    new TextOnlyModel($"Far: {record.Far}", Font.Beatrice20, System.Drawing.Color.FromArgb(216, 157, 49), x + 570, y + 235),
+                    new TextOnlyModel($"Lost: {record.Lost}", Font.Beatrice20, System.Drawing.Color.FromArgb(159, 83, 109), x + 730, y + 235));
         }
 
         if (!(B40data.OverflowList?.Count > 0)) return bg;
@@ -71,23 +66,18 @@ internal class ArcBest40ImageGenerator
             using var song = await record.GetSongImage();
 
             bg.Draw(
-                    new PolygonModel(Color.White, new(x + 9, y), new(x + 891, y), new(x + 900, y + 9),
-                                     new(x + 900, y + 291), new(x + 891, y + 300), new(x + 9, y + 300), new(x, y + 291),
-                                     new(x, y + 9)),
-                    new PolygonModel(record.DifficultyInfo.Color, new(x + 278, y + 22), new(x + 278, y + 70),
-                                     new(x + 503, y + 70), new(x + 458, y + 22)),
-                    new ImageModel(song, x + 22, y + 22, 256, 256),
-                    new TextOnlyModel($"[{record.Const:0.0}] {record.SongName(11)}", Font.Beatrice36, song.MainColor,
-                                      x + 295, y + 80),
+                    new PolygonModel(Color.White, new(x + 9, y), new(x + 891, y), new(x + 900, y + 9), new(x + 900, y + 291), new(x + 891, y + 300),
+                                     new(x + 9, y + 300), new(x, y + 291), new(x, y + 9)),
+                    new PolygonModel(record.DifficultyInfo.Color, new(x + 278, y + 22), new(x + 278, y + 70), new(x + 503, y + 70),
+                                     new(x + 458, y + 22)), new ImageModel(song, x + 22, y + 22, 256, 256),
+                    new TextOnlyModel($"[{record.Const:0.0}] {record.SongName(11)}", Font.Beatrice36, song.MainColor, x + 295, y + 80),
                     new TextOnlyModel(record.Score, Font.Exo44, song.MainColor, x + 290, y + 145),
                     new TextOnlyModel(record.Rating, Font.Exo26, System.Drawing.Color.White, x + 297, y + 24),
                     new TextOnlyModel($"#{i + 1}", Font.Beatrice26, System.Drawing.Color.Black, x + 800, y + 24),
-                    new TextOnlyModel($"Pure: {record.Pure} (+{record.MaxPure})", Font.Beatrice20,
-                                      System.Drawing.Color.FromArgb(105, 68, 100), x + 300, y + 235),
-                    new TextOnlyModel($"Far: {record.Far}", Font.Beatrice20,
-                                      System.Drawing.Color.FromArgb(216, 157, 49), x + 570, y + 235),
-                    new TextOnlyModel($"Lost: {record.Lost}", Font.Beatrice20,
-                                      System.Drawing.Color.FromArgb(159, 83, 109), x + 730, y + 235));
+                    new TextOnlyModel($"Pure: {record.Pure} (+{record.MaxPure})", Font.Beatrice20, System.Drawing.Color.FromArgb(105, 68, 100),
+                                      x + 300, y + 235),
+                    new TextOnlyModel($"Far: {record.Far}", Font.Beatrice20, System.Drawing.Color.FromArgb(216, 157, 49), x + 570, y + 235),
+                    new TextOnlyModel($"Lost: {record.Lost}", Font.Beatrice20, System.Drawing.Color.FromArgb(159, 83, 109), x + 730, y + 235));
         }
 
         return bg;

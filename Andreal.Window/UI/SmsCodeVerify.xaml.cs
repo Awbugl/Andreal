@@ -9,7 +9,7 @@ namespace Andreal.Window.UI;
 internal partial class SmsCodeVerify
 {
     private static readonly Regex Regex = new("[^0-9]+", RegexOptions.Compiled);
-    
+
     private readonly Bot _bot;
 
     internal SmsCodeVerify(Bot bot, string phone)
@@ -37,6 +37,5 @@ internal partial class SmsCodeVerify
         }
     }
 
-    private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e) =>
-        e.Handled = Regex.IsMatch(e.Text);
+    private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text);
 }

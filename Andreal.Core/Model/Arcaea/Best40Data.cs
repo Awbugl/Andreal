@@ -4,16 +4,16 @@ namespace Andreal.Core.Model.Arcaea;
 
 internal class Best40Data : IBest40Data
 {
-    internal Best40Data(UserBestsContent b40data) { B40data = b40data; }
+    internal Best40Data(UserBestsContent b40data)
+    {
+        B40data = b40data;
+    }
 
     private UserBestsContent B40data { get; }
 
     private string Best30Avg => B40data.Best30Avg.ToString("0.0000");
 
-    private string Recent10Avg =>
-        B40data.Recent10Avg > 0
-            ? B40data.Recent10Avg.ToString("0.0000")
-            : "--";
+    private string Recent10Avg => B40data.Recent10Avg > 0 ? B40data.Recent10Avg.ToString("0.0000") : "--";
 
     private List<RecordInfo> Best30List => B40data.Best30List.Select(i => new RecordInfo(i)).ToList();
 

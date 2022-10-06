@@ -2,6 +2,8 @@
 using Andreal.Core.Data.Api;
 using Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Core.Utils;
+using Newtonsoft.Json;
+using Path = Andreal.Core.Common.Path;
 
 namespace Andreal.Core.Model.Arcaea;
 
@@ -25,11 +27,9 @@ public static partial class ArcaeaCharts
         var abbrdata = new List<ArcaeaSong>();
 
         Abbreviations.ForAllItems<ArcaeaSong, string, List<string>>((song, value) =>
-                                                                    {
-                                                                        if (StringHelper.Equals(value, alias)
-                                                                            && !abbrdata.Contains(song))
-                                                                            abbrdata.Add(song);
-                                                                    });
+        {
+            if (StringHelper.Equals(value, alias) && !abbrdata.Contains(song)) abbrdata.Add(song);
+        });
 
         if (abbrdata.Count > 0) return abbrdata;
 
@@ -42,7 +42,7 @@ public static partial class ArcaeaCharts
 
     internal static ArcaeaChart? RandomSong(double start, double end)
     {
-        var ls = GetByConstRange(start, end).ToArray();
+        ArcaeaChart[] ls = GetByConstRange(start, end).ToArray();
         if (ls.Length == 0) return null;
         return ls.GetRandomItem();
     }
@@ -50,11 +50,19 @@ public static partial class ArcaeaCharts
 
 public static partial class ArcaeaCharts
 {
-    [NonSerialized] private static readonly ConcurrentDictionary<ArcaeaSong, List<string>> Abbreviations = new();
-    [NonSerialized] private static readonly ConcurrentDictionary<ArcaeaSong, List<string>> Names = new();
-    [NonSerialized] private static readonly ConcurrentDictionary<string, List<ArcaeaSong>> AliasCache = new();
+    [NonSerialized]
+    private static readonly ConcurrentDictionary<ArcaeaSong, List<string>> Abbreviations = new();
 
-    static ArcaeaCharts() { Init(); }
+    [NonSerialized]
+    private static readonly ConcurrentDictionary<ArcaeaSong, List<string>> Names = new();
+
+    [NonSerialized]
+    private static readonly ConcurrentDictionary<string, List<ArcaeaSong>> AliasCache = new();
+
+    static ArcaeaCharts()
+    {
+        Init();
+    }
 
     public static void Init()
     {
@@ -63,7 +71,20 @@ public static partial class ArcaeaCharts
         Abbreviations.Clear();
         Names.Clear();
 
-        var slst = ArcaeaUnlimitedApi.SongList().Result!.DeserializeContent<SongListContent>().Songs;
+        List<SongsItem>? slst;
+
+        try
+        {
+            slst = ArcaeaUnlimitedApi.SongList().Result?.DeserializeContent<SongListContent>().Songs;
+            if (slst != null) File.WriteAllText(Path.TmpSongList, JsonConvert.SerializeObject(slst));
+        }
+        catch
+        {
+            if (!File.Exists(Path.TmpSongList)) throw;
+            slst = JsonConvert.DeserializeObject<List<SongsItem>>(File.ReadAllText(Path.TmpSongList));
+        }
+
+        if (slst == null) return;
 
         foreach (var songitem in slst)
         {
@@ -85,6 +106,7 @@ public static partial class ArcaeaCharts
             var names = new List<string>();
 
             for (var index = 0; index < value.Count; index++)
+            {
                 if (index == 0 || value[index].AudioOverride)
                 {
                     abbrs.Add(value[index].NameEn.GetAbbreviation());
@@ -95,6 +117,7 @@ public static partial class ArcaeaCharts
                     abbrs.Add(value[index].NameJp.GetAbbreviation());
                     names.Add(value[index].NameJp);
                 }
+            }
 
             Abbreviations.TryAdd(value, abbrs);
             Names.TryAdd(value, names);
@@ -104,10 +127,7 @@ public static partial class ArcaeaCharts
 
 public static partial class ArcaeaCharts
 {
-    private static ArcaeaSong? GetByID(string? songid) =>
-        songid is not null && Songs.TryGetValue(songid, out var value)
-            ? value
-            : null;
+    private static ArcaeaSong? GetByID(string? songid) => songid is not null && Songs.TryGetValue(songid, out var value) ? value : null;
 
     private static ArcaeaSong? GetByName(ConcurrentDictionary<string, ArcaeaSong> values, string alias)
     {
@@ -127,8 +147,7 @@ public static partial class ArcaeaCharts
     {
         var dic = new PriorityQueue<ArcaeaSong, byte>();
 
-        Aliases.ForAllItems<string, string, List<string>>((song, sid) =>
-                                                              Enqueue(dic, alias, sid, GetByID(song)!, 1, 4));
+        Aliases.ForAllItems<string, string, List<string>>((song, sid) => Enqueue(dic, alias, sid, GetByID(song)!, 1, 4));
 
         dic.TryPeek(out _, out var firstpriority);
 
@@ -138,8 +157,7 @@ public static partial class ArcaeaCharts
 
         dic.TryPeek(out _, out firstpriority);
 
-        if (firstpriority != 2)
-            Names.ForAllItems<ArcaeaSong, string, List<string>>((song, name) => Enqueue(dic, alias, name, song, 3, 6));
+        if (firstpriority != 2) Names.ForAllItems<ArcaeaSong, string, List<string>>((song, name) => Enqueue(dic, alias, name, song, 3, 6));
 
         if (dic.Count == 0) return default;
 
@@ -148,15 +166,21 @@ public static partial class ArcaeaCharts
         var ls = new List<ArcaeaSong> { firstobj! };
 
         while (dic.TryDequeue(out var obj, out var priority) && priority == lowestpriority)
-            if (!ls.Contains(obj))
-                ls.Add(obj);
+        {
+            if (!ls.Contains(obj)) ls.Add(obj);
+        }
 
         AliasCache.TryAdd(alias, ls);
         return ls;
     }
 
-    private static void Enqueue(PriorityQueue<ArcaeaSong, byte> dic, string alias, string key, ArcaeaSong song,
-                                byte upperpriority, byte lowerpriority)
+    private static void Enqueue(
+        PriorityQueue<ArcaeaSong, byte> dic,
+        string alias,
+        string key,
+        ArcaeaSong song,
+        byte upperpriority,
+        byte lowerpriority)
     {
         if (StringHelper.Contains(key, alias)) dic.Enqueue(song, upperpriority);
         if (StringHelper.Contains(alias, key)) dic.Enqueue(song, lowerpriority);
@@ -169,9 +193,12 @@ public static partial class ArcaeaCharts
         // ReSharper disable once LoopCanBePartlyConvertedToQuery
         foreach (var song in Songs.Values)
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+        {
             foreach (var chart in song)
-                if (Math.Abs(chart.Const - @const) < lerance)
-                    yield return chart;
+            {
+                if (Math.Abs(chart.Const - @const) < lerance) yield return chart;
+            }
+        }
     }
 
     private static IEnumerable<ArcaeaChart> GetByConstRange(double lowerlimit, double upperlimit)
@@ -179,8 +206,11 @@ public static partial class ArcaeaCharts
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var song in Songs.Values)
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+        {
             foreach (var chart in song)
-                if (chart.Const >= lowerlimit && chart.Const <= upperlimit)
-                    yield return chart;
+            {
+                if (chart.Const >= lowerlimit && chart.Const <= upperlimit) yield return chart;
+            }
+        }
     }
 }

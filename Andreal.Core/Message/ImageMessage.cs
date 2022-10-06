@@ -8,7 +8,10 @@ public class ImageMessage : IMessage
 {
     private readonly string _path;
 
-    private ImageMessage(string path) { _path = path; }
+    private ImageMessage(string path)
+    {
+        _path = path;
+    }
 
     public override string ToString() => _path;
 

@@ -8,5 +8,5 @@ internal static class LastExceptionHelper
 
     internal static string Get() => $"{_lastException.Item1}\n {_lastException.Exception.GetType().FullName}";
 
-    internal static void Set(Exception ex) { _lastException = (DateTime.Now, ex); }
+    internal static void Set(Exception ex) => _lastException = (DateTime.Now, ex);
 }

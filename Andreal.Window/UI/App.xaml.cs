@@ -13,25 +13,24 @@ internal partial class App
     protected override void OnStartup(StartupEventArgs e)
     {
         Current.DispatcherUnhandledException += (_, args) =>
-                                                {
-                                                    ExceptionLogger.Log(args.Exception);
-                                                    args.Handled = true;
-                                                };
+        {
+            ExceptionLogger.Log(args.Exception);
+            args.Handled = true;
+        };
 
         TaskScheduler.UnobservedTaskException += (_, args) =>
-                                                 {
-                                                     ExceptionLogger.Log(args.Exception.InnerException);
-                                                     args.SetObserved();
-                                                 };
+        {
+            ExceptionLogger.Log(args.Exception.InnerException);
+            args.SetObserved();
+        };
 
         AppDomain.CurrentDomain.UnhandledException += (_, args) => ExceptionLogger.Log(args.ExceptionObject as Exception);
 
         ExceptionLogger.OnExceptionRecorded += exception =>
-                                        {
-                                            Program.Add(Program.Exceptions,
-                                                        new() { Time = DateTime.Now, Exception = exception });
-                                            if (Program.Exceptions.Count > 100) Program.RemoveFirst(Program.Exceptions);
-                                        };
+        {
+            Program.Add(Program.Exceptions, new() { Time = DateTime.Now, Exception = exception });
+            if (Program.Exceptions.Count > 100) Program.RemoveFirst(Program.Exceptions);
+        };
 
         FindResource("Taskbar");
         base.OnStartup(e);

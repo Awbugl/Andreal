@@ -10,7 +10,7 @@ public static class Utils
         {
             DataFriendlyName = dataFriendlyName;
         }
-        
+
         public string DataFriendlyName { get; }
     }
 }

@@ -49,10 +49,7 @@ public class BackGround : Image, IDisposable
     internal new BackGround Cut(Rectangle rectangle) => new(Bitmap.Clone(rectangle, PixelFormat.Format32bppArgb));
 
     internal void FillColor(System.Drawing.Color color, int alpha = 120)
-    {
-        GraphicsFromBackGround().FillRectangle(new SolidBrush(System.Drawing.Color.FromArgb(alpha, color)), 0, 0,
-                                               Width, Height);
-    }
+        => GraphicsFromBackGround().FillRectangle(new SolidBrush(System.Drawing.Color.FromArgb(alpha, color)), 0, 0, Width, Height);
 
     internal void Draw(params IGraphicsModel[] graphicsModelCollection)
     {

@@ -9,9 +9,12 @@ namespace Andreal.Window.UI;
 
 internal partial class Login
 {
-    internal Login() { InitializeComponent(); }
-
     private static readonly Regex Regex = new("[^0-9]+", RegexOptions.Compiled);
+
+    internal Login()
+    {
+        InitializeComponent();
+    }
 
     private async void OnLoginBtnClick(object sender, RoutedEventArgs e)
     {
@@ -51,7 +54,7 @@ internal partial class Login
         }
     }
 
-    private void OnCloseBtnClick(object sender, RoutedEventArgs e) { Close(); }
+    private void OnCloseBtnClick(object sender, RoutedEventArgs e) => Close();
 
     private void OnPreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text);
 

@@ -14,7 +14,9 @@ public static class ExceptionLogger
         if (ex is null) return;
         LastExceptionHelper.Set(ex);
         if (ex is HttpRequestException or TaskCanceledException)
+        {
             ++WebExceptionCount;
+        }
         else
         {
             ++ExceptionCount;

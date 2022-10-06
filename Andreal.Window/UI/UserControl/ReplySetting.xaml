@@ -48,8 +48,7 @@
                     <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
                                Text="个性化回复模板" VerticalAlignment="Center"
                                FontFamily="Microsoft YaHei" FontSize="16"
-                               Background="#23262A" Margin="0,-2,0,0">
-                    </TextBlock>
+                               Background="#23262A" Margin="0,-2,0,0" />
                     <ComboBox x:Name="ComboBox" Width="200" Height="30" Margin="20,0,0,0"
                               DisplayMemberPath="Name"
                               FontFamily="Microsoft YaHei" FontSize="16"
@@ -67,10 +66,9 @@
                              HorizontalAlignment="Left"
                              VerticalScrollBarVisibility="Visible"
                              FontFamily="Microsoft YaHei" FontSize="20"
-                             Margin="40,10,0,0">
-                    </TextBox>
-                </StackPanel> 
-             </Grid>
+                             Margin="40,10,0,0" />
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

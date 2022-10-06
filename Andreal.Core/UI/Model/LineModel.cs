@@ -11,7 +11,11 @@ internal class LineModel : IGraphicsModel
     private readonly int _penwidth;
     private readonly Point _start;
 
-    internal LineModel(System.Drawing.Color color, int penwidth, Point start, Point end)
+    internal LineModel(
+        System.Drawing.Color color,
+        int penwidth,
+        Point start,
+        Point end)
     {
         _color = color;
         _penwidth = penwidth;
@@ -19,5 +23,5 @@ internal class LineModel : IGraphicsModel
         _end = end;
     }
 
-    void IGraphicsModel.Draw(Graphics g) { g.DrawLine(new(_color, _penwidth), _start, _end); }
+    void IGraphicsModel.Draw(Graphics g) => g.DrawLine(new(_color, _penwidth), _start, _end);
 }

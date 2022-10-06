@@ -24,8 +24,7 @@
                     <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
                                Text="BotMasterQQ" VerticalAlignment="Center"
                                FontFamily="Microsoft YaHei" FontSize="16"
-                               Background="#23262A">
-                    </TextBlock>
+                               Background="#23262A" />
                     <TextBox x:Name="MasterQQ" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"
                              Margin="20,0,0,0"
                              BorderThickness="0,0,0,1" Foreground="DarkGray" PreviewTextInput="OnPreviewTextInput"
@@ -33,15 +32,14 @@
                              FontSize="16" Background="#23262A" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="30,20,0,0">
-                <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
-                           Text="QQ协议" VerticalAlignment="Top"
-                           FontFamily="Microsoft YaHei" FontSize="16"
-                           Background="#23262A" Margin="0,-2,0,0">
-                </TextBlock>
-                <ComboBox x:Name="ComboBox" Width="100" Height="30" Margin="20,-5,0,0"
-                          VerticalAlignment="Top"
-                          FontFamily="Microsoft YaHei" FontSize="16"
-                          SelectionChanged="ComboBox_OnSelectionChanged" />
+                    <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
+                               Text="QQ协议" VerticalAlignment="Top"
+                               FontFamily="Microsoft YaHei" FontSize="16"
+                               Background="#23262A" Margin="0,-2,0,0" />
+                    <ComboBox x:Name="ComboBox" Width="100" Height="30" Margin="20,-5,0,0"
+                              VerticalAlignment="Top"
+                              FontFamily="Microsoft YaHei" FontSize="16"
+                              SelectionChanged="ComboBox_OnSelectionChanged" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Vertical" Margin="30,60,0,0">
                     <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
@@ -71,7 +69,8 @@
                                        Text="Token" VerticalAlignment="Center"
                                        FontFamily="Microsoft YaHei" FontSize="16"
                                        Background="#23262A" />
-                            <TextBox x:Name="AUAToken" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"
+                            <TextBox x:Name="AUAToken" Width="120" HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
                                      Margin="20,0,0,0"
                                      BorderThickness="0,0,0,1" Foreground="DarkGray"
 
@@ -98,7 +97,8 @@
                                        Text="Token" VerticalAlignment="Center"
                                        FontFamily="Microsoft YaHei" FontSize="16"
                                        Background="#23262A" />
-                            <TextBox x:Name="ALAToken" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"
+                            <TextBox x:Name="ALAToken" Width="120" HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
                                      Margin="20,0,0,0"
                                      BorderThickness="0,0,0,1" Foreground="DarkGray"
                                      FontSize="16" Background="#23262A" />
@@ -114,8 +114,7 @@
                         <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
                                    Text="消息处理总开关（风控期建议关闭）" VerticalAlignment="Center" Margin="0,-2,0,0"
                                    FontFamily="Microsoft YaHei" FontSize="16"
-                                   Background="#23262A">
-                        </TextBlock>
+                                   Background="#23262A" />
                     </CheckBox>
 
                     <CheckBox x:Name="AutoFriendRequest" VerticalAlignment="Center" HorizontalAlignment="Left"
@@ -124,8 +123,7 @@
                         <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
                                    Text="自动同意好友申请" VerticalAlignment="Center" Margin="0,-2,0,0"
                                    FontFamily="Microsoft YaHei" FontSize="16"
-                                   Background="#23262A">
-                        </TextBlock>
+                                   Background="#23262A" />
                     </CheckBox>
 
                     <CheckBox x:Name="AutoGroupRequest"
@@ -134,11 +132,10 @@
                         <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
                                    Text="自动同意群邀请（非白名单）" VerticalAlignment="Center" Margin="0,-2,0,0"
                                    FontFamily="Microsoft YaHei" FontSize="16"
-                                   Background="#23262A">
-                        </TextBlock>
+                                   Background="#23262A" />
                     </CheckBox>
 
-                    <Button Margin="0,33,0,0" Height="30" Width="425" HorizontalAlignment="Left" 
+                    <Button Margin="0,33,0,0" Height="30" Width="425" HorizontalAlignment="Left"
                             Click="OnSaveButtonClick">
                         <TextBlock TextWrapping="Wrap" Text="保存并应用" FontSize="16" />
                     </Button>
@@ -149,16 +146,14 @@
                 <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
                            Text="群邀请白名单（QQ号，分行）" VerticalAlignment="Center"
                            FontFamily="Microsoft YaHei" FontSize="16"
-                           Background="#23262A" Height="30">
-                </TextBlock>
+                           Background="#23262A" Height="30" />
                 <TextBox x:Name="WhiteList" Width="Auto" Height="400"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
                          VerticalScrollBarVisibility="Visible"
                          InputMethod.IsInputMethodEnabled="False"
                          FontFamily="Microsoft YaHei" FontSize="16"
-                         Margin="40,10,30,10">
-                </TextBox>
+                         Margin="40,10,30,10" />
             </StackPanel>
         </Grid>
     </Grid>

@@ -9,7 +9,10 @@ internal abstract class ExecutorBase
 {
     protected readonly MessageInfo Info;
 
-    protected ExecutorBase(MessageInfo info) { Info = info; }
+    protected ExecutorBase(MessageInfo info)
+    {
+        Info = info;
+    }
 
     protected Bot Bot => Info.Bot;
     protected bool IsGroup => Info.MessageType == MessageInfoType.Group;

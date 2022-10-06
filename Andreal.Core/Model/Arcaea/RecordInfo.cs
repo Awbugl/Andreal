@@ -12,9 +12,7 @@ internal class RecordInfo
 
     internal RecordInfo(RecordDataItem recentdata, sbyte difficulty = -128)
     {
-        Difficulty = difficulty == -128
-            ? recentdata.Difficulty
-            : difficulty;
+        Difficulty = difficulty == -128 ? recentdata.Difficulty : difficulty;
         SongInfo = ArcaeaCharts.QueryByID(recentdata.SongID)![Difficulty];
         Cleartype = 0;
         SongID = recentdata.SongID;
@@ -27,7 +25,6 @@ internal class RecordInfo
 
         _score = recentdata.Score;
     }
-
 
     public RecordInfo(ArcSongdata recentdata)
     {
@@ -82,9 +79,7 @@ internal class RecordInfo
             for (var i = 0; i < 8; i++)
             {
                 var j = len - 8 + i;
-                result.Append(j < 0
-                                  ? '0'
-                                  : scorestr[j]);
+                result.Append(j < 0 ? '0' : scorestr[j]);
                 if (i is 1 or 4) result.Append('\'');
             }
 
@@ -93,21 +88,16 @@ internal class RecordInfo
     }
 
     internal string Rate
-    {
-        get
-        {
-            return _score switch
-                   {
-                       >= 9900000 => "[EX+]",
-                       >= 9800000 => "[EX]",
-                       >= 9500000 => "[AA]",
-                       >= 9200000 => "[A]",
-                       >= 8900000 => "[B]",
-                       >= 8600000 => "[C]",
-                       _          => "[D]"
-                   };
-        }
-    }
+        => _score switch
+           {
+               >= 9900000 => "[EX+]",
+               >= 9800000 => "[EX]",
+               >= 9500000 => "[AA]",
+               >= 9200000 => "[A]",
+               >= 8900000 => "[B]",
+               >= 8600000 => "[C]",
+               _          => "[D]"
+           };
 
     internal Task<Image> GetSongImage() => SongInfo.GetSongImage();
 

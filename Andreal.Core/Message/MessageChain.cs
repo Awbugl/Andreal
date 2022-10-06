@@ -4,9 +4,15 @@ public class MessageChain
 {
     private IEnumerable<IMessage> _messages;
 
-    internal MessageChain() { _messages = Array.Empty<IMessage>(); }
+    internal MessageChain()
+    {
+        _messages = Array.Empty<IMessage>();
+    }
 
-    internal MessageChain(params IMessage[] messages) { _messages = messages.ToList(); }
+    internal MessageChain(params IMessage[] messages)
+    {
+        _messages = messages.ToList();
+    }
 
     internal void Append(IMessage? message)
     {

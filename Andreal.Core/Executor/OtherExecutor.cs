@@ -18,10 +18,7 @@ internal class OtherExecutor : ExecutorBase
     public OtherExecutor(MessageInfo info) : base(info) { }
 
     [CommandPrefix("/help", "/arc help")]
-    private MessageChain HelpMessage() =>
-        CommandLength == 0
-            ? RobotReply.HelpMessage
-            : null;
+    private MessageChain HelpMessage() => CommandLength == 0 ? RobotReply.HelpMessage : null;
 
     [CommandPrefix("/yiyan")]
     private static async Task<MessageChain> Hitokoto() => await OtherApi.HitokotoApi();
@@ -71,7 +68,8 @@ internal class OtherExecutor : ExecutorBase
                 BotUserInfo.Set(User);
                 return "默认显示方式已更改为图片。";
 
-            default: return RobotReply.ConfigNotFound;
+            default:
+                return RobotReply.ConfigNotFound;
         }
     }
 

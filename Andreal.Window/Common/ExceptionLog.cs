@@ -11,6 +11,13 @@ internal class ExceptionLog : IComparable<ExceptionLog>, IComparable
     public DateTime Time { get; set; }
     public Exception? Exception { get; set; }
 
+    public int CompareTo(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return 1;
+        if (ReferenceEquals(this, obj)) return 0;
+        return obj is ExceptionLog other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(ExceptionLog)}");
+    }
+
     public int CompareTo(ExceptionLog? other)
     {
         if (ReferenceEquals(this, other)) return 0;
@@ -18,26 +25,13 @@ internal class ExceptionLog : IComparable<ExceptionLog>, IComparable
         return Time.CompareTo(other.Time);
     }
 
-    public int CompareTo(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return 1;
-        if (ReferenceEquals(this, obj)) return 0;
-        return obj is ExceptionLog other
-            ? CompareTo(other)
-            : throw new ArgumentException($"Object must be of type {nameof(ExceptionLog)}");
-    }
+    public static bool operator <(ExceptionLog? left, ExceptionLog? right) => Comparer<ExceptionLog>.Default.Compare(left, right) < 0;
 
-    public static bool operator <(ExceptionLog? left, ExceptionLog? right) =>
-        Comparer<ExceptionLog>.Default.Compare(left, right) < 0;
+    public static bool operator >(ExceptionLog? left, ExceptionLog? right) => Comparer<ExceptionLog>.Default.Compare(left, right) > 0;
 
-    public static bool operator >(ExceptionLog? left, ExceptionLog? right) =>
-        Comparer<ExceptionLog>.Default.Compare(left, right) > 0;
+    public static bool operator <=(ExceptionLog? left, ExceptionLog? right) => Comparer<ExceptionLog>.Default.Compare(left, right) <= 0;
 
-    public static bool operator <=(ExceptionLog? left, ExceptionLog? right) =>
-        Comparer<ExceptionLog>.Default.Compare(left, right) <= 0;
-
-    public static bool operator >=(ExceptionLog? left, ExceptionLog? right) =>
-        Comparer<ExceptionLog>.Default.Compare(left, right) >= 0;
+    public static bool operator >=(ExceptionLog? left, ExceptionLog? right) => Comparer<ExceptionLog>.Default.Compare(left, right) >= 0;
 }
 
 internal class MessageLog : IComparable<MessageLog>, IComparable
@@ -48,6 +42,13 @@ internal class MessageLog : IComparable<MessageLog>, IComparable
     public string FromGroup { get; set; } = "";
     public string Message { get; set; } = "";
 
+    public int CompareTo(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return 1;
+        if (ReferenceEquals(this, obj)) return 0;
+        return obj is MessageLog other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(MessageLog)}");
+    }
+
     public int CompareTo(MessageLog? other)
     {
         if (ReferenceEquals(this, other)) return 0;
@@ -55,42 +56,33 @@ internal class MessageLog : IComparable<MessageLog>, IComparable
         return Time.CompareTo(other.Time);
     }
 
-    public int CompareTo(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return 1;
-        if (ReferenceEquals(this, obj)) return 0;
-        return obj is MessageLog other
-            ? CompareTo(other)
-            : throw new ArgumentException($"Object must be of type {nameof(MessageLog)}");
-    }
+    public static bool operator <(MessageLog? left, MessageLog? right) => Comparer<MessageLog>.Default.Compare(left, right) < 0;
 
-    public static bool operator <(MessageLog? left, MessageLog? right) =>
-        Comparer<MessageLog>.Default.Compare(left, right) < 0;
+    public static bool operator >(MessageLog? left, MessageLog? right) => Comparer<MessageLog>.Default.Compare(left, right) > 0;
 
-    public static bool operator >(MessageLog? left, MessageLog? right) =>
-        Comparer<MessageLog>.Default.Compare(left, right) > 0;
+    public static bool operator <=(MessageLog? left, MessageLog? right) => Comparer<MessageLog>.Default.Compare(left, right) <= 0;
 
-    public static bool operator <=(MessageLog? left, MessageLog? right) =>
-        Comparer<MessageLog>.Default.Compare(left, right) <= 0;
-
-    public static bool operator >=(MessageLog? left, MessageLog? right) =>
-        Comparer<MessageLog>.Default.Compare(left, right) >= 0;
+    public static bool operator >=(MessageLog? left, MessageLog? right) => Comparer<MessageLog>.Default.Compare(left, right) >= 0;
 }
 
 internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLog>, IComparable
 {
-    public AccountLog(Bot bot, uint uin, string state, string message)
+    internal readonly Bot? Bot;
+    private string _message = "";
+    private string _nick = "";
+    private string _state = "";
+
+    public AccountLog(
+        Bot bot,
+        uint uin,
+        string state,
+        string message)
     {
         Bot = bot;
         Robot = uin;
         State = state;
         Message = message;
     }
-
-    internal readonly Bot? Bot;
-    private string _nick = "";
-    private string _state = "";
-    private string _message = "";
 
     public uint Robot { get; }
 
@@ -124,11 +116,11 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
         }
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public int CompareTo(object? obj)
     {
-        PropertyChanged?.Invoke(this, new(propertyName));
+        if (ReferenceEquals(null, obj)) return 1;
+        if (ReferenceEquals(this, obj)) return 0;
+        return obj is AccountLog other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(AccountLog)}");
     }
 
     public int CompareTo(AccountLog? other)
@@ -138,24 +130,15 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
         return Robot.CompareTo(other.Robot);
     }
 
-    public int CompareTo(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return 1;
-        if (ReferenceEquals(this, obj)) return 0;
-        return obj is AccountLog other
-            ? CompareTo(other)
-            : throw new ArgumentException($"Object must be of type {nameof(AccountLog)}");
-    }
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    public static bool operator <(AccountLog? left, AccountLog? right) =>
-        Comparer<AccountLog>.Default.Compare(left, right) < 0;
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new(propertyName));
 
-    public static bool operator >(AccountLog? left, AccountLog? right) =>
-        Comparer<AccountLog>.Default.Compare(left, right) > 0;
+    public static bool operator <(AccountLog? left, AccountLog? right) => Comparer<AccountLog>.Default.Compare(left, right) < 0;
 
-    public static bool operator <=(AccountLog? left, AccountLog? right) =>
-        Comparer<AccountLog>.Default.Compare(left, right) <= 0;
+    public static bool operator >(AccountLog? left, AccountLog? right) => Comparer<AccountLog>.Default.Compare(left, right) > 0;
 
-    public static bool operator >=(AccountLog? left, AccountLog? right) =>
-        Comparer<AccountLog>.Default.Compare(left, right) >= 0;
+    public static bool operator <=(AccountLog? left, AccountLog? right) => Comparer<AccountLog>.Default.Compare(left, right) <= 0;
+
+    public static bool operator >=(AccountLog? left, AccountLog? right) => Comparer<AccountLog>.Default.Compare(left, right) >= 0;
 }

@@ -17,7 +17,6 @@ internal static class BackgroundTask
     {
         var time = DateTime.Now.AddMinutes(-2);
 
-        foreach (var j in new DirectoryInfo(Path.TempImageRoot).GetFiles().Where(j => time > j.LastWriteTime))
-            j.Delete();
+        foreach (var j in new DirectoryInfo(Path.TempImageRoot).GetFiles().Where(j => time > j.LastWriteTime)) j.Delete();
     }
 }

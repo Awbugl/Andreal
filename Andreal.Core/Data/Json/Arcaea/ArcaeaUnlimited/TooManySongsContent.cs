@@ -6,5 +6,6 @@ namespace Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
 
 public class TooManySongsContent
 {
-    [JsonProperty("songs")] public List<string> Songs { get; set; }
+    [JsonProperty("songs")]
+    public List<string> Songs { get; set; }
 }

@@ -66,48 +66,43 @@
             <RowDefinition Height="100" />
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
-                       Text="验证短信已发送至您的手机" VerticalAlignment="Center"
-                       FontFamily="Microsoft YaHei" FontSize="16"
-                       Background="#23262A">
-            </TextBlock> 
-        
-            <TextBlock x:Name="PhoneBlock" Grid.Row="0"  Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
-                       Text="" VerticalAlignment="Center"
-                       Margin="0,70,0,0"
-                       FontFamily="Microsoft YaHei" FontSize="16"
-                       Background="#23262A">
-            </TextBlock>
-       
+        <TextBlock Grid.Row="0" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
+                   Text="验证短信已发送至您的手机" VerticalAlignment="Center"
+                   FontFamily="Microsoft YaHei" FontSize="16"
+                   Background="#23262A" />
 
-      
-        
+        <TextBlock x:Name="PhoneBlock" Grid.Row="0" Foreground="DarkGray" IsHitTestVisible="False"
+                   HorizontalAlignment="Center"
+                   Text="" VerticalAlignment="Center"
+                   Margin="0,70,0,0"
+                   FontFamily="Microsoft YaHei" FontSize="16"
+                   Background="#23262A" />
+
+
         <StackPanel Grid.Row="1" Orientation="Vertical" Height="100" Width="196"
                     Margin="0,30,0,0">
             <TextBlock Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Left"
                        Text="请输入短信验证码" VerticalAlignment="Top"
                        FontFamily="Microsoft YaHei" FontSize="16"
-                       Background="#23262A">
-                
-            </TextBlock>
-            
+                       Background="#23262A" />
+
             <TextBox x:Name="CodeBox" Width="120" VerticalAlignment="Bottom"
                      Margin="0,10,0,0"
                      HorizontalAlignment="Right"
-                     BorderThickness="0,0,0,1" Foreground="DarkGray"  PreviewTextInput="TextBox_PreviewTextInput"
+                     BorderThickness="0,0,0,1" Foreground="DarkGray" PreviewTextInput="TextBox_PreviewTextInput"
                      InputMethod.IsInputMethodEnabled="False"
-                     
+
                      Height="30" FontSize="16" Background="#23262A" />
         </StackPanel>
-    
+
         <StackPanel Grid.Row="2" Orientation="Horizontal" Height="50" Width="196">
-        <Button x:Name="SubmitBtn"
-                Margin="0,-20,0,0"
-                Height="30"
-                Width="200"
-                Style="{StaticResource BtnStyle}" Click="OnSubmit">
-            <TextBlock TextWrapping="Wrap" Text="提交"  FontSize="16" VerticalAlignment="Center" />
-        </Button>
-        </StackPanel> 
+            <Button x:Name="SubmitBtn"
+                    Margin="0,-20,0,0"
+                    Height="30"
+                    Width="200"
+                    Style="{StaticResource BtnStyle}" Click="OnSubmit">
+                <TextBlock TextWrapping="Wrap" Text="提交" FontSize="16" VerticalAlignment="Center" />
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

@@ -33,15 +33,9 @@ internal class PlayerInfo
         Potential = accountInfo.Rating;
     }
 
-    internal string PlayerName =>
-        _isHide
-            ? _playerName
-            : $"{_playerName[0]}......{_playerName[^1]}";
+    internal string PlayerName => _isHide ? _playerName : $"{_playerName[0]}......{_playerName[^1]}";
 
-    internal string PlayerCode =>
-        _isHide
-            ? _playerCode
-            : "xxxxxxxxx";
+    internal string PlayerCode => _isHide ? _playerCode : "xxxxxxxxx";
 
     internal ImgVersion ImgVersion { get; }
 

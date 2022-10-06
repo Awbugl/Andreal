@@ -9,13 +9,13 @@ namespace Andreal.Window.UI;
 
 internal partial class SliderVerify
 {
+    private readonly Bot _bot;
     private readonly string _sliderUrl;
     private DevToolsProtocolHelper? _cdpHelper;
-    private readonly Bot _bot;
-
-    private string _ticketId = "";
 
     private string _ticket = "";
+
+    private string _ticketId = "";
 
     internal SliderVerify(Bot bot, string sliderUrl)
     {
@@ -25,10 +25,7 @@ internal partial class SliderVerify
         InitializeAsync();
     }
 
-    private DevToolsProtocolHelper CdpHelper
-    {
-        get { return _cdpHelper ??= WebBrowser.CoreWebView2.GetDevToolsProtocolHelper(); }
-    }
+    private DevToolsProtocolHelper CdpHelper => _cdpHelper ??= WebBrowser.CoreWebView2.GetDevToolsProtocolHelper();
 
     private async void InitializeAsync()
     {
@@ -53,25 +50,20 @@ internal partial class SliderVerify
         }
 
         CdpHelper.Network.ResponseReceived += (_, args) =>
-                                              {
-                                                  if (args.Response.Url
-                                                      == "https://t.captcha.qq.com/cap_union_new_verify")
-                                                      _ticketId = args.RequestId;
-                                              };
+        {
+            if (args.Response.Url == "https://t.captcha.qq.com/cap_union_new_verify") _ticketId = args.RequestId;
+        };
 
         CdpHelper.Network.LoadingFinished += async (_, args) =>
-                                             {
-                                                 if (args.RequestId != _ticketId) return;
+        {
+            if (args.RequestId != _ticketId) return;
 
-                                                 _ticketId = args.RequestId;
-                                                 _ticket
-                                                     = JObject.Parse((await CdpHelper.Network
-                                                                                     .GetResponseBodyAsync(_ticketId))
-                                                                     .Body)["ticket"]!.ToString();
+            _ticketId = args.RequestId;
+            _ticket = JObject.Parse((await CdpHelper.Network.GetResponseBodyAsync(_ticketId)).Body)["ticket"]!.ToString();
 
-                                                 _bot.SubmitSliderTicket(_ticket);
-                                                 Close();
-                                             };
+            _bot.SubmitSliderTicket(_ticket);
+            Close();
+        };
     }
 
     private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

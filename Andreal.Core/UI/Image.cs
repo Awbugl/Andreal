@@ -58,12 +58,14 @@ public class Image : IDisposable
         Alreadydisposed = true;
     }
 
-    ~Image() { Bitmap.Dispose(); }
+    ~Image()
+    {
+        Bitmap.Dispose();
+    }
 
     private System.Drawing.Color DeserializeColor()
     {
-        var bm = Bitmap.LockBits(new(0, 0, Bitmap.Width, Bitmap.Height), ImageLockMode.ReadWrite,
-                                 PixelFormat.Format32bppArgb);
+        var bm = Bitmap.LockBits(new(0, 0, Bitmap.Width, Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
         var ptr = bm.Scan0;
         var bytes = Math.Abs(bm.Stride) * Bitmap.Height;
         var rgbValues = new byte[bytes];
@@ -86,9 +88,9 @@ public class Image : IDisposable
 
     internal Image Cut(Rectangle rectangle) => new(Bitmap.Clone(rectangle, PixelFormat.Format32bppArgb));
 
-    internal void SaveAsPng(Path path) { Bitmap.Save(path, ImageFormat.Png); }
+    internal void SaveAsPng(Path path) => Bitmap.Save(path, ImageFormat.Png);
 
-    internal void SaveAsJpgWithQuality(Path path, int quality = 50) { ImageExtend.SaveAsJpeg(Bitmap, path, quality); }
+    internal void SaveAsJpgWithQuality(Path path, int quality = 50) => ImageExtend.SaveAsJpeg(Bitmap, path, quality);
 
     internal static class ImageExtend
     {
@@ -103,22 +105,24 @@ public class Image : IDisposable
             bmpTemp.Save(newPath, ImageFormat.Png);
         }
 
+        internal static void DrawImage(
+            Graphics g,
+            Image image,
+            int posX,
+            int posY)
+            => g.DrawImage(image.Bitmap, posX, posY);
 
-        internal static void DrawImage(Graphics g, Image image, int posX, int posY)
-        {
-            g.DrawImage(image.Bitmap, posX, posY);
-        }
-
-        internal static void DrawImage(Graphics g, Image image, int posX, int posY, int newWidth, int newHeight)
-        {
-            g.DrawImage(image.Bitmap, posX, posY, newWidth, newHeight);
-        }
-
+        internal static void DrawImage(
+            Graphics g,
+            Image image,
+            int posX,
+            int posY,
+            int newWidth,
+            int newHeight)
+            => g.DrawImage(image.Bitmap, posX, posY, newWidth, newHeight);
 
         private static ImageCodecInfo? GetCodecInfo(string mimeType)
-        {
-            return ImageCodecInfo.GetImageEncoders().FirstOrDefault(ici => ici.MimeType == mimeType);
-        }
+            => ImageCodecInfo.GetImageEncoders().FirstOrDefault(ici => ici.MimeType == mimeType);
 
         public static void SaveAsJpeg(Bitmap bmp, Path path, int quality)
         {

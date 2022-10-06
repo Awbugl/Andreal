@@ -70,10 +70,7 @@ internal class ArcExecutor : ExecutorBase
         {
             if (uid < 3)
             {
-                var unbinduser = User ?? new BotUserInfo
-                                         {
-                                             Uin = Info.FromQQ, UiVersion = (ImgVersion)new Random().Next(3)
-                                         };
+                var unbinduser = User ?? new BotUserInfo { Uin = Info.FromQQ, UiVersion = (ImgVersion)new Random().Next(3) };
 
                 unbinduser.ArcCode = 0;
 
@@ -82,12 +79,12 @@ internal class ArcExecutor : ExecutorBase
             }
 
             var info = await ArcaeaUnlimitedApi.UserInfo(uid);
-            data = info.Status == 0
-                ? info
-                : await ArcaeaUnlimitedApi.UserInfo(Command[0]);
+            data = info.Status == 0 ? info : await ArcaeaUnlimitedApi.UserInfo(Command[0]);
         }
         else
+        {
             data = await ArcaeaUnlimitedApi.UserInfo(Command[0]);
+        }
 
         if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
 
@@ -103,7 +100,6 @@ internal class ArcExecutor : ExecutorBase
             RobotReply.OnBindSuccess($"{content.AccountInfo.Name} ({(content.AccountInfo.Rating == -1 ? "--" : ((double)content.AccountInfo.Rating / 100).ToString("0.00"))})");
     }
 
-
     [CommandPrefix("/arc ycm")]
     private static async Task<MessageChain> GetCars()
     {
@@ -111,9 +107,8 @@ internal class ArcExecutor : ExecutorBase
         if (response.Code == 404) return "myc";
 
         return response.Cars.Aggregate("现有车牌:",
-                                       (curr, room) =>
-                                           curr
-                                           + $"\n\n{room.RoomID}   {room.AddTime.DateStringFromNow()}\n{Regex.Unescape(room.Description)}");
+                                       (curr, room) => curr +
+                                                       $"\n\n{room.RoomID}   {room.AddTime.DateStringFromNow()}\n{Regex.Unescape(room.Description)}");
     }
 
     [CommandPrefix("/arc car")]
@@ -142,8 +137,12 @@ internal class ArcExecutor : ExecutorBase
     {
         switch (CommandLength)
         {
-            default: return RobotReply.ParameterLengthError;
-            case 0:  return RobotReply.RandSongReply + ArcaeaCharts.RandomSong().NameWithPackage;
+            default:
+                return RobotReply.ParameterLengthError;
+
+            case 0:
+                return RobotReply.RandSongReply + ArcaeaCharts.RandomSong().NameWithPackage;
+
             case 1:
             {
                 var (lower, upper) = Command[0].ConvertToArcaeaRange();
@@ -157,6 +156,7 @@ internal class ArcExecutor : ExecutorBase
                 chain.Append(info.NameWithPackageAndConst);
                 return chain;
             }
+
             case 2:
             {
                 var (lower, _) = Command[0].ConvertToArcaeaRange();
@@ -178,11 +178,9 @@ internal class ArcExecutor : ExecutorBase
     private MessageChain CalcNote()
     {
         if (CommandLength < 3) return RobotReply.ParameterLengthError;
-        if (!short.TryParse(Command[0], out var far) || !short.TryParse(Command[1], out var lost))
-            return RobotReply.ParameterError;
+        if (!short.TryParse(Command[0], out var far) || !short.TryParse(Command[1], out var lost)) return RobotReply.ParameterError;
 
-        if (!ArcaeaHelper.SongInfoParser(Command.Skip(2), out var song, out var dif, out var errMessage))
-            return errMessage;
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(2), out var song, out var dif, out var errMessage)) return errMessage;
 
         if (dif == -1) dif = 2;
 
@@ -209,8 +207,7 @@ internal class ArcExecutor : ExecutorBase
 
         if (!double.TryParse(Command[0], out var ptt)) return RobotReply.ParameterError;
 
-        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
-            return errMessage;
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage)) return errMessage;
 
         if (dif == -1) dif = 2;
 
@@ -239,8 +236,7 @@ internal class ArcExecutor : ExecutorBase
 
         if (!double.TryParse(Command[0], out var score) || score is < 0 or > 10009999) return RobotReply.ParameterError;
 
-        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage))
-            return errMessage;
+        if (!ArcaeaHelper.SongInfoParser(Command.Skip(1), out var song, out var dif, out var errMessage)) return errMessage;
 
         if (dif == -1) dif = 2;
 
@@ -253,9 +249,7 @@ internal class ArcExecutor : ExecutorBase
                   {
                       >= 1e7   => defNum + 2,
                       >= 9.8e6 => defNum + 1 + (score - 9.8e6) / 2e5,
-                      _ => defNum + (score - 9.5e6) / 3e5 > 0
-                          ? defNum + (score - 9.5e6) / 3e5
-                          : 0
+                      _        => defNum + (score - 9.5e6) / 3e5 > 0 ? defNum + (score - 9.5e6) / 3e5 : 0
                   };
 
         return $"{arcsong.NameWithPackageAndConst}\n在分数为 {Command[0]} 时\nPtt为 {ptt:0.0000}";
@@ -275,8 +269,9 @@ internal class ArcExecutor : ExecutorBase
             var msg = new MessageChain();
 
             for (var i = 0; i < lastsong.Count; i++)
-                if (i == 2 || lastsong[i].JacketOverride)
-                    msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lastsong[i])));
+            {
+                if (i == 2 || lastsong[i].JacketOverride) msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lastsong[i])));
+            }
 
             msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lasteternitysong[3])));
 
@@ -401,7 +396,7 @@ internal class ArcExecutor : ExecutorBase
         if (CommandLength != 1) return RobotReply.ParameterLengthError;
         if (!double.TryParse(Command[0], out var num) || num > 12) return RobotReply.ParameterError;
         if (num < 8) return (TextMessage)"暂不支持查询8.0以下的定数。";
-        var list = ArcaeaCharts.GetByConst(num).OrderBy(i => i.NameEn).ToArray();
+        ArcaeaChart[] list = ArcaeaCharts.GetByConst(num).OrderBy(i => i.NameEn).ToArray();
         if (list.Length == 0) return (TextMessage)"此定数在当前版本不存在对应谱面。";
         return await new ArcSongLevelListImageGenerator(list).Generate();
     }
@@ -433,11 +428,11 @@ internal class ArcExecutor : ExecutorBase
 
         if (!ArcaeaHelper.SongInfoParser(Command, out var song, out _, out var errMessage)) return errMessage;
 
-        var alias = ArcaeaCharts.GetSongAlias(song.SongID);
+        List<string> alias = ArcaeaCharts.GetSongAlias(song.SongID);
 
         return alias.Count > 0
-            ? $"{song.NameWithPackage}\n在数据库中的别名列表：\n{alias.Aggregate((i, j) => i + "\n" + j)}"
-            : $"{song.NameWithPackage}\n该曲目暂无别名收录。";
+                   ? $"{song.NameWithPackage}\n在数据库中的别名列表：\n{alias.Aggregate((i, j) => i + "\n" + j)}"
+                   : $"{song.NameWithPackage}\n该曲目暂无别名收录。";
     }
 
     [CommandPrefix("/arc chart", "查谱面")]

@@ -11,11 +11,20 @@ internal class BotUserInfo
     private static Lazy<ConcurrentDictionary<long, BotUserInfo>> _list
         = new(() => new(SqliteHelper.SelectAll<BotUserInfo>().ToDictionary(i => i.Uin)));
 
-    [PrimaryKey] [Column("QQId")] public long Uin { get; set; }
-    [Column("ArcId")] public int ArcCode { get; set; }
-    [Column("IsHide")] public int IsHide { get; set; }
-    [Column("IsText")] public int IsText { get; set; }
-    [Column("ImgVer")] public ImgVersion UiVersion { get; set; }
+    [PrimaryKey] [Column("QQId")]
+    public long Uin { get; set; }
+
+    [Column("ArcId")]
+    public int ArcCode { get; set; }
+
+    [Column("IsHide")]
+    public int IsHide { get; set; }
+
+    [Column("IsText")]
+    public int IsText { get; set; }
+
+    [Column("ImgVer")]
+    public ImgVersion UiVersion { get; set; }
 
     internal static void Set(BotUserInfo user)
     {
@@ -31,8 +40,5 @@ internal class BotUserInfo
         }
     }
 
-    internal static BotUserInfo? Get(long uin) =>
-        _list.Value.TryGetValue(uin, out var user)
-            ? user
-            : null;
+    internal static BotUserInfo? Get(long uin) => _list.Value.TryGetValue(uin, out var user) ? user : null;
 }

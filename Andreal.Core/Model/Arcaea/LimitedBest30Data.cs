@@ -17,19 +17,14 @@ internal class LimitedBest30Data : IBest30Data
         _potential = potential;
         _best30List = B30data.Data.Select(i => new RecordInfo(i)).ToList();
         _b30Avg = B30data.Data.Average(i => i.PotentialValue);
-        _r10Avg = _potential > 0
-            ? (double)_potential / 25 - 3 * _b30Avg
-            : -1;
+        _r10Avg = _potential > 0 ? (double)_potential / 25 - 3 * _b30Avg : -1;
     }
 
     private Best30 B30data { get; }
 
     private string Best30Avg => _b30Avg.ToString("0.0000");
 
-    private string Recent10Avg =>
-        _r10Avg > 0
-            ? _r10Avg.ToString("0.0000")
-            : "--";
+    private string Recent10Avg => _r10Avg > 0 ? _r10Avg.ToString("0.0000") : "--";
 
     string IBest30Data.Best30Avg => Best30Avg;
 

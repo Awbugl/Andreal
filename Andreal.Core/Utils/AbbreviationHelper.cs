@@ -10,8 +10,9 @@ internal static class AbbreviationHelper
         sb.Append(str[0]);
 
         for (var index = 0; index < str.Length - 1; ++index)
-            if (str[index] == ' ')
-                sb.Append(str[index + 1]);
+        {
+            if (str[index] == ' ') sb.Append(str[index + 1]);
+        }
 
         return sb.ToString();
     }

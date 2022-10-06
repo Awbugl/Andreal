@@ -7,5 +7,6 @@ namespace Andreal.Core.Data.Json.Bandori;
 [Serializable]
 public class BandoriRoomInfo
 {
-    [JsonProperty("response")] public List<ResponseItem> Response { get; set; }
+    [JsonProperty("response")]
+    public List<ResponseItem> Response { get; set; }
 }

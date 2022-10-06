@@ -7,8 +7,7 @@ namespace Andreal.Core.Common;
 public static class GlobalConfig
 {
     internal static ConcurrentDictionary<string, List<PosInfoItem>> Locations
-        = new(JsonConvert.DeserializeObject<Dictionary<string, List<PosInfoItem>>>(File.ReadAllText(Path.PartnerConfig))
-              !);
+        = new(JsonConvert.DeserializeObject<Dictionary<string, List<PosInfoItem>>>(File.ReadAllText(Path.PartnerConfig)) !);
 
     public static RobotReply RobotReply = JsonConvert.DeserializeObject<RobotReply>(File.ReadAllText(Path.RobotReply))!;
 
@@ -17,10 +16,7 @@ public static class GlobalConfig
         switch (file)
         {
             case "positioninfo.json":
-                Locations
-                    = new(JsonConvert
-                              .DeserializeObject<
-                                  Dictionary<string, List<PosInfoItem>>>(File.ReadAllText(Path.PartnerConfig))!);
+                Locations = new(JsonConvert.DeserializeObject<Dictionary<string, List<PosInfoItem>>>(File.ReadAllText(Path.PartnerConfig))!);
                 return;
 
             case "replytemplate.json":

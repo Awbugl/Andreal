@@ -31,8 +31,7 @@
                         <Border x:Name="button"
                                 BorderThickness="0"
                                 Background="{TemplateBinding Background}"
-                                SnapsToDevicePixels="True">
-                        </Border>
+                                SnapsToDevicePixels="True" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -48,16 +47,15 @@
         <Grid Grid.Column="0">
             <Grid
                 HorizontalAlignment="Left"
-                  Width="200"
-                  Background="#2E333A">
+                Width="200"
+                Background="#2E333A">
 
                 <StackPanel>
 
                     <Grid Height="100">
                         <TextBlock Margin="20,0,0,0"
                                    Text="Project Andreal"
-                                   Style="{StaticResource FontStyle}">
-                        </TextBlock>
+                                   Style="{StaticResource FontStyle}" />
                     </Grid>
 
                     <ListView Background="Transparent"
@@ -79,8 +77,8 @@
                                 <TextBlock Text="消息动态" Margin="30,0,0,0" Style="{StaticResource FontStyle}" />
                             </StackPanel>
                         </ListViewItem>
-                        
-                        
+
+
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15">
                             <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196"
                                         MouseDown="OnExceptionLogClick">
@@ -96,8 +94,8 @@
                                 <TextBlock Text="基础配置" Margin="30,0,0,0" Style="{StaticResource FontStyle}" />
                             </StackPanel>
                         </ListViewItem>
-                        
-                        
+
+
                         <ListViewItem HorizontalAlignment="Left" Margin="0,0,0,15">
                             <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196"
                                         MouseDown="OnReplySettingClick">
@@ -157,10 +155,11 @@
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
                     <ContentControl Grid.Column="0">
-                        <TextBlock x:Name="Status" Margin="30,5,5,5" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Left"
+                        <TextBlock x:Name="Status" Margin="30,5,5,5" Foreground="DarkGray" IsHitTestVisible="False"
+                                   HorizontalAlignment="Left"
                                    Text="" VerticalAlignment="Center"
                                    FontFamily="Microsoft YaHei" FontSize="14"
-                                   Background="#23262A"/>
+                                   Background="#23262A" />
                     </ContentControl>
                     <Button Grid.Column="1"
                             Height="20"
@@ -172,7 +171,7 @@
                         </Button.Background>
                     </Button>
                 </Grid>
-                <ContentControl Grid.Row="1" x:Name="Label"/>
+                <ContentControl Grid.Row="1" x:Name="Label" />
 
 
             </Grid>

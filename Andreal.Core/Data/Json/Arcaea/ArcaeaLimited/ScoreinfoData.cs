@@ -7,5 +7,6 @@ namespace Andreal.Core.Data.Json.Arcaea.ArcaeaLimited;
 [Serializable]
 public class ScoreinfoData
 {
-    [JsonProperty("data")] public RecordDataItem Data { get; set; }
+    [JsonProperty("data")]
+    public RecordDataItem Data { get; set; }
 }

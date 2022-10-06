@@ -12,7 +12,12 @@ internal class ImageModel : IGraphicsModel
     private readonly Path? _path;
     private readonly int _posX, _posY;
 
-    internal ImageModel(Image image, int posX, int posY, int? newWidth = null, int? newHeight = null)
+    internal ImageModel(
+        Image image,
+        int posX,
+        int posY,
+        int? newWidth = null,
+        int? newHeight = null)
     {
         _posX = posX;
         _posY = posY;
@@ -22,7 +27,12 @@ internal class ImageModel : IGraphicsModel
         _newHeight = newHeight;
     }
 
-    internal ImageModel(Path path, int posX, int posY, int? newWidth = null, int? newHeight = null)
+    internal ImageModel(
+        Path path,
+        int posX,
+        int posY,
+        int? newWidth = null,
+        int? newHeight = null)
     {
         _posX = posX;
         _posY = posY;
@@ -37,7 +47,9 @@ internal class ImageModel : IGraphicsModel
         var image = _image ?? new Image(_path!);
 
         if (_newWidth == null && _newHeight == null)
+        {
             Image.ImageExtend.DrawImage(g, image, _posX, _posY);
+        }
         else
         {
             var newWidth = _newWidth ?? _newHeight * image.Width / image.Height ?? image.Width;

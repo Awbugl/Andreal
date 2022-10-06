@@ -17,17 +17,65 @@ internal partial class Accounts
         Program.Accounts.CollectionChanged += OnAccountsChanged;
     }
 
+    public ICommand LoginAccountCommand
+        => new DelegateCommand
+           {
+               CanExecuteFunc = obj =>
+               {
+                   try
+                   {
+                       return (obj as AccountLog)?.Bot?.IsOnline() == false;
+                   }
+                   catch
+                   {
+                       return false;
+                   }
+               },
+               CommandAction = OnLoginAccountCommandExecute
+           };
+
+    public ICommand LogoutAccountCommand
+        => new DelegateCommand
+           {
+               CanExecuteFunc = obj =>
+               {
+                   try
+                   {
+                       return (obj as AccountLog)?.Bot?.IsOnline() == true;
+                   }
+                   catch
+                   {
+                       return false;
+                   }
+               },
+               CommandAction = OnLogoutAccountCommandExecute
+           };
+
+    public ICommand DeleteAccountCommand
+        => new DelegateCommand
+           {
+               CanExecuteFunc = obj =>
+               {
+                   try
+                   {
+                       return obj != null;
+                   }
+                   catch
+                   {
+                       return false;
+                   }
+               },
+               CommandAction = OnDeleteAccountCommandExecute
+           };
+
     private void OnAccountsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        List.GetBindingExpression(ItemsControl.ItemsSourceProperty)?.UpdateTarget();
-    }
+        => List.GetBindingExpression(ItemsControl.ItemsSourceProperty)?.UpdateTarget();
 
     private void OnMouseRightDown(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGridRow row) return;
 
         if (row.Item is AccountLog item)
-        {
             foreach (var items in row.ContextMenu!.Items)
             {
                 var i = (MenuItem)items;
@@ -40,64 +88,9 @@ internal partial class Accounts
                                 _    => i.Command
                             };
             }
-        }
     }
 
-    public ICommand LoginAccountCommand =>
-        new DelegateCommand
-        {
-            CanExecuteFunc = (obj) =>
-                             {
-                                 try
-                                 {
-                                     return (obj as AccountLog)?.Bot?.IsOnline() == false;
-                                 }
-                                 catch
-                                 {
-                                     return false;
-                                 }
-                             },
-            CommandAction = OnLoginAccountCommandExecute
-        };
-
-    public ICommand LogoutAccountCommand =>
-        new DelegateCommand
-        {
-            CanExecuteFunc = (obj) =>
-                             {
-                                 try
-                                 {
-                                     return (obj as AccountLog)?.Bot?.IsOnline() == true;
-                                 }
-                                 catch
-                                 {
-                                     return false;
-                                 }
-                             },
-            CommandAction = OnLogoutAccountCommandExecute
-        };
-
-    public ICommand DeleteAccountCommand =>
-        new DelegateCommand
-        {
-            CanExecuteFunc = (obj) =>
-                             {
-                                 try
-                                 {
-                                     return obj != null;
-                                 }
-                                 catch
-                                 {
-                                     return false;
-                                 }
-                             },
-            CommandAction = OnDeleteAccountCommandExecute
-        };
-
-    private void OnAddAccountCommandExecute(object parameter, RoutedEventArgs routedEventArgs)
-    {
-        new Login().ShowDialog();
-    }
+    private void OnAddAccountCommandExecute(object parameter, RoutedEventArgs routedEventArgs) => new Login().ShowDialog();
 
     private async void OnLoginAccountCommandExecute(object bot)
     {
@@ -106,7 +99,7 @@ internal partial class Accounts
         await Program.OnLogin(log.Bot!, loginresult);
     }
 
-    private async void OnLogoutAccountCommandExecute(object bot) { await (bot as AccountLog)?.Bot?.Logout()!; }
+    private async void OnLogoutAccountCommandExecute(object bot) => await (bot as AccountLog)?.Bot?.Logout()!;
 
-    private async void OnDeleteAccountCommandExecute(object bot) { await Program.OnRemove((bot as AccountLog)!); }
+    private async void OnDeleteAccountCommandExecute(object bot) => await Program.OnRemove((bot as AccountLog)!);
 }

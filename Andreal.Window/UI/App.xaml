@@ -2,21 +2,20 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:tb="http://www.hardcodet.net/taskbar"
-             xmlns:core="clr-namespace:Andreal.Core"
              xmlns:common="clr-namespace:Andreal.Window.Common"
              ShutdownMode="OnLastWindowClose"
              x:ClassModifier="internal">
-    
+
     <Application.Resources>
-        
+
         <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
             <MenuItem Header="显示窗口" Command="{Binding ShowWindowCommand}" />
             <MenuItem Header="隐藏至托盘" Command="{Binding HideWindowCommand}" />
             <Separator />
             <MenuItem Header="退出" Command="{Binding ExitApplicationCommand}" />
         </ContextMenu>
-        
-        <tb:TaskbarIcon x:Key="Taskbar"   
+
+        <tb:TaskbarIcon x:Key="Taskbar"
                         IconSource="../Assets/favicon.ico"
                         DoubleClickCommand="{Binding ShowWindowCommand}"
                         ContextMenu="{StaticResource SysTrayMenu}">

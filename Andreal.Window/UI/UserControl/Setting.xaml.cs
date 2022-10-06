@@ -19,8 +19,6 @@ internal partial class Setting
 {
     private static readonly Regex Regex = new("[^0-9]+", RegexOptions.Compiled);
 
-    private OicqProtocol CurrentProtocol { get; set; } = OicqProtocol.Android;
-
     internal Setting()
     {
         InitializeComponent();
@@ -47,6 +45,8 @@ internal partial class Setting
         WhiteList.Text = string.Join('\n', Program.Config.Settings.GroupInviterWhitelist);
     }
 
+    private OicqProtocol CurrentProtocol { get; set; } = OicqProtocol.Android;
+
     private void OnPreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text);
 
     private void OnSaveButtonClick(object sender, RoutedEventArgs e)
@@ -70,9 +70,8 @@ internal partial class Setting
 
         try
         {
-            whitelist = WhiteList.Text
-                                 .Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-                                 .Select(uint.Parse).ToList();
+            whitelist = WhiteList.Text.Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).Select(uint.Parse)
+                                 .ToList();
         }
         catch
         {
@@ -86,12 +85,7 @@ internal partial class Setting
                          Protocol = protocol,
                          Accounts = Program.Config.Accounts,
                          EnableHandleMessage = enableProcess,
-                         Settings = new()
-                                    {
-                                        FriendAdd = autoFriendRequest,
-                                        GroupAdd = autoGroupRequest,
-                                        GroupInviterWhitelist = whitelist
-                                    }
+                         Settings = new() { FriendAdd = autoFriendRequest, GroupAdd = autoGroupRequest, GroupInviterWhitelist = whitelist }
                      };
 
 
@@ -113,9 +107,6 @@ internal partial class Setting
 
     private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (((ComboBox)sender).SelectedItem is OicqProtocol protocol)
-        {
-            CurrentProtocol = protocol;
-        }
+        if (((ComboBox)sender).SelectedItem is OicqProtocol protocol) CurrentProtocol = protocol;
     }
 }

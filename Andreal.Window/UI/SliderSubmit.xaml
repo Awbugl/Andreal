@@ -76,9 +76,7 @@
             <TextBlock Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Left"
                        Text="滑块助手Ticket" VerticalAlignment="Top"
                        FontFamily="Microsoft YaHei" FontSize="16"
-                       Background="#23262A">
-
-            </TextBlock>
+                       Background="#23262A" />
             <Button Foreground="DarkGray" Background="#23262A" Margin="100,-21,0,0" Height="22" Width="40"
                     HorizontalAlignment="Right"
                     Click="OnPasteButtonClick">

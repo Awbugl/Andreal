@@ -14,10 +14,10 @@ internal static class ConfigWatcher
 
         Timer timer = new(OnTimer, null, Timeout.Infinite, Timeout.Infinite);
         Watcher.Changed += (_, e) =>
-                           {
-                               TmpFiles.Add(e.Name!);
-                               timer.Change(TimeoutMillis, Timeout.Infinite);
-                           };
+        {
+            TmpFiles.Add(e.Name!);
+            timer.Change(TimeoutMillis, Timeout.Infinite);
+        };
     }
 
     private static void OnTimer(object? _)

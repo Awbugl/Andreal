@@ -97,8 +97,7 @@
             <TextBlock Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
                        Text="QQ" VerticalAlignment="Center" Width="40"
                        FontFamily="Microsoft YaHei" FontSize="16"
-                       Background="#23262A">
-            </TextBlock>
+                       Background="#23262A" />
             <TextBox x:Name="UserTextBox" Width="160" VerticalAlignment="Center"
                      BorderThickness="0,0,0,1" Foreground="DarkGray" PreviewTextInput="OnPreviewTextInput"
                      InputMethod.IsInputMethodEnabled="False"
@@ -109,8 +108,7 @@
             <TextBlock Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
                        Text="密码" VerticalAlignment="Center" Width="40"
                        FontFamily="Microsoft YaHei" FontSize="16"
-                       Background="#23262A">
-            </TextBlock>
+                       Background="#23262A" />
             <PasswordBox x:Name="PwdBox" Width="160" VerticalAlignment="Center"
                          BorderThickness="0,0,0,1" Foreground="DarkGray"
                          InputMethod.IsInputMethodEnabled="False" KeyDown="OnKeyDown"

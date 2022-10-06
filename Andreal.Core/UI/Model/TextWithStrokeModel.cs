@@ -16,10 +16,17 @@ internal class TextWithStrokeModel : IGraphicsModel
     private readonly string _text;
     private readonly int? _width, _height;
 
-    internal TextWithStrokeModel(string text, System.Drawing.Font font, System.Drawing.Color color, int posX, int posY,
-                                 System.Drawing.Color? penColor = null, int penWidth = 3,
-                                 StringAlignment stringAlignment = StringAlignment.Near, int? width = null,
-                                 int? height = null)
+    internal TextWithStrokeModel(
+        string text,
+        System.Drawing.Font font,
+        System.Drawing.Color color,
+        int posX,
+        int posY,
+        System.Drawing.Color? penColor = null,
+        int penWidth = 3,
+        StringAlignment stringAlignment = StringAlignment.Near,
+        int? width = null,
+        int? height = null)
     {
         _text = text;
         _color = color;
@@ -40,7 +47,8 @@ internal class TextWithStrokeModel : IGraphicsModel
         using var path = new GraphicsPath();
         using var brush = new SolidBrush(_color);
         using var pen = new Pen(_penColor ?? Defcolor, _penWidth);
-        path.AddString(_text, _font.FontFamily, (int)_font.Style, _font.SizeInPoints, _width == null || _height == null
+        path.AddString(_text, _font.FontFamily, (int)_font.Style, _font.SizeInPoints,
+                       _width == null || _height == null
                            ? new(origin, g.MeasureString(_text + "?", _font, origin, s))
                            : new RectangleF(_posX, _posY, (float)_width, (float)_width), s);
         g.DrawPath(pen, path);
