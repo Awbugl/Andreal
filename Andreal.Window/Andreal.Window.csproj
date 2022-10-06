@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <SatelliteResourceLanguages>None</SatelliteResourceLanguages>
         <ApplicationIcon>Assets\favicon.ico</ApplicationIcon>
     </PropertyGroup>
 
