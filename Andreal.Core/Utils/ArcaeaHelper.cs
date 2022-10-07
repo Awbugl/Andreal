@@ -46,7 +46,7 @@ internal static class ArcaeaHelper
 
         if (result == null || result.Count == 0)
         {
-            errMessage = MessageInfo.RobotReply.NoSongFound!;
+            errMessage = MessageInfo.RobotReply.NoSongFound;
             return false;
         }
 

@@ -13,15 +13,21 @@ public static class ExceptionLogger
     {
         if (ex is null) return;
         LastExceptionHelper.Set(ex);
-        if (ex is HttpRequestException or TaskCanceledException)
+        
+        switch (ex)
         {
-            ++WebExceptionCount;
-        }
-        else
-        {
-            ++ExceptionCount;
-            WriteException(ex);
-            OnExceptionRecorded?.Invoke(ex);
+            case HttpRequestException or TaskCanceledException:
+                ++WebExceptionCount;
+                return;
+
+            case InvalidCastException when ex.Message.Contains("Konata.Core.Events.ProtocolEvent"):
+                return;
+
+            default:
+                ++ExceptionCount;
+                WriteException(ex);
+                OnExceptionRecorded?.Invoke(ex);
+                return;
         }
     }
 

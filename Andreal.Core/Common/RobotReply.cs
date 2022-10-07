@@ -33,7 +33,7 @@ public class RobotReply
     public string TooManyArcUid { get; set; } = "";
 
     [JsonProperty("NoSongFound")]
-    public string? NoSongFound { get; set; } = "";
+    public string NoSongFound { get; set; } = "";
 
     [JsonProperty("NoBydChart")]
     public string NoBydChart { get; set; } = "";

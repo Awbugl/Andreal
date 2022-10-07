@@ -166,6 +166,7 @@ internal class MessageInfo
         => e switch
            {
                JsonReaderException or HttpRequestException or TaskCanceledException or TimeoutException => RobotReply.OnAPIQueryFailed(e),
+               ArgumentException when e.Message == RobotReply.NoSongFound                               => RobotReply.NoSongFound,
                _                                                                                        => RobotReply.OnExceptionOccured(e)
            };
 

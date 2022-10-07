@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Andreal.Core.Common;
 using Andreal.Core.Data.Json.Arcaea.ArcaeaLimited;
 using Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Core.UI;
@@ -13,7 +14,7 @@ internal class RecordInfo
     internal RecordInfo(RecordDataItem recentdata, sbyte difficulty = -128)
     {
         Difficulty = difficulty == -128 ? recentdata.Difficulty : difficulty;
-        SongInfo = ArcaeaCharts.QueryByID(recentdata.SongID)![Difficulty];
+        SongInfo = ArcaeaCharts.QueryByID(recentdata.SongID)?[Difficulty] ?? throw new ArgumentException(MessageInfo.RobotReply.NoSongFound);
         Cleartype = 0;
         SongID = recentdata.SongID;
         Rating = recentdata.PotentialValue.ToString("0.0000");
@@ -29,7 +30,7 @@ internal class RecordInfo
     public RecordInfo(ArcSongdata recentdata)
     {
         Difficulty = recentdata.Difficulty;
-        SongInfo = ArcaeaCharts.QueryByID(recentdata.SongID)![Difficulty];
+        SongInfo = ArcaeaCharts.QueryByID(recentdata.SongID)?[Difficulty] ?? throw new ArgumentException(MessageInfo.RobotReply.NoSongFound);
         Cleartype = recentdata.ClearType;
         SongID = recentdata.SongID;
         Rating = recentdata.Rating.ToString("0.0000");
@@ -37,7 +38,7 @@ internal class RecordInfo
         MaxPure = recentdata.MaxPure;
         Far = recentdata.Far;
         Lost = recentdata.Lost;
-        Time = new DateTime(1970, 1, 1, 8, 0, 0, DateTimeKind.Utc).AddMilliseconds(recentdata.TimePlayed);
+        Time = DateTime.UnixEpoch.AddMilliseconds(recentdata.TimePlayed);
         _score = recentdata.Score;
     }
 

@@ -366,7 +366,6 @@ internal class ArcExecutor : ExecutorBase
         var content = data.DeserializeContent<UserInfoContent>();
 
         if (content.RecentScore.Count == 0) return RobotReply.NotPlayedTheSong;
-
         RecordInfo recordInfo = new(content.RecentScore[0]);
         PlayerInfo playerInfo = new(content.AccountInfo, User);
 
