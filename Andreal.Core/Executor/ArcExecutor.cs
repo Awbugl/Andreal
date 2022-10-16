@@ -269,9 +269,8 @@ internal class ArcExecutor : ExecutorBase
             var msg = new MessageChain();
 
             for (var i = 0; i < lastsong.Count; i++)
-            {
-                if (i == 2 || lastsong[i].JacketOverride) msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lastsong[i])));
-            }
+                if (i == 2 || lastsong[i].JacketOverride)
+                    msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lastsong[i])));
 
             msg.Append(ImageMessage.FromPath(await Path.ArcaeaSong(lasteternitysong[3])));
 
@@ -361,7 +360,7 @@ internal class ArcExecutor : ExecutorBase
 
     private async Task<MessageChain> Recent()
     {
-        var data = await ArcaeaUnlimitedApi.UserInfo(User!.ArcCode);
+        var data = await ArcaeaUnlimitedApi.UserInfo(User.ArcCode);
         if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
         var content = data.DeserializeContent<UserInfoContent>();
 

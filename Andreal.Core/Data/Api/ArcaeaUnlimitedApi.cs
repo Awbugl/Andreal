@@ -13,10 +13,11 @@ public static class ArcaeaUnlimitedApi
     public static void Init(AndrealConfig config)
     {
         _client = new();
-        var apiConfig = config.Api["unlimited"];
-        _client.BaseAddress = new(apiConfig.Url);
-        _client.DefaultRequestHeaders.Add("User-Agent", apiConfig.Token);
-        _client.DefaultRequestHeaders.Authorization = new("Bearer", apiConfig.Token);
+        if (config.Api.TryGetValue("unlimited", out var apiConfig))
+        {
+            _client.BaseAddress = new(apiConfig.Url);
+            _client.DefaultRequestHeaders.Authorization = new("Bearer", apiConfig.Token);
+        }
     }
 
     private static async Task<ResponseRoot?> GetString(string url)

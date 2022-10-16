@@ -166,9 +166,8 @@ public static partial class ArcaeaCharts
         var ls = new List<ArcaeaSong> { firstobj! };
 
         while (dic.TryDequeue(out var obj, out var priority) && priority == lowestpriority)
-        {
-            if (!ls.Contains(obj)) ls.Add(obj);
-        }
+            if (!ls.Contains(obj))
+                ls.Add(obj);
 
         AliasCache.TryAdd(alias, ls);
         return ls;
@@ -195,9 +194,8 @@ public static partial class ArcaeaCharts
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
         {
             foreach (var chart in song)
-            {
-                if (Math.Abs(chart.Const - @const) < lerance) yield return chart;
-            }
+                if (Math.Abs(chart.Const - @const) < lerance)
+                    yield return chart;
         }
     }
 
@@ -208,9 +206,8 @@ public static partial class ArcaeaCharts
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
         {
             foreach (var chart in song)
-            {
-                if (chart.Const >= lowerlimit && chart.Const <= upperlimit) yield return chart;
-            }
+                if (chart.Const >= lowerlimit && chart.Const <= upperlimit)
+                    yield return chart;
         }
     }
 }

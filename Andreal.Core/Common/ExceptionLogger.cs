@@ -7,13 +7,15 @@ public static class ExceptionLogger
 {
     public delegate void ExceptionEventHandler(Exception e);
 
+    private static readonly object SyncObj = new();
+
     public static event ExceptionEventHandler? OnExceptionRecorded;
 
     public static void Log(Exception? ex)
     {
         if (ex is null) return;
         LastExceptionHelper.Set(ex);
-        
+
         switch (ex)
         {
             case HttpRequestException or TaskCanceledException:
@@ -33,14 +35,9 @@ public static class ExceptionLogger
 
     private static void WriteException(Exception ex)
     {
-        try
+        lock (SyncObj)
         {
             File.AppendAllText(Path.ExceptionReport, $"{DateTime.Now}\n{ex}\n\n");
-        }
-        catch
-        {
-            Thread.Sleep(2000);
-            WriteException(ex);
         }
     }
 }
