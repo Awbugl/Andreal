@@ -54,6 +54,6 @@ internal partial class SliderSubmit : IDisposable
     public void Dispose()
     {
         _httpClient?.Dispose();
-        _httpClient = null!;
+        _httpClient = null;
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using Andreal.Core.Common;
 using Andreal.Window.Common;
+using Path = Andreal.Core.Common.Path;
 
 #pragma warning disable CS4014
 
@@ -35,9 +37,10 @@ internal partial class App
         FindResource("Taskbar");
         base.OnStartup(e);
 
-        Dispatcher.InvokeAsync(Program.ProgramInit);
+        var window = new SourceDownloader();
+        window.Show();
 
         MainWindow = new MainWindow();
-        MainWindow.Show();
+        MainWindow.Hide();
     }
 }

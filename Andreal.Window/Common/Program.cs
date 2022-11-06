@@ -103,9 +103,14 @@ internal static class Program
             {
                 case WtLoginEvent.Type.Unknown:
                 case WtLoginEvent.Type.InvalidUinOrPassword:
+                    await OnRemove(log);
+                    RemoveBotInfo(log.Robot);
+                    break;
+
                 case WtLoginEvent.Type.LoginDenied:
                 case WtLoginEvent.Type.HighRiskEnvironment:
                     await OnRemove(log);
+                    if (MessageBox.Show("是否删除现在的BotInfo信息？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes) RemoveBotInfo(log.Robot);
                     break;
             }
         }
@@ -119,12 +124,15 @@ internal static class Program
         Config.Accounts.Remove(info!);
         await File.WriteAllTextAsync(Path.Config, JsonConvert.SerializeObject(Config));
 
-        var pth = Path.BotConfig(log.Robot);
-        if (File.Exists(pth)) File.Delete(pth);
-        BotInfos.TryRemove(log.Robot, out _);
-
         log.Bot?.Dispose();
         Remove(Accounts, log);
+    }
+
+    private static void RemoveBotInfo(uint bot)
+    {
+        var pth = Path.BotConfig(bot);
+        if (File.Exists(pth)) File.Delete(pth);
+        BotInfos.TryRemove(bot, out _);
     }
 
     private static string Translate(WtLoginEvent.Type type)
@@ -136,7 +144,7 @@ internal static class Program
                WtLoginEvent.Type.VerifyDeviceLock     => "需要设备锁验证",
                WtLoginEvent.Type.InvalidSmsCode       => "短信验证码不正确",
                WtLoginEvent.Type.InvalidUinOrPassword => "QQ号或密码不正确",
-               WtLoginEvent.Type.LoginDenied          => "当前上网环境异常",
+               WtLoginEvent.Type.LoginDenied          => "登录环境异常",
                WtLoginEvent.Type.HighRiskEnvironment  => "当前上网环境异常",
                WtLoginEvent.Type.TokenExpired         => "快速登录Token已过期",
                _                                      => ""
@@ -216,7 +224,7 @@ internal static class Program
         if (log.State == "在线")
         {
             log.State = "在线（发送群消息受限）";
-            log.Message += "请访问 https://accounts.qq.com/safe/message/unlock?lock_info=5_5 解除限制。";
+            log.Message += "请手动登录Bot账号并访问 https://accounts.qq.com/safe/message/unlock?lock_info=5_5 解除限制。";
         }
     }
 

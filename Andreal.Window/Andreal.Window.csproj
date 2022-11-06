@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.774.44" />
         <PackageReference Include="Microsoft.Web.WebView2.DevToolsProtocolExtension" Version="1.0.824" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

@@ -8,37 +8,27 @@ namespace Andreal.Core.Common;
 public class Path
 {
     private static readonly string BaseDirectory = AppContext.BaseDirectory;
-    public static readonly string ArcaeaBackgroundRoot = BaseDirectory + "/Andreal/Background/";
-    private static readonly string ArcaeaImageRoot = BaseDirectory + "/Andreal/Arcaea/";
-    private static readonly string ArcaeaSourceRoot = BaseDirectory + "/Andreal/Source/";
-    public static readonly string AndreaConfigRoot = BaseDirectory + "/Andreal/Config/";
-    public static readonly string TempImageRoot = BaseDirectory + "/Andreal/TempImage/";
 
-    public static readonly Path Database = new(AndreaConfigRoot + "Andreal.db");
+    public static readonly string ArcaeaBackgroundRoot = BaseDirectory + "/Andreal/Background/",
+                                  ArcaeaImageRoot = BaseDirectory + "/Andreal/Arcaea/",
+                                  ArcaeaSourceRoot = BaseDirectory + "/Andreal/Source/",
+                                  ArcaeaFontRoot = BaseDirectory + "/Andreal/Fonts/",
+                                  AndreaConfigRoot = BaseDirectory + "/Andreal/Config/",
+                                  TempImageRoot = BaseDirectory + "/Andreal/TempImage/";
 
-    public static readonly Path Config = new(AndreaConfigRoot + "config.json");
-
-    public static readonly Path PartnerConfig = new(AndreaConfigRoot + "positioninfo.json");
-
-    public static readonly Path RobotReply = new(AndreaConfigRoot + "replytemplate.json");
-
-    public static readonly Path TmpSongList = new(AndreaConfigRoot + "tempsonglist.json");
-
-    public static readonly Path ArcaeaConstListBg = new(ArcaeaSourceRoot + "ConstList.jpg");
-
-    public static readonly Path ArcaeaDivider = new(ArcaeaSourceRoot + "Divider.png");
-
-    public static readonly Path ArcaeaGlass = new(ArcaeaSourceRoot + "Glass.png");
-
-    public static readonly Path ArcaeaBest30Bg = new(ArcaeaSourceRoot + "B30.png");
-
-    public static readonly Path ArcaeaBest40Bg = new(ArcaeaSourceRoot + "B40.png");
-
-    public static readonly Path ArcaeaBest5Bg = new(ArcaeaSourceRoot + "Floor.png");
-
-    public static readonly Path ExceptionReport = new(BaseDirectory + "/Andreal/ExceptionReport.log");
-
-    public static readonly Path ArcaeaBg1Mask = new(ArcaeaSourceRoot + "Mask.png");
+    public static readonly Path Database = new(AndreaConfigRoot + "Andreal.db"),
+                                Config = new(AndreaConfigRoot + "config.json"),
+                                PartnerConfig = new(AndreaConfigRoot + "positioninfo.json"),
+                                RobotReply = new(AndreaConfigRoot + "replytemplate.json"),
+                                TmpSongList = new(AndreaConfigRoot + "tempsonglist.json"),
+                                ArcaeaConstListBg = new(ArcaeaSourceRoot + "ConstList.jpg"),
+                                ArcaeaDivider = new(ArcaeaSourceRoot + "Divider.png"),
+                                ArcaeaGlass = new(ArcaeaSourceRoot + "Glass.png"),
+                                ArcaeaBest30Bg = new(ArcaeaSourceRoot + "B30.png"),
+                                ArcaeaBest40Bg = new(ArcaeaSourceRoot + "B40.png"),
+                                ArcaeaBest5Bg = new(ArcaeaSourceRoot + "Floor.png"),
+                                ArcaeaBg1Mask = new(ArcaeaSourceRoot + "Mask.png"),
+                                ExceptionReport = new(BaseDirectory + "/Andreal/ExceptionReport.log");
 
     private readonly string _rawpath;
 
@@ -46,24 +36,14 @@ public class Path
 
     static Path()
     {
-        if (!Directory.Exists(ArcaeaBackgroundRoot)) Directory.CreateDirectory(ArcaeaBackgroundRoot);
-        if (!Directory.Exists(ArcaeaSourceRoot)) Directory.CreateDirectory(ArcaeaSourceRoot);
-        if (!Directory.Exists(TempImageRoot)) Directory.CreateDirectory(TempImageRoot);
-
-        if (!Directory.Exists(AndreaConfigRoot))
-        {
-            Directory.CreateDirectory(AndreaConfigRoot);
-            Directory.CreateDirectory(AndreaConfigRoot + "BotInfo/");
-        }
-
-        if (!Directory.Exists(ArcaeaImageRoot))
-        {
-            Directory.CreateDirectory(ArcaeaImageRoot);
-            Directory.CreateDirectory(ArcaeaImageRoot + "Song/");
-            Directory.CreateDirectory(ArcaeaImageRoot + "Char/");
-            Directory.CreateDirectory(ArcaeaImageRoot + "Icon/");
-            Directory.CreateDirectory(ArcaeaImageRoot + "Preview/");
-        }
+        Directory.CreateDirectory(ArcaeaBackgroundRoot);
+        Directory.CreateDirectory(ArcaeaSourceRoot);
+        Directory.CreateDirectory(TempImageRoot);
+        Directory.CreateDirectory(AndreaConfigRoot + "BotInfo/");
+        Directory.CreateDirectory(ArcaeaImageRoot + "Song/");
+        Directory.CreateDirectory(ArcaeaImageRoot + "Char/");
+        Directory.CreateDirectory(ArcaeaImageRoot + "Icon/");
+        Directory.CreateDirectory(ArcaeaImageRoot + "Preview/");
     }
 
     private Path(string rawpath)
