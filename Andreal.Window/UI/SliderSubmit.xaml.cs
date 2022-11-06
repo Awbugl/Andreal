@@ -1,41 +1,41 @@
 ﻿using System;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 using Konata.Core;
 using Konata.Core.Interfaces.Api;
-using QRCoder;
+using Newtonsoft.Json.Linq;
 
 namespace Andreal.Window.UI;
 
-internal partial class SliderSubmit
+internal partial class SliderSubmit : IDisposable
 {
     private readonly Bot _bot;
     private readonly string _sliderUrl;
+    private HttpClient? _httpClient;
 
     internal SliderSubmit(Bot bot, string sliderUrl)
     {
         _bot = bot;
-        _sliderUrl = sliderUrl;
+        _sliderUrl = sliderUrl.Replace("ssl.captcha.qq.com", "txhelper.glitch.me");
+        _httpClient = new();
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
         InitializeComponent();
-        Dispatcher.Invoke(CreateQr);
+        Dispatcher.Invoke(GetCode);
     }
 
-    private void CreateQr()
+    private void GetCode()
     {
-        using var qrGenerator = new QRCodeGenerator();
-        using var qrCodeData = qrGenerator.CreateQrCode(_sliderUrl, QRCodeGenerator.ECCLevel.L);
-        using var qrCode = new QRCode(qrCodeData);
-        using var qrCodeImage = qrCode.GetGraphic(4);
-
-        Image.Source = Imaging.CreateBitmapSourceFromHBitmap(qrCodeImage.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
-                                                             BitmapSizeOptions.FromEmptyOptions());
+        var str = _httpClient!.GetStringAsync(_sliderUrl).Result;
+        CodeBlock.Text = JObject.Parse(str)["code"]!.ToString();
     }
 
     private void OnSubmit(object sender, RoutedEventArgs e)
     {
-        _bot.SubmitSliderTicket(CodeBox.Text);
+        var str = _httpClient!.GetStringAsync(_sliderUrl).Result;
+        var ticket = JObject.Parse(str)["ticket"]!.ToString();
+        _bot.SubmitSliderTicket(ticket);
         Close();
     }
 
@@ -51,5 +51,9 @@ internal partial class SliderSubmit
         }
     }
 
-    private void OnPasteButtonClick(object sender, RoutedEventArgs e) => CodeBox.Text = Clipboard.GetText();
+    public void Dispose()
+    {
+        _httpClient?.Dispose();
+        _httpClient = null!;
+    }
 }

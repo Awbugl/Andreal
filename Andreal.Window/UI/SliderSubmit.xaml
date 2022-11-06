@@ -4,7 +4,7 @@
         Title="LoginWindow"
         ResizeMode="NoResize"
         WindowStyle="None"
-        Width="300" Height="450"
+        Width="300" Height="300"
         WindowStartupLocation="CenterScreen"
         MouseLeftButtonDown="OnMouseLeftButtonDown" x:ClassModifier="internal">
 
@@ -62,34 +62,28 @@
 
     <Grid Background="#23262A" Width="{Binding Width, ElementName=w}" Height="{Binding Height, ElementName=w}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="250" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
+                   Text="请在滑动验证助手输入验证码" VerticalAlignment="Center"
+                   FontFamily="Microsoft YaHei" FontSize="16"
+                   Background="#23262A" />
 
-        <StackPanel Grid.Row="0" Orientation="Vertical" Height="200" VerticalAlignment="Center" Width="200"
-                    Margin="0,50,0,0">
-            <Image x:Name="Image" />
-        </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Vertical" Height="100" Width="196"
+        <TextBlock x:Name="CodeBlock" Grid.Row="0" Foreground="DarkGray" IsHitTestVisible="False"
+                   HorizontalAlignment="Center"
+                   Text="" VerticalAlignment="Center"
+                   Margin="0,100,0,0"
+                   FontFamily="Microsoft YaHei" FontSize="40"
+                   Background="#23262A" />
+        
+        <StackPanel Grid.Row="1" Orientation="Vertical" Height="100" Width="300"
                     Margin="0,30,0,0">
-            <TextBlock Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Left"
-                       Text="滑块助手Ticket" VerticalAlignment="Top"
+            <TextBlock Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
+                       Text="完成滑动验证后请点击" VerticalAlignment="Top"
                        FontFamily="Microsoft YaHei" FontSize="16"
                        Background="#23262A" />
-            <Button Foreground="DarkGray" Background="#23262A" Margin="100,-21,0,0" Height="22" Width="40"
-                    HorizontalAlignment="Right"
-                    Click="OnPasteButtonClick">
-                <TextBlock TextWrapping="Wrap" FontFamily="Microsoft YaHei" Text="粘贴" FontSize="14" />
-            </Button>
-
-            <TextBox x:Name="CodeBox" Width="160" VerticalAlignment="Bottom"
-                     Margin="0,10,0,0"
-                     HorizontalAlignment="Right"
-                     BorderThickness="0,0,0,1" Foreground="DarkGray"
-                     InputMethod.IsInputMethodEnabled="False"
-
-                     Height="30" FontSize="16" Background="#23262A" />
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Height="50" Width="196">
@@ -98,7 +92,7 @@
                     Height="30"
                     Width="200"
                     Style="{StaticResource BtnStyle}" Click="OnSubmit">
-                <TextBlock TextWrapping="Wrap" Text="提交" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock TextWrapping="Wrap" Text="完成验证" FontSize="16" VerticalAlignment="Center" />
             </Button>
         </StackPanel>
     </Grid>

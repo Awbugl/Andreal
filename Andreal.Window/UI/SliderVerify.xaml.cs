@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Konata.Core;
 using Konata.Core.Interfaces.Api;
@@ -7,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Andreal.Window.UI;
 
-internal partial class SliderVerify
+internal partial class SliderVerify : IDisposable
 {
     private readonly Bot _bot;
     private readonly string _sliderUrl;
@@ -62,6 +63,7 @@ internal partial class SliderVerify
             _ticket = JObject.Parse((await CdpHelper.Network.GetResponseBodyAsync(_ticketId)).Body)["ticket"]!.ToString();
 
             _bot.SubmitSliderTicket(_ticket);
+            
             Close();
         };
     }
@@ -76,5 +78,11 @@ internal partial class SliderVerify
         {
             //ignored
         }
+    }
+
+    public void Dispose()
+    {
+        WebBrowser?.Dispose();
+        WebBrowser = null;
     }
 }
