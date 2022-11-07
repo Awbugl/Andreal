@@ -43,6 +43,7 @@ internal partial class SliderSubmit : IDisposable
     {
         try
         {
+            Focus();
             DragMove();
         }
         catch

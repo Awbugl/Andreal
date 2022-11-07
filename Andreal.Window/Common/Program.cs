@@ -110,7 +110,7 @@ internal static class Program
                 case WtLoginEvent.Type.LoginDenied:
                 case WtLoginEvent.Type.HighRiskEnvironment:
                     await OnRemove(log);
-                    if (MessageBox.Show("是否删除现在的BotInfo信息？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes) RemoveBotInfo(log.Robot);
+                    if (MessageBox.Show("是否删除此账号的BotInfo信息？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes) RemoveBotInfo(log.Robot);
                     break;
             }
         }

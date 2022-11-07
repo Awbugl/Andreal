@@ -72,6 +72,7 @@ internal partial class SliderVerify : IDisposable
     {
         try
         {
+            Focus();
             DragMove();
         }
         catch

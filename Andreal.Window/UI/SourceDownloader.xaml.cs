@@ -7,6 +7,7 @@ using System.Net.Http.Handlers;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Andreal.Core.Common;
 using Andreal.Window.Common;
 using Newtonsoft.Json;
 using static Andreal.Core.Common.Path;
@@ -91,8 +92,9 @@ internal partial class SourceDownloader
                 }
             }
         }
-        catch
+        catch(Exception ex)
         {
+            ExceptionLogger.Log(ex);
             MessageBox.Show("下载失败，请检查网络连接。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Environment.Exit(0);
         }
@@ -102,6 +104,7 @@ internal partial class SourceDownloader
     {
         try
         {
+            Focus();
             DragMove();
         }
         catch

@@ -63,6 +63,7 @@ internal partial class MainWindow
     {
         try
         {
+            Focus();
             DragMove();
         }
         catch

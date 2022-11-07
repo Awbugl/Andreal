@@ -5,8 +5,14 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <PublishSingleFile>true</PublishSingleFile>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <SelfContained>true</SelfContained>
+        <DebugType>embedded</DebugType>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
         <SatelliteResourceLanguages>None</SatelliteResourceLanguages>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <PublishReadyToRun>true</PublishReadyToRun>
         <ApplicationIcon>Assets\favicon.ico</ApplicationIcon>
     </PropertyGroup>
 

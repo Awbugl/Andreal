@@ -29,6 +29,7 @@ internal partial class SmsCodeVerify
     {
         try
         {
+            Focus();
             DragMove();
         }
         catch
