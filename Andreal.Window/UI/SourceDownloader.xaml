@@ -17,22 +17,25 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Name="Notice" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Left"
-                   Margin="35,10,0,0"  Text="正在检查资源文件..." VerticalAlignment="Center"
-                   FontFamily="Microsoft YaHei" FontSize="16"/>
-        <TextBlock Grid.Row="0" Name="TextBlock" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Left"
-                   Margin="120,10,0,0"  Text="" VerticalAlignment="Center"
-                   FontFamily="Microsoft YaHei" FontSize="16"/>
+                   Margin="35,10,0,0" Text="正在检查资源文件..." VerticalAlignment="Center"
+                   FontFamily="Microsoft YaHei" FontSize="16" />
+        <TextBlock Grid.Row="0" Name="TextBlock" Foreground="DarkGray" IsHitTestVisible="False"
+                   HorizontalAlignment="Left"
+                   Margin="120,10,0,0" Text="" VerticalAlignment="Center"
+                   FontFamily="Microsoft YaHei" FontSize="16" />
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="450" />
-                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="420" />
+                    <ColumnDefinition Width="80" />
                 </Grid.ColumnDefinitions>
 
-                <ProgressBar Grid.Column="0" Height="20" Margin="20,10,0,0" Name="ProgressBar" HorizontalAlignment="Center"
-                             VerticalAlignment="Top" Width="400" />
-                <TextBlock Name="Block" Grid.Column="1" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Left"
-                           Margin="0,-10,0,0"
+                <ProgressBar Grid.Column="0" Height="20" Margin="20,10,0,0" Name="ProgressBar"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Top" Width="370" Visibility="Hidden" />
+                <TextBlock Name="Block" Grid.Column="1" Foreground="DarkGray" IsHitTestVisible="False"
+                           HorizontalAlignment="Right"
+                           Margin="0,-10,35,0"
                            Text="" VerticalAlignment="Center"
                            FontFamily="Microsoft YaHei" FontSize="16"
                            Background="#23262A" />

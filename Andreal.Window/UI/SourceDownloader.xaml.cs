@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Handlers;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Andreal.Window.Common;
@@ -71,7 +72,11 @@ internal partial class SourceDownloader
 
             var list = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(_client!.GetStringAsync("list.json").Result)!;
 
-            Dispatcher.Invoke(() => Notice.Text = "正在下载：");
+            Dispatcher.Invoke(() =>
+            {
+                 Notice.Text = "正在下载：";
+                 ProgressBar.Visibility = Visibility.Visible;
+            });
 
             foreach (var (key,ls) in list)
             {
