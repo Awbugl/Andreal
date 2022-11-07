@@ -75,11 +75,11 @@ internal partial class SourceDownloader
 
             Dispatcher.Invoke(() =>
             {
-                 Notice.Text = "正在下载：";
-                 ProgressBar.Visibility = Visibility.Visible;
+                Notice.Text = "正在下载：";
+                ProgressBar.Visibility = Visibility.Visible;
             });
 
-            foreach (var (key,ls) in list)
+            foreach (var (key, ls) in list)
             {
                 foreach (var i in ls)
                 {
@@ -92,11 +92,16 @@ internal partial class SourceDownloader
                 }
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ExceptionLogger.Log(ex);
-            MessageBox.Show("下载失败，请检查网络连接。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Environment.Exit(0);
+
+            Dispatcher.Invoke(() =>
+            {
+                MessageBox.Show("下载失败，请检查网络连接或重试。", "下载失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                Environment.Exit(0);
+            });
         }
     }
 
