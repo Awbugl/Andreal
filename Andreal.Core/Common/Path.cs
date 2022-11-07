@@ -38,6 +38,7 @@ public class Path
     {
         Directory.CreateDirectory(ArcaeaBackgroundRoot);
         Directory.CreateDirectory(ArcaeaSourceRoot);
+        Directory.CreateDirectory(ArcaeaFontRoot);
         Directory.CreateDirectory(TempImageRoot);
         Directory.CreateDirectory(AndreaConfigRoot + "BotInfo/");
         Directory.CreateDirectory(ArcaeaImageRoot + "Song/");

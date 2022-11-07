@@ -67,6 +67,7 @@ internal partial class SourceDownloader
         {
             Directory.CreateDirectory(AndreaConfigRoot + "BotInfo/");
             Directory.CreateDirectory(ArcaeaSourceRoot);
+            Directory.CreateDirectory(ArcaeaFontRoot);
 
             var list = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(_client!.GetStringAsync("list.json").Result)!;
 
