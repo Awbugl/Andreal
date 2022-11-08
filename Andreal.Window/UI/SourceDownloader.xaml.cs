@@ -39,6 +39,15 @@ internal partial class SourceDownloader
 
     private void WorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
+        if ((int)ProgressBar.Value != 100)
+            Dispatcher.Invoke(() =>
+            {
+                MessageBox.Show("下载失败，请检查网络连接或重试。", "下载失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                Environment.Exit(0);
+                return;
+            });
+
         var mainWindow = Application.Current.MainWindow!;
         mainWindow.Dispatcher.InvokeAsync(Program.ProgramInit);
         mainWindow.Show();
@@ -50,8 +59,11 @@ internal partial class SourceDownloader
     private void ProgressChanged(object? sender, ProgressChangedEventArgs e)
     {
         var value = e.ProgressPercentage;
-        ProgressBar.Value = value;
-        Block.Text = value + "%";
+        Dispatcher.Invoke(() =>
+        {
+            ProgressBar.Value = value;
+            Block.Text = value + "%";
+        });
     }
 
     private static string GetPath(string id)
@@ -95,13 +107,7 @@ internal partial class SourceDownloader
         catch (Exception ex)
         {
             ExceptionLogger.Log(ex);
-
-            Dispatcher.Invoke(() =>
-            {
-                MessageBox.Show("下载失败，请检查网络连接或重试。", "下载失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
-                Environment.Exit(0);
-            });
+            Dispatcher.Invoke(() => { ProgressBar.Value = -1; });
         }
     }
 
