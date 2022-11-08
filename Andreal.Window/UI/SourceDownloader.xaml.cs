@@ -99,14 +99,16 @@ internal partial class SourceDownloader
                     var requestUri = $"{key}/{i}";
                     Dispatcher.Invoke(() =>
                     {
-                         TextBlock.Text = requestUri;
-                         ProgressBar.Value = 0;
+                        TextBlock.Text = requestUri;
+                        ProgressBar.Value = 0;
                     });
                     if (File.Exists(path)) continue;
                     var config = _client.GetByteArrayAsync(requestUri).Result;
                     File.WriteAllBytes(path, config);
                 }
             }
+
+            Dispatcher.Invoke(() => { ProgressBar.Value = 100; });
         }
         catch (Exception ex)
         {
