@@ -37,7 +37,7 @@ internal partial class Setting
             ALAToken.Text = alavalue.Token;
         }
 
-        ComboBox.ItemsSource = new[] { OicqProtocol.Android, OicqProtocol.Watch };
+        ComboBox.ItemsSource = new[] { OicqProtocol.Android, OicqProtocol.Watch, OicqProtocol.AndroidPad };
         ComboBox.SelectedItem = Program.Config.Protocol;
         EnableProcess.IsChecked = Program.Config.EnableHandleMessage;
         AutoFriendRequest.IsChecked = Program.Config.Settings.FriendAdd;
@@ -57,15 +57,6 @@ internal partial class Setting
             return;
         }
 
-        var protocol = CurrentProtocol;
-        var auauri = AUAUrl.Text;
-        var auatoken = AUAToken.Text;
-        var alauri = ALAUrl.Text;
-        var alatoken = ALAToken.Text;
-        var enableProcess = EnableProcess.IsChecked ?? true;
-        var autoFriendRequest = AutoFriendRequest.IsChecked ?? false;
-        var autoGroupRequest = AutoGroupRequest.IsChecked ?? false;
-
         List<uint> whitelist;
 
         try
@@ -82,18 +73,28 @@ internal partial class Setting
         var config = new AndrealConfig
                      {
                          Master = master,
-                         Protocol = protocol,
+                         Protocol = CurrentProtocol,
                          Accounts = Program.Config.Accounts,
-                         EnableHandleMessage = enableProcess,
-                         Settings = new() { FriendAdd = autoFriendRequest, GroupAdd = autoGroupRequest, GroupInviterWhitelist = whitelist }
+                         EnableHandleMessage = EnableProcess.IsChecked ?? true,
+                         Settings = new()
+                                    {
+                                        FriendAdd = AutoFriendRequest.IsChecked ?? false,
+                                        GroupAdd = AutoGroupRequest.IsChecked ?? false,
+                                        GroupInviterWhitelist = whitelist
+                                    }
                      };
 
+        var auauri = AUAUrl.Text;
+        var auatoken = AUAToken.Text;
 
         if (!string.IsNullOrWhiteSpace(auauri) && !string.IsNullOrWhiteSpace(auatoken))
         {
             config.Api["unlimited"] = new() { Url = auauri, Token = auatoken };
             ArcaeaUnlimitedApi.Init(config);
         }
+
+        var alauri = ALAUrl.Text;
+        var alatoken = ALAToken.Text;
 
         if (!string.IsNullOrWhiteSpace(alauri) && !string.IsNullOrWhiteSpace(alatoken))
         {

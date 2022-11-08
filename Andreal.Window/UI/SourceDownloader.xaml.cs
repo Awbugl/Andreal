@@ -29,7 +29,7 @@ internal partial class SourceDownloader
         processMessageHander.HttpReceiveProgress += (_, e) => { _worker.ReportProgress(e.ProgressPercentage); };
         _client = new(processMessageHander);
         _client.BaseAddress = new("https://server.awbugl.top/andreal/");
-        _client.Timeout = TimeSpan.FromSeconds(30);
+        _client.Timeout = TimeSpan.FromMinutes(5);
         _worker.WorkerReportsProgress = true;
         _worker.DoWork += Download;
         _worker.ProgressChanged += ProgressChanged;
@@ -97,7 +97,11 @@ internal partial class SourceDownloader
                 {
                     var path = GetPath(key) + i;
                     var requestUri = $"{key}/{i}";
-                    Dispatcher.Invoke(() => TextBlock.Text = requestUri);
+                    Dispatcher.Invoke(() =>
+                    {
+                         TextBlock.Text = requestUri;
+                         ProgressBar.Value = 0;
+                    });
                     if (File.Exists(path)) continue;
                     var config = _client.GetByteArrayAsync(requestUri).Result;
                     File.WriteAllBytes(path, config);
@@ -107,7 +111,7 @@ internal partial class SourceDownloader
         catch (Exception ex)
         {
             ExceptionLogger.Log(ex);
-            Dispatcher.Invoke(() => { ProgressBar.Value = -1; });
+            Dispatcher.Invoke(() => { ProgressBar.Value = 0; });
         }
     }
 
