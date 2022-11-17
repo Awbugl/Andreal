@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Andreal.Core.Common;
 using Andreal.Window.Common;
-using Path = Andreal.Core.Common.Path;
+using MessageBox = System.Windows.MessageBox;
 
 #pragma warning disable CS4014
 
@@ -12,8 +12,15 @@ namespace Andreal.Window.UI;
 
 internal partial class App
 {
+    private static Mutex? _mutex;
+
     protected override void OnStartup(StartupEventArgs e)
     {
+        _mutex = new(true, "AndrealOnlyRunMutex");
+        if (!_mutex.WaitOne(0, false) &&
+            MessageBox.Show("已有在运行的Andreal，是否要打开新的实例？", "Andreal提示", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+            Environment.Exit(0);
+
         Current.DispatcherUnhandledException += (_, args) =>
         {
             ExceptionLogger.Log(args.Exception);

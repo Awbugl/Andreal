@@ -37,8 +37,8 @@ internal partial class Setting
             ALAToken.Text = alavalue.Token;
         }
 
-        ComboBox.ItemsSource = new[] { OicqProtocol.Android, OicqProtocol.Watch, OicqProtocol.AndroidPad };
-        ComboBox.SelectedItem = Program.Config.Protocol;
+        ProtocolComboBox.SelectedItem = Program.Config.Protocol;
+        SliderComboBox.SelectedItem = Program.Config.SliderType;
         EnableProcess.IsChecked = Program.Config.EnableHandleMessage;
         AutoFriendRequest.IsChecked = Program.Config.Settings.FriendAdd;
         AutoGroupRequest.IsChecked = Program.Config.Settings.GroupAdd;
@@ -53,7 +53,7 @@ internal partial class Setting
     {
         if (!uint.TryParse(MasterQQ.Text, out var master))
         {
-            MessageBox.Show("请正确输入MasterQQ号！");
+            MessageBox.Show("Bot管理员QQ号解析失败！");
             return;
         }
 

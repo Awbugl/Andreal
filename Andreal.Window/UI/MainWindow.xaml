@@ -63,15 +63,16 @@
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                         <ListViewItem Margin="0,0,0,15">
-                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196"
+                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196" Background="Transparent"
                                         MouseDown="OnAccountManageClick">
+                              
                                 <Image Source="../Assets/img_contact.png" Stretch="None" Margin="15,0,0,0" />
                                 <TextBlock Text="账号管理" Margin="30,0,0,0" Style="{StaticResource FontStyle}" />
                             </StackPanel>
                         </ListViewItem>
 
                         <ListViewItem Margin="0,0,0,15">
-                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196"
+                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196" Background="Transparent"
                                         MouseDown="OnMessagePushClick">
                                 <Image Source="../Assets/img_message.png" Stretch="None" Margin="15,0,0,0" />
                                 <TextBlock Text="消息动态" Margin="30,0,0,0" Style="{StaticResource FontStyle}" />
@@ -80,7 +81,7 @@
 
 
                         <ListViewItem Margin="0,0,0,15">
-                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196"
+                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196" Background="Transparent"
                                         MouseDown="OnExceptionLogClick">
                                 <Image Source="../Assets/img_map.png" Stretch="None" Margin="15,0,0,0" />
                                 <TextBlock Text="异常记录" Margin="30,0,0,0" Style="{StaticResource FontStyle}" />
@@ -88,7 +89,7 @@
                         </ListViewItem>
 
                         <ListViewItem Margin="0,0,0,15">
-                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196"
+                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196" Background="Transparent"
                                         MouseDown="OnSettingClick">
                                 <Image Source="../Assets/img_setting.png" Stretch="None" Margin="15,0,0,0" />
                                 <TextBlock Text="基础配置" Margin="30,0,0,0" Style="{StaticResource FontStyle}" />
@@ -97,7 +98,7 @@
 
 
                         <ListViewItem Margin="0,0,0,15">
-                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196"
+                            <StackPanel Orientation="Horizontal" Margin="-5,-2,0,0" Height="50" Width="196" Background="Transparent"
                                         MouseDown="OnReplySettingClick">
                                 <Image Source="../Assets/img_setting.png" Stretch="None" Margin="15,0,0,0" />
                                 <TextBlock Text="其他设置" Margin="30,0,0,0" Style="{StaticResource FontStyle}" />

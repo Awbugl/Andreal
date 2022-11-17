@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Konata.Core.Common;
 using Newtonsoft.Json;
 
@@ -5,6 +6,9 @@ namespace Andreal.Core.Common;
 
 public class ConfigJson
 {
+    [JsonProperty("protocol")]
+    public OicqProtocol Protocol { get; set; }
+    
     [JsonProperty("keystore")]
     public BotKeyStore? KeyStore { get; set; }
 
@@ -50,6 +54,9 @@ public class AndrealConfig
     [JsonProperty("protocol")]
     public OicqProtocol Protocol { get; set; }
 
+    [JsonProperty("slider")]
+    public SliderType SliderType { get; set; }
+
     [JsonProperty("enable_handle_message")]
     public bool EnableHandleMessage { get; set; } = true;
 
@@ -61,4 +68,13 @@ public class AndrealConfig
 
     [JsonProperty("approve_settings")]
     public AndrealSettings Settings { get; set; } = new();
+}
+
+public enum SliderType
+{
+    [Description("滑块验证助手")]
+    Helper,
+
+    [Description("浏览器模拟滑块（不建议）")]
+    Browser
 }

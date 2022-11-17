@@ -50,7 +50,7 @@ internal static class Program
 
         Init(bot);
 
-        var log = new AccountLog(bot, info.Account, "登录中", "");
+        var log = new AccountLog(bot, info.Account, "登录中", "", BotInfos[info.Account].Protocol);
         Add(Accounts, log);
 
         var loginresult = await bot.Login();
@@ -62,7 +62,7 @@ internal static class Program
         }
         else if (retry)
         {
-            switch (loginresult.Type)
+            switch (loginresult.Event.EventType)
             {
                 case WtLoginEvent.Type.Unknown:
                 case WtLoginEvent.Type.LoginDenied:
@@ -78,7 +78,7 @@ internal static class Program
         await OnLogin(bot, loginresult);
     }
 
-    internal static async Task OnLogin(Bot bot, (bool Success, WtLoginEvent.Type Type) loginresult)
+    internal static async Task OnLogin(Bot bot, (bool Success, WtLoginEvent Event) loginresult)
     {
         var log = Accounts.First(i => i.Bot == bot);
 
@@ -87,30 +87,22 @@ internal static class Program
             UpdateKeystore(bot.Uin, bot.KeyStore);
             log.Nick = bot.Name;
 
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var friend in await bot.GetFriendList(true))
-            {
-                if (!BotFriendList.ContainsKey(friend.Uin)) BotFriendList.TryAdd(friend.Uin, friend.Name);
-            }
+                if (!BotFriendList.ContainsKey(friend.Uin))
+                    BotFriendList.TryAdd(friend.Uin, friend.Name);
         }
         else
         {
+            var type = loginresult.Event.EventType;
             log.State = "登录失败";
-            log.Message = Translate(loginresult.Type);
+            log.Message = Translate(type);
+            MessageBox.Show($"QQ {log.Robot} \n登录失败，请重新登录！\n原因：{Translate(type)}  错误代码：{loginresult.Event.ResultCode}", "登录失败！");
 
-            MessageBox.Show($"QQ {log.Robot} \n登录失败，请重新登录！\n原因：" + Translate(loginresult.Type), "登录失败！");
-
-            switch (loginresult.Type)
+            switch (type)
             {
-                case WtLoginEvent.Type.Unknown:
                 case WtLoginEvent.Type.InvalidUinOrPassword:
                     await OnRemove(log);
-                    RemoveBotInfo(log.Robot);
-                    break;
-
-                case WtLoginEvent.Type.LoginDenied:
-                case WtLoginEvent.Type.HighRiskEnvironment:
-                    await OnRemove(log);
-                    if (MessageBox.Show("是否删除此账号的BotInfo信息？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes) RemoveBotInfo(log.Robot);
                     break;
             }
         }
@@ -126,6 +118,8 @@ internal static class Program
 
         log.Bot?.Dispose();
         Remove(Accounts, log);
+
+        if (MessageBox.Show("是否删除此账号的模拟登录信息？\n删除后不可恢复！", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes) RemoveBotInfo(log.Robot);
     }
 
     private static void RemoveBotInfo(uint bot)
@@ -181,7 +175,7 @@ internal static class Program
         {
             var bot = GenerateBotInstance(info);
             Init(bot);
-            Add(Accounts, new(bot, info.Account, "登录中", ""));
+            Add(Accounts, new(bot, info.Account, "登录中", "", BotInfos[info.Account].Protocol));
             var loginresult = await bot.Login();
             await OnLogin(bot, loginresult);
         }
@@ -301,11 +295,9 @@ internal static class Program
             case CaptchaEvent.CaptchaType.Slider:
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    System.Windows.Window window
-                        = MessageBox.Show("是否使用Webview进行滑块验证？\n选择否将使用扫码验证", "需要滑块验证", MessageBoxButtons.YesNo) == DialogResult.Yes
-                              ? new SliderVerify(b, e.SliderUrl)
-                              : new SliderSubmit(b, e.SliderUrl);
-
+                    System.Windows.Window window = Config.SliderType == SliderType.Helper
+                                                       ? new SliderSubmit(b, e.SliderUrl)
+                                                       : new SliderVerify(b, e.SliderUrl);
                     window.ShowDialog();
                 });
                 break;
@@ -319,9 +311,7 @@ internal static class Program
     private static void UpdateKeystore(uint qqid, BotKeyStore keystore)
     {
         var pth = Path.BotConfig(qqid);
-
-        ConfigJson cfg = new() { KeyStore = keystore, Device = BotInfos[qqid].Device };
-
+        var cfg = new ConfigJson { KeyStore = keystore, Protocol = BotInfos[qqid].Protocol, Device = BotInfos[qqid].Device };
         File.WriteAllText(pth, JsonConvert.SerializeObject(cfg));
     }
 
@@ -331,7 +321,7 @@ internal static class Program
 
         var cfg = File.Exists(pth)
                       ? JsonConvert.DeserializeObject<ConfigJson>(File.ReadAllText(pth))!
-                      : new() { Device = BotDevice.Default(), KeyStore = new(info.Account.ToString(), info.Password) };
+                      : new() { Protocol = Config.Protocol, Device = BotDevice.Default(), KeyStore = new(info.Account.ToString(), info.Password) };
 
         BotInfos[info.Account] = cfg;
         return BotFather.Create(_botConfig, cfg.Device, cfg.KeyStore);

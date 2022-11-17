@@ -20,10 +20,11 @@
                   SelectionMode="Extended" CanUserAddRows="False">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="QQ" Binding="{Binding Robot}" Width="100" />
+                <DataGridTextColumn Header="QQ" Binding="{Binding Robot}" Width="125" />
                 <DataGridTextColumn Header="昵称" Binding="{Binding Nick}" Width="100" />
                 <DataGridTextColumn Header="状态" Binding="{Binding State}" Width="100" />
-                <DataGridTextColumn Header="信息" Binding="{Binding Message}" Width="500" />
+                <DataGridTextColumn Header="协议" Binding="{Binding Protocol}" Width="100" />
+                <DataGridTextColumn Header="信息" Binding="{Binding Message}" Width="375" />
             </DataGrid.Columns>
             <DataGrid.Resources>
                 <ContextMenu x:Key="RawContextMenu">

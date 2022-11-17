@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Konata.Core;
+using Konata.Core.Common;
 
 namespace Andreal.Window.Common;
 
@@ -71,17 +72,20 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
     private string _message = "";
     private string _nick = "";
     private string _state = "";
+    private OicqProtocol _protocol = OicqProtocol.Android;
 
     public AccountLog(
         Bot bot,
         uint uin,
         string state,
-        string message)
+        string message,
+        OicqProtocol protocol)
     {
         Bot = bot;
         Robot = uin;
         State = state;
         Message = message;
+        Protocol = protocol;
     }
 
     public uint Robot { get; }
@@ -112,6 +116,16 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
         set
         {
             _message = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public OicqProtocol Protocol
+    {
+        get => _protocol;
+        set
+        {
+            _protocol = value;
             OnPropertyChanged();
         }
     }
