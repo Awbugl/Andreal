@@ -18,5 +18,5 @@ internal class TimeConverter : IValueConverter
         Type targetType,
         object parameter,
         CultureInfo culture)
-        => throw new NotImplementedException();
+        => string.Empty;
 }

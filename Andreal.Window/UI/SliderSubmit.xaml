@@ -67,7 +67,7 @@
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
-                   Text="请在滑动验证助手输入验证码" VerticalAlignment="Center"
+                   Text="请在滑块验证助手输入验证码" VerticalAlignment="Center"
                    FontFamily="Microsoft YaHei" FontSize="16"
                    Background="#23262A" />
 
@@ -81,7 +81,7 @@
         <StackPanel Grid.Row="1" Orientation="Vertical" Height="100" Width="300"
                     Margin="0,30,0,0">
             <TextBlock Foreground="DarkGray" IsHitTestVisible="False" HorizontalAlignment="Center"
-                       Text="完成滑动验证后请点击" VerticalAlignment="Top"
+                       Text="完成滑块验证后请点击" VerticalAlignment="Top"
                        FontFamily="Microsoft YaHei" FontSize="16"
                        Background="#23262A" />
         </StackPanel>

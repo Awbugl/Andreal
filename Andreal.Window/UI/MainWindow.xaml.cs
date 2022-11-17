@@ -4,7 +4,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Andreal.Core.Utils;
+using Andreal.Window.Common;
 using Andreal.Window.UI.UserControl;
+using ExceptionLog = Andreal.Window.UI.UserControl.ExceptionLog;
+using MessageLog = Andreal.Window.UI.UserControl.MessageLog;
 
 namespace Andreal.Window.UI;
 
@@ -22,6 +25,8 @@ internal partial class MainWindow
         timer.Start();
         _controlers = new();
         _controlers.TryAdd(WindowStatus.None, new());
+        
+        Version.Text = $"v{Program.Version}";
     }
 
     private System.Windows.Controls.UserControl GetNewUserControl(WindowStatus status)

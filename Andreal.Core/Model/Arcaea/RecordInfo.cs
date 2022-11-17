@@ -22,7 +22,7 @@ internal class RecordInfo
         MaxPure = recentdata.ShinyPureCount;
         Far = recentdata.FarCount;
         Lost = recentdata.LostCount;
-        Time = DateTime.UnixEpoch.AddMilliseconds(recentdata.TimePlayed);
+        Time = DateTime.UnixEpoch.AddMilliseconds(recentdata.TimePlayed).ToLocalTime();
 
         _score = recentdata.Score;
     }
@@ -38,7 +38,7 @@ internal class RecordInfo
         MaxPure = recentdata.MaxPure;
         Far = recentdata.Far;
         Lost = recentdata.Lost;
-        Time = DateTime.UnixEpoch.AddMilliseconds(recentdata.TimePlayed);
+        Time = DateTime.UnixEpoch.AddMilliseconds(recentdata.TimePlayed).ToLocalTime();
         _score = recentdata.Score;
     }
 

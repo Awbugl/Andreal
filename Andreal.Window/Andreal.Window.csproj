@@ -14,6 +14,8 @@
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PublishReadyToRun>true</PublishReadyToRun>
         <ApplicationIcon>Assets\favicon.ico</ApplicationIcon>
+        <AssemblyName>Andreal</AssemblyName>
+        <NeutralLanguage>zh-Hans</NeutralLanguage>
     </PropertyGroup>
 
     <ItemGroup>
