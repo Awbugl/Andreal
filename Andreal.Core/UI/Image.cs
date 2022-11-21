@@ -121,14 +121,16 @@ public class Image : IDisposable
             int newHeight)
             => g.DrawImage(image.Bitmap, posX, posY, newWidth, newHeight);
 
+        private static ImageCodecInfo? _imageCodecInfo;
+        private static ImageCodecInfo ImageCodecInfo => _imageCodecInfo ??= GetCodecInfo("image/jpeg")!;
+
         private static ImageCodecInfo? GetCodecInfo(string mimeType)
             => ImageCodecInfo.GetImageEncoders().FirstOrDefault(ici => ici.MimeType == mimeType);
 
         public static void SaveAsJpeg(Bitmap bmp, Path path, int quality)
         {
-            var ps = new EncoderParameters(1);
-            ps.Param[0] = new(Encoder.Quality, quality);
-            bmp.Save(path, GetCodecInfo("image/jpeg")!, ps);
+            var ps = new EncoderParameters() { Param = { [0] = new(Encoder.Quality, quality) } };
+            bmp.Save(path, ImageCodecInfo, ps);
         }
     }
 }
