@@ -72,7 +72,7 @@ internal sealed class AccountLog : INotifyPropertyChanged, IComparable<AccountLo
     private string _message = "";
     private string _nick = "";
     private string _state = "";
-    private OicqProtocol _protocol = OicqProtocol.Android;
+    private OicqProtocol _protocol = OicqProtocol.AndroidPhone;
 
     public AccountLog(
         Bot bot,

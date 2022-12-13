@@ -45,7 +45,7 @@ internal partial class Setting
         WhiteList.Text = string.Join('\n', Program.Config.Settings.GroupInviterWhitelist);
     }
 
-    private OicqProtocol CurrentProtocol { get; set; } = OicqProtocol.Android;
+    private OicqProtocol CurrentProtocol { get; set; } = OicqProtocol.AndroidPhone;
 
     private void OnPreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text);
 

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq.Expressions;
+using System.Reflection;
 using Andreal.Core.Data.Sqlite;
 using Andreal.Core.Executor;
 using Andreal.Core.Message;
@@ -20,7 +21,14 @@ internal class MessageInfo
 {
     private static uint _master;
 
-    private static readonly Dictionary<(Type, MethodInfo), string[]> MethodPrefixs = GetMethodPrefixs();
+    private static Dictionary<(Type, Func<ExecutorBase, object?>), string[]> _methodPrefixs;
+
+    private static Dictionary<Type, Func<MessageInfo, ExecutorBase>> _ctors;
+
+    static MessageInfo()
+    {
+        Init();
+    }
 
     internal Bot Bot { get; set; }
     internal uint FromGroup { get; private set; }
@@ -95,13 +103,24 @@ internal class MessageInfo
         {
             var rMsg = Replace(message.Chain.ToString());
 
-            foreach (KeyValuePair<(Type, MethodInfo), string[]> pair in MethodPrefixs)
+            foreach (KeyValuePair<(Type, Func<ExecutorBase, object?>), string[]> pair in _methodPrefixs)
             {
-                var match = pair.Value.FirstOrDefault(j => rMsg.StartsWith(j, StringComparison.OrdinalIgnoreCase));
+                string? match = null;
 
-                if (match == default) continue;
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var j in pair.Value)
+                {
+                    if (rMsg.StartsWith(j, StringComparison.OrdinalIgnoreCase))
+                    {
+                        match = j;
+                        break;
+                    }
+                }
+
+                if (match == null) continue;
 
                 var (executor, method) = pair.Key;
+
                 var info = new MessageInfo
                            {
                                Bot = bot,
@@ -114,7 +133,7 @@ internal class MessageInfo
 
                 try
                 {
-                    info.ReplyMessages = method.Invoke(Activator.CreateInstance(executor, info), null) switch
+                    info.ReplyMessages = method(_ctors[executor](info)) switch
                                          {
                                              Task<MessageChain> task => await task,
                                              MessageChain chain      => chain,
@@ -159,6 +178,8 @@ internal class MessageInfo
                             ExceptionLogger.Log(e);
                         }
                 }
+
+                return;
             }
         });
 
@@ -188,19 +209,41 @@ internal class MessageInfo
         return string.Join(" ", rawMessage.Split(new char[] { '\n', '\t', '\r' }, StringSplitOptions.RemoveEmptyEntries));
     }
 
-    private static Dictionary<(Type, MethodInfo), string[]> GetMethodPrefixs()
+    private static void Init()
     {
-        var ls = new Dictionary<(Type, MethodInfo), string[]>();
+        _methodPrefixs = new();
+        _ctors = new();
 
-        foreach (var type in Assembly.GetExecutingAssembly().DefinedTypes.Where(i => i.BaseType == typeof(ExecutorBase)))
+        // ReSharper disable once LoopCanBePartlyConvertedToQuery
+        foreach (var type in Assembly.GetExecutingAssembly().DefinedTypes)
         {
-            foreach (var method in type.GetMethods(BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+            if (type.BaseType == typeof(ExecutorBase))
             {
-                var prefixs = (method.GetCustomAttribute(typeof(CommandPrefixAttribute)) as CommandPrefixAttribute)?.Prefixs;
-                if (prefixs != null) ls.Add((type, method), prefixs);
+                if (!_ctors.ContainsKey(type)) _ctors.Add(type, GetExecutorCtor(type));
+
+                foreach (var method in type.GetMethods(BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+                {
+                    var prefixs = (method.GetCustomAttribute(typeof(CommandPrefixAttribute)) as CommandPrefixAttribute)?.Prefixs;
+                    if (prefixs != null) _methodPrefixs.Add((type, GetMethodDelegate(method)), prefixs);
+                }
             }
         }
+    }
 
-        return ls;
+    private static Func<MessageInfo, ExecutorBase> GetExecutorCtor(Type type)
+    {
+        var ctor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, new[] { typeof(MessageInfo) });
+        if (ctor == null) throw new ArgumentException("No valid constructor found.");
+        var parameterExpression = Expression.Parameter(typeof(MessageInfo), "argument");
+        var newExpression = Expression.New(ctor, parameterExpression);
+        return Expression.Lambda<Func<MessageInfo, ExecutorBase>>(newExpression, parameterExpression).Compile();
+    }
+
+    private static Func<ExecutorBase, object?> GetMethodDelegate(MethodInfo method)
+    {
+        var parameterExpression = Expression.Parameter(typeof(ExecutorBase), "argument");
+        var convertedExpression = Expression.Convert(parameterExpression, method.DeclaringType!);
+        var methodCallExpression = Expression.Call(method.IsStatic ? null : convertedExpression, method);
+        return Expression.Lambda<Func<ExecutorBase, object?>>(methodCallExpression, parameterExpression).Compile();
     }
 }
