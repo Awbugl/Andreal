@@ -26,7 +26,7 @@ internal partial class MainWindow
         _controlers = new();
         _controlers.TryAdd(WindowStatus.None, new());
         
-        Version.Text = $"v{Program.Version}";
+        Version.Text = Program.Version;
     }
 
     private System.Windows.Controls.UserControl GetNewUserControl(WindowStatus status)

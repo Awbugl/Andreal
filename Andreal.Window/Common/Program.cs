@@ -23,7 +23,7 @@ namespace Andreal.Window.Common;
 internal static class Program
 {
     //TODO: Update Version
-    internal const string Version = "0.5.0";
+    internal const string Version = "v0.5.1";
 
     internal static readonly ObservableCollection<ExceptionLog> Exceptions = new();
     internal static readonly ObservableCollection<MessageLog> Messages = new();
