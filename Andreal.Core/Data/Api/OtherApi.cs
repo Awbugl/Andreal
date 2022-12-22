@@ -53,6 +53,6 @@ internal static class OtherApi
                    ? "myc"
                    : jsonData?.Response.Aggregate("",
                                                   (current, i) => current +
-                                                                  $"\n\n{((DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalMilliseconds - i.Time) / 1000:##.000}秒前\n来自 {i.SourceInfo.Name} 的车牌：\n{i.RawMessage}");
+                                                                  $"\n\n{((DateTime.UtcNow - DateTime.UnixEpoch).TotalMilliseconds - i.Time) / 1000:##.000}秒前\n来自 {i.SourceInfo.Name} 的车牌：\n{i.RawMessage}");
     }
 }

@@ -4,7 +4,7 @@ internal static class DateTimeHelper
 {
     internal static string DateStringFromNow(this long unixTime)
     {
-        var span = DateTime.UtcNow - new DateTime(1970, 1, 1).AddSeconds(unixTime);
+        var span = DateTime.UtcNow - DateTime.UnixEpoch.AddSeconds(unixTime);
 
         return span.TotalMinutes switch
                {
