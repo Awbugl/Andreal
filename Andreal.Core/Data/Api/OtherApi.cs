@@ -16,8 +16,7 @@ internal static class OtherApi
         Client = new();
     }
 
-    private static async Task<string> GetString(string url)
-        => await (await Client.SendAsync(new(HttpMethod.Get, url))).EnsureSuccessStatusCode().Content.ReadAsStringAsync();
+    private static async Task<string> GetString(string url) => await Client.GetStringAsync(url);
 
     internal static async Task<string> HitokotoApi()
     {
@@ -26,9 +25,13 @@ internal static class OtherApi
     }
 
     internal static async Task<string> JrrpApi(long uin)
-        => await (await Client.PostAsync("http://api.kokona.tech:5555/jrrp",
-                                         new StringContent($"QQ=2967373629&v=20190114&QueryQQ={uin}", Encoding.UTF8,
-                                                           new("application/x-www-form-urlencoded")))).Content.ReadAsStringAsync();
+    {
+        Task<HttpResponseMessage> msg = Client.PostAsync("http://api.kokona.tech:5555/jrrp",
+                                                         new StringContent($"QQ=2967373629&v=20190114&QueryQQ={uin}", Encoding.UTF8,
+                                                                           new("application/x-www-form-urlencoded")));
+
+        return await (await msg).Content.ReadAsStringAsync();
+    }
 
     internal static async Task<YcmResponse?> YcmApi(string carType)
         => JsonConvert.DeserializeObject<YcmResponse>(await

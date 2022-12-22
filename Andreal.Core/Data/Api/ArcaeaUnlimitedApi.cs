@@ -21,13 +21,13 @@ public static class ArcaeaUnlimitedApi
     }
 
     private static async Task<ResponseRoot?> GetString(string url)
-        => JsonConvert.DeserializeObject<ResponseRoot>(await (await _client!.SendAsync(new(HttpMethod.Get, url))).EnsureSuccessStatusCode().Content
+        => JsonConvert.DeserializeObject<ResponseRoot>(await (await _client!.SendAsync(new(HttpMethod.Get, url))).Content
                                                                                                                  .ReadAsStringAsync());
 
     private static async Task GetImage(string url, Path filename)
     {
         FileStream? fileStream = null;
-        var message = (await _client!.GetAsync(url)).EnsureSuccessStatusCode();
+        var message = await _client!.GetAsync(url);
 
         if (message.Content.Headers.ContentType?.MediaType?.StartsWith("image/") != true)
             throw new ArgumentException(JsonConvert.DeserializeObject<ResponseRoot>(await message.Content.ReadAsStringAsync())!.Message);

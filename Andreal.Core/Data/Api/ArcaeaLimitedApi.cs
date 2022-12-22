@@ -23,8 +23,7 @@ public static class ArcaeaLimitedApi
         _client.DefaultRequestHeaders.Authorization = new("Bearer", config.Api["limited"].Token);
     }
 
-    private static async Task<string> GetString(string url)
-        => await (await _client!.SendAsync(new(HttpMethod.Get, url))).EnsureSuccessStatusCode().Content.ReadAsStringAsync();
+    private static async Task<string> GetString(string url) => await _client!.GetStringAsync(url);
 
     internal static async Task<UserinfoDataItem?> Userinfo(long uid)
         => JsonConvert.DeserializeObject<UserinfoData>(await GetString($"user/{uid:D9}"))?.Data;
