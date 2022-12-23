@@ -28,7 +28,7 @@ internal partial class SourceDownloader
         var processMessageHander = new ProgressMessageHandler(new HttpClientHandler());
         processMessageHander.HttpReceiveProgress += (_, e) => { _worker.ReportProgress(e.ProgressPercentage); };
         _client = new(processMessageHander);
-        _client.BaseAddress = new("https://server.awbugl.top/andreal/");
+        _client.BaseAddress = new("https://assets.awbugl.top/andreal/");
         _client.Timeout = TimeSpan.FromMinutes(5);
         _worker.WorkerReportsProgress = true;
         _worker.DoWork += Download;
