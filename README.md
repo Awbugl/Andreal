@@ -65,7 +65,7 @@
 >
 > 您申请获得的 Token 需要将其填入 Andreal 的配置中，以便API维护组对您的使用情况进行统计。
 > 
-> ArcaeaUnlimitedAPI 对于无Token的请求有着 10次/天 的限制。为保证您的正常使用，我们建议您申请Token。
+> ArcaeaUnlimitedAPI 的部分接口不会响应无Token请求。为保证您的正常使用，我们建议您申请Token。
 
 > **申请流程**
 >
@@ -123,3 +123,10 @@
 > 本项目的图片UI设计来源于 GNAQ、linwenxuan04、雨笙Fracture (按首字母排序)。
 >
 > 感谢所有赞助者的支持。
+
+
+#### 特别致谢
+
+特别致谢 JetBrains 为开发人员提供了免费的开源许可证。  
+
+[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" width="200"/>](https://jb.gg/OpenSourceSupport)
