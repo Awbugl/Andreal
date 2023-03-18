@@ -10,6 +10,7 @@ using Andreal.Core.Utils;
 using Andreal.Window.UI;
 using Konata.Core;
 using Konata.Core.Common;
+using Konata.Core.Components.Logics.Model;
 using Konata.Core.Events.Model;
 using Konata.Core.Interfaces;
 using Konata.Core.Interfaces.Api;
@@ -23,7 +24,7 @@ namespace Andreal.Window.Common;
 internal static class Program
 {
     //TODO: Update Version
-    internal const string Version = "v0.5.1";
+    internal const string Version = "v0.5.2";
 
     internal static readonly ObservableCollection<ExceptionLog> Exceptions = new();
     internal static readonly ObservableCollection<MessageLog> Messages = new();
@@ -58,18 +59,18 @@ internal static class Program
 
         var loginresult = await bot.Login();
 
-        if (loginresult.Success)
+        if (loginresult)
         {
             Config.Accounts.Add(info);
             await File.WriteAllTextAsync(Path.Config, JsonConvert.SerializeObject(Config));
         }
         else if (retry)
         {
-            switch (loginresult.Event.EventType)
+            switch (loginresult.EventType)
             {
                 case WtLoginEvent.Type.Unknown:
                 case WtLoginEvent.Type.LoginDenied:
-                case WtLoginEvent.Type.HighRiskEnvironment:
+                case WtLoginEvent.Type.HighRiskOfEnvironment:
                 {
                     Remove(Accounts, log);
                     await OnPreLogin(uin, password, false);
@@ -81,28 +82,28 @@ internal static class Program
         await OnLogin(bot, loginresult);
     }
 
-    internal static async Task OnLogin(Bot bot, (bool Success, WtLoginEvent Event) loginresult)
+    internal static async Task OnLogin(Bot bot, WtLoginResult loginresult)
     {
         var log = Accounts.First(i => i.Bot == bot);
 
-        if (loginresult.Success)
+        if (loginresult)
         {
             UpdateKeystore(bot.Uin, bot.KeyStore);
             log.Nick = bot.Name;
 
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var friend in await bot.GetFriendList(true))
-                if (!BotFriendList.ContainsKey(friend.Uin))
-                    BotFriendList.TryAdd(friend.Uin, friend.Name);
+            {
+                if (!BotFriendList.ContainsKey(friend.Uin)) BotFriendList.TryAdd(friend.Uin, friend.Name);
+            }
         }
         else
         {
-            var type = loginresult.Event.EventType;
             log.State = "登录失败";
-            log.Message = Translate(type);
-            MessageBox.Show($"QQ {log.Robot} \n登录失败，请重新登录！\n原因：{Translate(type)}  错误代码：{loginresult.Event.ResultCode}", "登录失败！");
+            log.Message = loginresult.EventMessage;
+            MessageBox.Show($"QQ {log.Robot} \n登录失败，请重新登录！\n原因：{loginresult.EventMessage}  错误代码：{loginresult.ResultCode}", "登录失败！");
 
-            switch (type)
+            switch (loginresult.EventType)
             {
                 case WtLoginEvent.Type.InvalidUinOrPassword:
                     await OnRemove(log);
@@ -131,21 +132,6 @@ internal static class Program
         if (File.Exists(pth)) File.Delete(pth);
         BotInfos.TryRemove(bot, out _);
     }
-
-    private static string Translate(WtLoginEvent.Type type)
-        => type switch
-           {
-               WtLoginEvent.Type.Unknown              => "未知原因",
-               WtLoginEvent.Type.CheckSms             => "需要短信验证",
-               WtLoginEvent.Type.CheckSlider          => "需要滑块验证",
-               WtLoginEvent.Type.VerifyDeviceLock     => "需要设备锁验证",
-               WtLoginEvent.Type.InvalidSmsCode       => "短信验证码不正确",
-               WtLoginEvent.Type.InvalidUinOrPassword => "QQ号或密码不正确",
-               WtLoginEvent.Type.LoginDenied          => "登录环境异常",
-               WtLoginEvent.Type.HighRiskEnvironment  => "当前上网环境异常",
-               WtLoginEvent.Type.TokenExpired         => "快速登录Token已过期",
-               _                                      => ""
-           };
 
     private static void Init(Bot bot)
     {
@@ -266,9 +252,7 @@ internal static class Program
 
     private static async void OnFriendRequest(Bot b, FriendRequestEvent e)
     {
-        if (Config.EnableHandleMessage)
-            if (Config.Settings.FriendAdd)
-                await b.ApproveFriendRequest(e.ReqUin, e.Token);
+        if (Config is { EnableHandleMessage: true, Settings.FriendAdd: true }) await b.ApproveFriendRequest(e.ReqUin, e.Token);
     }
 
     private static async void OnGroupInvite(Bot b, GroupInviteEvent e)
