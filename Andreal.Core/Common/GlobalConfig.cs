@@ -11,6 +11,8 @@ public static class GlobalConfig
 
     public static RobotReply RobotReply = JsonConvert.DeserializeObject<RobotReply>(File.ReadAllText(Path.RobotReply))!;
 
+    internal static List<string> RandomReply = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(Path.RandomReply))!;
+
     internal static void Init(string file)
     {
         switch (file)
@@ -21,6 +23,10 @@ public static class GlobalConfig
 
             case "replytemplate.json":
                 RobotReply = JsonConvert.DeserializeObject<RobotReply>(File.ReadAllText(Path.RobotReply))!;
+                return;
+
+            case "randomtemplate.json":
+                RandomReply = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(Path.RandomReply))!;
                 return;
         }
     }

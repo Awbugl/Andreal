@@ -1,6 +1,9 @@
 ﻿using System.Net;
+using System.Runtime.CompilerServices;
 using Andreal.Core.Common;
 using Andreal.Core.Data.Api;
+
+[assembly: InternalsVisibleTo("Andreal.Test")]
 
 namespace Andreal.Core.Utils;
 

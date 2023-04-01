@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Andreal.Window", "Andreal.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konata.Core", "..\Konata.Core\Konata.Core\Konata.Core.csproj", "{3FAE53BD-304E-4A73-96A2-99B6D6635445}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Andreal.Test", "Andreal.Test\Andreal.Test.csproj", "{2E6E3EE4-1DFB-40CC-9006-B329CAB96D8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{3FAE53BD-304E-4A73-96A2-99B6D6635445}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FAE53BD-304E-4A73-96A2-99B6D6635445}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FAE53BD-304E-4A73-96A2-99B6D6635445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E6E3EE4-1DFB-40CC-9006-B329CAB96D8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E6E3EE4-1DFB-40CC-9006-B329CAB96D8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E6E3EE4-1DFB-40CC-9006-B329CAB96D8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E6E3EE4-1DFB-40CC-9006-B329CAB96D8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

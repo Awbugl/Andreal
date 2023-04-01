@@ -141,7 +141,10 @@ internal class ArcExecutor : ExecutorBase
                 return RobotReply.ParameterLengthError;
 
             case 0:
-                return RobotReply.RandSongReply + ArcaeaCharts.RandomSong().NameWithPackage;
+            {
+                var randomSong = ArcaeaCharts.RandomSong();
+                return $"Ai酱：{RobotReply.GetRandomAIReply(randomSong.NameWithPackage, randomSong.Last().Artist)}";
+            }
 
             case 1:
             {
@@ -149,12 +152,7 @@ internal class ArcExecutor : ExecutorBase
                 if (lower < 0) return RobotReply.ParameterError;
                 var info = ArcaeaCharts.RandomSong(lower, upper);
                 if (info == null) return RobotReply.ParameterError;
-
-                var chain = new MessageChain();
-                chain.Append(RobotReply.RandSongReply);
-                chain.Append(ImageMessage.FromPath(await Path.ArcaeaSong(info)));
-                chain.Append(info.NameWithPackageAndConst);
-                return chain;
+                return await GetSongInfo(info);
             }
 
             case 2:
@@ -164,13 +162,16 @@ internal class ArcExecutor : ExecutorBase
                 if (lower < 0 || upper < 0 || lower > upper) return RobotReply.ParameterError;
                 var info = ArcaeaCharts.RandomSong(lower, upper);
                 if (info == null) return RobotReply.ParameterError;
-
-                var chain = new MessageChain();
-                chain.Append(RobotReply.RandSongReply);
-                chain.Append(ImageMessage.FromPath(await Path.ArcaeaSong(info)));
-                chain.Append(info.NameWithPackageAndConst);
-                return chain;
+                return await GetSongInfo(info);
             }
+        }
+
+        async Task<MessageChain> GetSongInfo(ArcaeaChart info)
+        {
+            var chain = new MessageChain();
+            chain.Append(ImageMessage.FromPath(await Path.ArcaeaSong(info)));
+            chain.Append($"Ai酱：{RobotReply.GetRandomAIReply(info.NameWithPackageAndConst, info.Artist)}");
+            return chain;
         }
     }
 

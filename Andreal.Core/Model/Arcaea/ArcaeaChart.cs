@@ -84,7 +84,7 @@ public class ArcaeaChart
 
     internal string ConstString => $"[{DifficultyInfo.ShortStr} {Const:0.0}]";
 
-    internal string NameWithPackageAndConst => $"{NameEn}\n(Package: {SetFriendly})\n{ConstString}";
+    internal string NameWithPackageAndConst => $"{NameEn} (Package: {SetFriendly}) {ConstString}";
 
     internal string GetSongName(byte length) => NameEn.Length < length + 3 ? NameEn : $"{NameEn[..length]}...";
 

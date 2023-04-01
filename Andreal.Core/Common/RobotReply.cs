@@ -1,4 +1,5 @@
 using Andreal.Core.Message;
+using Andreal.Core.Utils;
 using Newtonsoft.Json;
 
 namespace Andreal.Core.Common;
@@ -65,9 +66,6 @@ public class RobotReply
     [JsonProperty("HelpMessage")]
     public string HelpMessage { get; set; } = "";
 
-    [JsonProperty("RandSongReply")]
-    public string RandSongReply { get; set; } = "";
-
     [JsonProperty("GroupLeave")]
     public string GroupLeave { get; set; } = "";
 
@@ -87,4 +85,6 @@ public class RobotReply
 
     internal TextMessage OnJrrpResult(string value) => JrrpResult.Replace("$jrrp$", value);
     internal TextMessage OnBindSuccess(string value) => BindSuccess.Replace("$info$", value);
+    internal string GetRandomAIReply(string songname, string artist)
+        => GlobalConfig.RandomReply.GetRandomItem().Replace("$songname$", songname).Replace("$artist$", artist);
 }

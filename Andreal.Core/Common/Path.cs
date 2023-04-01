@@ -20,6 +20,7 @@ public class Path
                                 Config = new(AndreaConfigRoot + "config.json"),
                                 PartnerConfig = new(AndreaConfigRoot + "positioninfo.json"),
                                 RobotReply = new(AndreaConfigRoot + "replytemplate.json"),
+                                RandomReply = new(AndreaConfigRoot + "randomtemplate.json"),
                                 TmpSongList = new(AndreaConfigRoot + "tempsonglist.json"),
                                 ArcaeaConstListBg = new(ArcaeaSourceRoot + "ConstList.jpg"),
                                 ArcaeaDivider = new(ArcaeaSourceRoot + "Divider.png"),
