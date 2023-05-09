@@ -1,6 +1,6 @@
 # Andreal
 
-基于 Konata.Core 和 ArcaeaUnlimitedAPI 的开源 ArcaeaBot。
+基于 Konata.Core 和 UnofficialArcaeaAPI 的开源 ArcaeaBot。
 
 ----
 
@@ -13,19 +13,19 @@
 
 ----
 
-#### 部署步骤
+#### ~~部署步骤~~ 已失效
 
-1. 申请 `ArcaeaUnlimitedAPI Token`（详见常见问题）
+1. ~~申请 `UnofficialArcaeaAPI Token`（详见常见问题）~~
 
-2. [下载最新版本 Andreal](https://github.com/Awbugl/Andreal/releases/)
+2. ~~[下载最新版本 Andreal](https://github.com/Awbugl/Andreal/releases/)~~
 
-3. 运行 Andreal
+3. ~~运行 Andreal~~
 
-4. 填写基础配置页面的配置项并保存
+4. ~~填写基础配置页面的配置项并保存~~
 
-5. 账号管理界面右键添加新帐号
+5. ~~账号管理界面右键添加新帐号~~
 
-* 若一切顺利，此时您的 Bot 就已可用。
+* ~~若一切顺利，此时您的 Bot 就已可用。~~
 
 ----
 
@@ -35,19 +35,19 @@
 >
 >  Bot迁移时，只迁移配置文件夹即可。
 
-| 文件（夹）                | 说明               |
-|:---------------------|:-----------------|
-| config.json          | Andreal 主要配置文件    |
-| positioninfo.json    | Arcaea 图查立绘位置配置文件 |
-| replytemplate.json   | Bot 回复模板          |
-| Andreal.db           | 用户绑定信息数据库        |
-| BotInfo/             | Bot 登录信息文件夹       |
+| 文件（夹）              | 说明                |
+|:-------------------|:------------------|
+| config.json        | Andreal 主要配置文件    |
+| positioninfo.json  | Arcaea 图查立绘位置配置文件 |
+| replytemplate.json | Bot 回复模板          |
+| Andreal.db         | 用户绑定信息数据库         |
+| BotInfo/           | Bot 登录信息文件夹       |
 
 ----
 
 #### 数据共享协议
 
-> 使用 ArcaeaUnlimitedAPI 服务将默认您允许 ArcaeaUnlimitedAPI 收集/记录/脱敏使用 您的使用记录，包括且不限于 Arcaea 用户名、游玩记录等；
+> 使用 UnofficialArcaeaAPI 服务将默认您允许 UnofficialArcaeaAPI 收集/记录/脱敏使用 您的使用记录，包括且不限于 Arcaea 用户名、游玩记录等；
 >
 > **我们将与其他 ArcaeaBot 共享我们从您那里收集的 Arcaea 用户名**。
 
@@ -55,17 +55,17 @@
 
 #### 常见问题
 
-**1. 为什么需要申请 ArcaeaUnlimitedAPI Token？如何申请？**
+**1. 为什么需要申请 UnofficialArcaeaAPI Token？如何申请？**
 
 > **Token 作用**
 > 
-> ArcaeaUnlimitedAPI 是由 TheSnowfield 与 Awbugl 基于 BotArcAPI 开发的第三方查分API。
+> UnofficialArcaeaAPI 是由 TheSnowfield 与 Awbugl 基于 BotArcAPI 开发的第三方查分API。
 >
 > 为了保证服务的质量与稳定性，API维护组需要对使用量进行统计，并且对恶意请求进行拦截。
 >
 > 您申请获得的 Token 需要将其填入 Andreal 的配置中，以便 API 维护组对您的使用情况进行统计。
 > 
-> ArcaeaUnlimitedAPI 的部分接口不会响应无 Token 请求。为保证您的正常使用，我们建议您申请 Token。
+> UnofficialArcaeaAPI 的部分接口不会响应无 Token 请求。为保证您的正常使用，我们建议您申请 Token。
 
 > **申请流程**
 >
@@ -108,7 +108,7 @@
 
 ----
 
-#### 赞助 ArcaeaUnlimitedAPI
+#### 赞助 UnofficialArcaeaAPI
 
 ##### 赞助所得将全部用于API的服务器维护。
 
@@ -118,7 +118,7 @@
 
 #### 感谢
 
-> 本项目的 Arcaea 数据来源于 ArcaeaUnlimitedAPI。
+> 本项目的 Arcaea 数据来源于 UnofficialArcaeaAPI。
 >
 > 本项目的图片UI设计来源于 GNAQ、linwenxuan04、雨笙Fracture (按首字母排序)。
 >
