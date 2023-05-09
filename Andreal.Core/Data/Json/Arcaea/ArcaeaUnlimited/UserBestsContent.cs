@@ -21,3 +21,9 @@ public class UserBestsContent
     [JsonProperty("best30_overflow")]
     public List<ArcSongdata>? OverflowList { get; set; }
 }
+
+public class UserBestsSessionContent
+{
+    [JsonProperty("session_info")]
+    public string SessionInfo { get; set; }
+}

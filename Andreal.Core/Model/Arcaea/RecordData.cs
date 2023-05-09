@@ -1,6 +1,4 @@
-﻿using Andreal.Core.Data.Api;
-using Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
-using Andreal.Core.Data.Sqlite;
+﻿using Andreal.Core.Data.Sqlite;
 using Andreal.Core.Message;
 using Andreal.Core.UI.ImageGenerator;
 
@@ -35,14 +33,6 @@ internal class RecordData
 
             case ImgVersion.ImgV3:
                 return await imageGenerator.Version3();
-
-            case ImgVersion.ImgV4:
-            {
-                var b30data = await ArcaeaUnlimitedApi.UserBest30(UserInfo.ArcCode);
-                return b30data!.Status != 0
-                           ? await imageGenerator.Version3()
-                           : await imageGenerator.Version4(new Best30Data(b30data.DeserializeContent<UserBestsContent>()));
-            }
 
             case ImgVersion.ImgV2:
             default:

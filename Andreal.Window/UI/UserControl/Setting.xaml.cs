@@ -31,12 +31,6 @@ internal partial class Setting
             AUAToken.Text = auavalue.Token;
         }
 
-        if (Program.Config.Api.TryGetValue("limited", out var alavalue))
-        {
-            ALAUrl.Text = alavalue.Url;
-            ALAToken.Text = alavalue.Token;
-        }
-
         ProtocolComboBox.SelectedItem = Program.Config.Protocol;
         SliderComboBox.SelectedItem = Program.Config.SliderType;
         EnableProcess.IsChecked = Program.Config.EnableHandleMessage;
@@ -90,16 +84,7 @@ internal partial class Setting
         if (!string.IsNullOrWhiteSpace(auauri) && !string.IsNullOrWhiteSpace(auatoken))
         {
             config.Api["unlimited"] = new() { Url = auauri, Token = auatoken };
-            ArcaeaUnlimitedApi.Init(config);
-        }
-
-        var alauri = ALAUrl.Text;
-        var alatoken = ALAToken.Text;
-
-        if (!string.IsNullOrWhiteSpace(alauri) && !string.IsNullOrWhiteSpace(alatoken))
-        {
-            config.Api["limited"] = new() { Url = alauri, Token = alatoken };
-            ArcaeaLimitedApi.Init(config);
+            UnofficialArcaeaAPI.Init(config);
         }
 
         Program.Config = config;

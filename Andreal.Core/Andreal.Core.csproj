@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\Git\Konata.Core\Konata.Core\Konata.Core.csproj"/>
+        <ProjectReference Include="..\..\..\Git\Konata.Core\Konata.Core\Konata.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
-        <PackageReference Include="sqlite-net-pcl" Version="1.7.335"/>
-        <PackageReference Include="System.Drawing.Common" Version="5.0.3"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+        <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
     </ItemGroup>
 
     <ItemGroup>

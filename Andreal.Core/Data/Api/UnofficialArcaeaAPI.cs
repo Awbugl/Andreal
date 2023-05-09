@@ -6,7 +6,7 @@ using Path = Andreal.Core.Common.Path;
 
 namespace Andreal.Core.Data.Api;
 
-public static class ArcaeaUnlimitedApi
+public static class UnofficialArcaeaAPI
 {
     private static HttpClient? _client;
 
@@ -21,8 +21,7 @@ public static class ArcaeaUnlimitedApi
     }
 
     private static async Task<ResponseRoot?> GetString(string url)
-        => JsonConvert.DeserializeObject<ResponseRoot>(await (await _client!.SendAsync(new(HttpMethod.Get, url))).Content
-                                                                                                                 .ReadAsStringAsync());
+        => JsonConvert.DeserializeObject<ResponseRoot>(await (await _client!.SendAsync(new(HttpMethod.Get, url))).Content.ReadAsStringAsync());
 
     private static async Task GetImage(string url, Path filename)
     {
@@ -70,21 +69,22 @@ public static class ArcaeaUnlimitedApi
         }
     }
 
-    internal static async Task<ResponseRoot?> UserInfo(long ucode) => await GetString($"user/info?usercode={ucode:D9}");
+    internal static async Task<ResponseRoot?> UserInfo(long ucode) => await GetString($"user/info?user_code={ucode:D9}");
 
-    internal static async Task<ResponseRoot?> UserInfo(string uname) => await GetString($"user/info?user={uname}");
+    internal static async Task<ResponseRoot?> UserInfo(string uname) => await GetString($"user/info?user_name={uname}");
 
     internal static async Task<ResponseRoot?> UserBest(long ucode, string song, object dif)
-        => await GetString($"user/best?usercode={ucode:D9}&songid={song}&difficulty={dif}");
+        => await GetString($"user/best?usercode={ucode:D9}&song_id={song}&difficulty={dif}");
 
-    internal static async Task<ResponseRoot?> UserBest30(long ucode) => await GetString($"user/best30?usercode={ucode:D9}");
+    internal static async Task<ResponseRoot?> UserBestsSession(long ucode) => await GetString($"user/bests/session?user_code={ucode:D9}");
 
-    internal static async Task<ResponseRoot?> UserBest40(long ucode) => await GetString($"user/best30?usercode={ucode:D9}&overflow=9");
+    internal static async Task<ResponseRoot?> UserBestsResult(string session)
+        => await GetString($"user/bests/result?session_info={session}&overflow=9");
 
     internal static async Task<ResponseRoot?> SongList() => await GetString("song/list");
 
     internal static async Task SongAssets(string sid, int difficulty, Path pth)
-        => await GetImage($"assets/song?songid={sid}&difficulty={difficulty}", pth);
+        => await GetImage($"assets/song?song_id={sid}&difficulty={difficulty}", pth);
 
     internal static async Task CharAssets(int partner, bool awakened, Path pth)
         => await GetImage($"assets/char?partner={partner}&awakened={(awakened ? "true" : "false")}", pth);
@@ -93,7 +93,7 @@ public static class ArcaeaUnlimitedApi
         => await GetImage($"assets/icon?partner={partner}&awakened={(awakened ? "true" : "false")}", pth);
 
     internal static async Task PreviewAssets(string sid, int difficulty, Path pth)
-        => await GetImage($"assets/preview?songid={sid}&difficulty={difficulty}", pth);
+        => await GetImage($"assets/preview?song_id={sid}&difficulty={difficulty}", pth);
 
     internal static TextMessage GetErrorMessage(RobotReply info, int status, string message)
         => status switch
@@ -105,6 +105,8 @@ public static class ArcaeaUnlimitedApi
                -16                   => info.GotShadowBanned,
                -23                   => info.BelowTheThreshold,
                -24                   => info.NeedUpdateAUA,
+               -29                   => info.InvalidSessionInfo,
+               -30                   => info.SessionExpired,
                _                     => info.OnAPIQueryFailed(status, message)
            };
 }

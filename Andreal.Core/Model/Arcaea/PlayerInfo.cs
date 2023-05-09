@@ -1,5 +1,4 @@
-﻿using Andreal.Core.Data.Json.Arcaea.ArcaeaLimited;
-using Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
+﻿using Andreal.Core.Data.Json.Arcaea.ArcaeaUnlimited;
 using Andreal.Core.Data.Sqlite;
 
 namespace Andreal.Core.Model.Arcaea;
@@ -10,17 +9,6 @@ internal class PlayerInfo
     private readonly bool _isHide;
 
     private readonly string _playerCode, _playerName;
-
-    internal PlayerInfo(UserinfoDataItem recentdata, BotUserInfo user)
-    {
-        _playerCode = user.ArcCode.ToString("D9");
-        _playerName = recentdata.DisplayName;
-        _isHide = user.IsHide == 0;
-        ImgVersion = user.UiVersion;
-        Partner = recentdata.Partner.PartnerID;
-        IsAwakened = recentdata.Partner.IsAwakened;
-        Potential = recentdata.Potential ?? -1;
-    }
 
     public PlayerInfo(AccountInfo accountInfo, BotUserInfo user)
     {

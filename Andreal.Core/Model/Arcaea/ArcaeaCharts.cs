@@ -75,7 +75,7 @@ public static partial class ArcaeaCharts
 
         try
         {
-            slst = ArcaeaUnlimitedApi.SongList().Result?.DeserializeContent<SongListContent>().Songs;
+            slst = UnofficialArcaeaAPI.SongList().Result?.DeserializeContent<SongListContent>().Songs;
             if (slst != null) File.WriteAllText(Path.TmpSongList, JsonConvert.SerializeObject(slst));
         }
         catch

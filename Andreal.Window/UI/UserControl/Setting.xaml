@@ -95,9 +95,9 @@
                                Height="30"
                                FontFamily="Microsoft YaHei" FontSize="16"
                                Background="#23262A" />
-                    <StackPanel Height="80">
+                    <StackPanel Height="120">
                         <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
-                                   Text="AUA" VerticalAlignment="Center"
+                                   Text="UAA" VerticalAlignment="Center"
                                    Margin="20,0,0,0"
                                    FontFamily="Microsoft YaHei" FontSize="16"
                                    Background="#23262A" />
@@ -110,10 +110,10 @@
                             <TextBox x:Name="AUAUrl" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"
                                      Margin="20,0,0,0"
                                      BorderThickness="0,0,0,1" Foreground="DarkGray"
-
                                      FontSize="16" Background="#23262A" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="40" Margin="40,0,0,0">
                             <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
-                                       Margin="20,0,0,0"
                                        Text="Token" VerticalAlignment="Center"
                                        FontFamily="Microsoft YaHei" FontSize="16"
                                        Background="#23262A" />
@@ -125,34 +125,6 @@
                                      FontSize="16" Background="#23262A" />
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Height="60">
-                        <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
-                                   Text="ALA（可选）" VerticalAlignment="Center"
-                                   FontFamily="Microsoft YaHei" FontSize="16"
-                                   Margin="20,-13,0,0"
-                                   Background="#23262A" />
-                        <StackPanel Orientation="Horizontal" Height="40" Margin="40,0,0,0">
-                            <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
-                                       Text="Uri" VerticalAlignment="Center"
-                                       FontFamily="Microsoft YaHei" FontSize="16"
-                                       Background="#23262A" />
-                            <TextBox x:Name="ALAUrl" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                     Margin="20,0,0,0"
-                                     BorderThickness="0,0,0,1" Foreground="DarkGray"
-                                     FontSize="16" Background="#23262A" />
-                            <TextBlock Foreground="Azure" IsHitTestVisible="False" HorizontalAlignment="Left"
-                                       Margin="20,0,0,0"
-                                       Text="Token" VerticalAlignment="Center"
-                                       FontFamily="Microsoft YaHei" FontSize="16"
-                                       Background="#23262A" />
-                            <TextBox x:Name="ALAToken" Width="120" HorizontalAlignment="Left"
-                                     VerticalAlignment="Center"
-                                     Margin="20,0,0,0"
-                                     BorderThickness="0,0,0,1" Foreground="DarkGray"
-                                     FontSize="16" Background="#23262A" />
-                        </StackPanel>
-                    </StackPanel>
-
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Vertical" Margin="30,-13,0,0">
                     <CheckBox x:Name="EnableProcess" VerticalAlignment="Center" HorizontalAlignment="Left">

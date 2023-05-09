@@ -29,18 +29,19 @@ internal class ArcExecutor : ExecutorBase
             return (new(content.Record), new(content.AccountInfo, User), null);
         }
 
-        return (null, null, ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message));
+        return (null, null, UnofficialArcaeaAPI.GetErrorMessage(RobotReply, data.Status, data.Message));
     }
 
     private async Task<(RecordInfo?, PlayerInfo?, TextMessage?)> GetUserBest(ArcaeaSong song, int dif)
     {
         if (dif == -1)
         {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var i in _difs)
             {
                 if (i == 3 && song.Count != 4) continue;
 
-                var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, i);
+                var data = await UnofficialArcaeaAPI.UserBest(User!.ArcCode, song.SongID, i);
 
                 if (data.Status == -15) continue;
 
@@ -51,7 +52,7 @@ internal class ArcExecutor : ExecutorBase
         }
 
         {
-            var data = await ArcaeaUnlimitedApi.UserBest(User!.ArcCode, song.SongID, dif);
+            var data = await UnofficialArcaeaAPI.UserBest(User!.ArcCode, song.SongID, dif);
 
             return GetValue(data);
         }
@@ -78,15 +79,15 @@ internal class ArcExecutor : ExecutorBase
                 return RobotReply.UnBindSuccess;
             }
 
-            var info = await ArcaeaUnlimitedApi.UserInfo(uid);
-            data = info.Status == 0 ? info : await ArcaeaUnlimitedApi.UserInfo(Command[0]);
+            var info = await UnofficialArcaeaAPI.UserInfo(uid);
+            data = info.Status == 0 ? info : await UnofficialArcaeaAPI.UserInfo(Command[0]);
         }
         else
         {
-            data = await ArcaeaUnlimitedApi.UserInfo(Command[0]);
+            data = await UnofficialArcaeaAPI.UserInfo(Command[0]);
         }
 
-        if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
+        if (data.Status != 0) return UnofficialArcaeaAPI.GetErrorMessage(RobotReply, data.Status, data.Message);
 
         var content = data.DeserializeContent<UserInfoContent>();
 
@@ -298,27 +299,37 @@ internal class ArcExecutor : ExecutorBase
         if (User == null) return RobotReply.NotBind;
         if (User.ArcCode < 2) return RobotReply.NotBindArc;
 
-
-        IBest30Data b30data;
-        PlayerInfo playerInfo;
-
-        if (Command.Length > 0 && Command[0] == "official")
+        if (CommandLength == 0)
         {
-            if (!ArcaeaLimitedApi.Available) return null!;
-            await Info.SendMessage(RobotReply.BestsQuerying);
+            var session = await UnofficialArcaeaAPI.UserBestsSession(User.ArcCode);
+            if (session.Status != 0 && session.Status != -33) return UnofficialArcaeaAPI.GetErrorMessage(RobotReply, session.Status, session.Message);
+            var sessionContent = session.DeserializeContent<UserBestsSessionContent>();
 
-            playerInfo = new((await ArcaeaLimitedApi.Userinfo(User.ArcCode))!, User);
-            b30data = new LimitedBest30Data((await ArcaeaLimitedApi.Userbest30(User.ArcCode))!, playerInfo.Potential);
+            return (session.Status == -33 ? RobotReply.DuplicateBestsRequests + "\n" : "") +
+                   RobotReply.OnUserBestsSession(sessionContent.SessionInfo);
         }
-        else
+
+        var sessionInfo = Command[0];
+
+        var data = await UnofficialArcaeaAPI.UserBestsResult(sessionInfo);
+        if (data.Status != 0)
         {
-            await Info.SendMessage(RobotReply.BestsQuerying);
-            var data = await ArcaeaUnlimitedApi.UserBest30(User.ArcCode);
-            if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
-            var content = data.DeserializeContent<UserBestsContent>();
-            b30data = new Best30Data(content);
-            playerInfo = new(content.AccountInfo, User);
+            if (data.Status == -31 || data.Status == -32)
+            {
+                var sessionContent = data.DeserializeContent<SessionQueryingContent>();
+
+                return data.Status == -31
+                           ? RobotReply.OnSessionQuerying(sessionContent.QueriedCharts)
+                           : RobotReply.OnSessionWaitingForAccount(sessionContent.CurrentAccount);
+            }
+
+            return UnofficialArcaeaAPI.GetErrorMessage(RobotReply, data.Status, data.Message);
         }
+
+        var content = data.DeserializeContent<UserBestsContent>();
+
+        IBest30Data b30data = new Best30Data(content);
+        PlayerInfo playerInfo = new(content.AccountInfo, User);
 
         return await new ArcBest30ImageGenerator(b30data, playerInfo).Generate();
     }
@@ -329,9 +340,32 @@ internal class ArcExecutor : ExecutorBase
         if (User == null) return RobotReply.NotBind;
         if (User.ArcCode < 2) return RobotReply.NotBindArc;
 
-        await Info.SendMessage(RobotReply.BestsQuerying);
-        var data = await ArcaeaUnlimitedApi.UserBest40(User.ArcCode);
-        if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
+        if (CommandLength == 0)
+        {
+            var session = await UnofficialArcaeaAPI.UserBestsSession(User.ArcCode);
+            if (session.Status != 0 && session.Status != -33) return UnofficialArcaeaAPI.GetErrorMessage(RobotReply, session.Status, session.Message);
+            var sessionContent = session.DeserializeContent<UserBestsSessionContent>();
+
+            return (session.Status == -33 ? RobotReply.DuplicateBestsRequests + "\n" : "") +
+                   RobotReply.OnUserBestsSession(sessionContent.SessionInfo);
+        }
+
+        var sessionInfo = Command[0];
+
+        var data = await UnofficialArcaeaAPI.UserBestsResult(sessionInfo);
+        if (data.Status != 0)
+        {
+            if (data.Status == -31 || data.Status == -32)
+            {
+                var sessionContent = data.DeserializeContent<SessionQueryingContent>();
+
+                return data.Status == -31
+                           ? RobotReply.OnSessionQuerying(sessionContent.QueriedCharts)
+                           : RobotReply.OnSessionWaitingForAccount(sessionContent.CurrentAccount);
+            }
+
+            return UnofficialArcaeaAPI.GetErrorMessage(RobotReply, data.Status, data.Message);
+        }
 
         var content = data.DeserializeContent<UserBestsContent>();
         IBest40Data b40data = new Best40Data(content);
@@ -350,9 +384,25 @@ internal class ArcExecutor : ExecutorBase
     {
         if (User == null) return RobotReply.NotBind;
         if (User.ArcCode < 2) return RobotReply.NotBindArc;
+        if (CommandLength == 0) return RobotReply.ParameterLengthError;
 
-        var data = await ArcaeaUnlimitedApi.UserBest30(User.ArcCode);
-        if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
+        var sessionInfo = Command[0];
+
+        var data = await UnofficialArcaeaAPI.UserBestsResult(sessionInfo);
+        if (data.Status != 0)
+        {
+            if (data.Status == -31 || data.Status == -32)
+            {
+                var sessionContent = data.DeserializeContent<SessionQueryingContent>();
+
+                return data.Status == -31
+                           ? RobotReply.OnSessionQuerying(sessionContent.QueriedCharts)
+                           : RobotReply.OnSessionWaitingForAccount(sessionContent.CurrentAccount);
+            }
+
+            return UnofficialArcaeaAPI.GetErrorMessage(RobotReply, data.Status, data.Message);
+        }
+
         var content = data.DeserializeContent<UserBestsContent>();
         IBest30Data b30data = new Best30Data(content);
 
@@ -361,8 +411,8 @@ internal class ArcExecutor : ExecutorBase
 
     private async Task<MessageChain> Recent()
     {
-        var data = await ArcaeaUnlimitedApi.UserInfo(User.ArcCode);
-        if (data.Status != 0) return ArcaeaUnlimitedApi.GetErrorMessage(RobotReply, data.Status, data.Message);
+        var data = await UnofficialArcaeaAPI.UserInfo(User.ArcCode);
+        if (data.Status != 0) return UnofficialArcaeaAPI.GetErrorMessage(RobotReply, data.Status, data.Message);
         var content = data.DeserializeContent<UserInfoContent>();
 
         if (content.RecentScore.Count == 0) return RobotReply.NotPlayedTheSong;

@@ -73,7 +73,7 @@ public class Path
             pth.FileInfo.Delete();
         }
 
-        await ArcaeaUnlimitedApi.SongAssets(chart.SongID, chart.RatingClass, pth);
+        await UnofficialArcaeaAPI.SongAssets(chart.SongID, chart.RatingClass, pth);
 
         return pth;
     }
@@ -116,7 +116,7 @@ public class Path
             pth.FileInfo.Delete();
         }
 
-        await ArcaeaUnlimitedApi.CharAssets(partner, awakened, pth);
+        await UnofficialArcaeaAPI.CharAssets(partner, awakened, pth);
 
         return pth;
     }
@@ -131,7 +131,7 @@ public class Path
             pth.FileInfo.Delete();
         }
 
-        await ArcaeaUnlimitedApi.IconAssets(partner, awakened, pth);
+        await UnofficialArcaeaAPI.IconAssets(partner, awakened, pth);
 
         return pth;
     }
@@ -146,7 +146,7 @@ public class Path
             pth.FileInfo.Delete();
         }
 
-        await ArcaeaUnlimitedApi.PreviewAssets(chart.SongID, chart.RatingClass, pth);
+        await UnofficialArcaeaAPI.PreviewAssets(chart.SongID, chart.RatingClass, pth);
 
         return pth;
     }

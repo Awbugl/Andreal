@@ -24,8 +24,7 @@ internal static class SystemHelper
         ServicePointManager.CheckCertificateRevocationList = true;
         WebRequest.DefaultWebProxy = null;
 
-        ArcaeaLimitedApi.Init(andrealConfig);
-        ArcaeaUnlimitedApi.Init(andrealConfig);
+        UnofficialArcaeaAPI.Init(andrealConfig);
         MessageInfo.Init(andrealConfig.Master);
         BackgroundTask.Init();
         ConfigWatcher.Init();

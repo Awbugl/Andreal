@@ -24,9 +24,6 @@ public class RobotReply
     [JsonProperty("NotPlayedTheSong")]
     public string NotPlayedTheSong { get; set; } = "";
 
-    [JsonProperty("BestsQuerying")]
-    public string BestsQuerying { get; set; } = "";
-
     [JsonProperty("ArcUidNotFound")]
     public string ArcUidNotFound { get; set; } = "";
 
@@ -75,6 +72,24 @@ public class RobotReply
     [JsonProperty("NeedUpdateAUA")]
     public string NeedUpdateAUA { get; set; } = "";
 
+    [JsonProperty("InvalidSessionInfo")]
+    public string InvalidSessionInfo { get; set; } = "";
+
+    [JsonProperty("SessionExpired")]
+    public string SessionExpired { get; set; } = "";
+
+    [JsonProperty("SessionQuerying")]
+    public string SessionQuerying { get; set; } = "";
+
+    [JsonProperty("SessionWaitingForAccount")]
+    public string SessionWaitingForAccount { get; set; } = "";
+
+    [JsonProperty("DuplicateBestsRequests")]
+    public string DuplicateBestsRequests { get; set; } = "";
+
+    [JsonProperty("UserBestsSession")]
+    public string UserBestsSession { get; set; } = "";
+
     [JsonProperty("ExceptionOccured")]
     public string ExceptionOccured { get; set; } = "";
 
@@ -85,6 +100,13 @@ public class RobotReply
 
     internal TextMessage OnJrrpResult(string value) => JrrpResult.Replace("$jrrp$", value);
     internal TextMessage OnBindSuccess(string value) => BindSuccess.Replace("$info$", value);
+
+    internal TextMessage OnUserBestsSession(string value) => UserBestsSession.Replace("$session$", value);
+
+    internal TextMessage OnSessionQuerying(string value) => SessionQuerying.Replace("$count$", value);
+
+    internal TextMessage OnSessionWaitingForAccount(string value) => SessionWaitingForAccount.Replace("$count$", value);
+
     internal string GetRandomAIReply(string songname, string artist)
         => GlobalConfig.RandomReply.GetRandomItem().Replace("$songname$", songname).Replace("$artist$", artist);
 }
